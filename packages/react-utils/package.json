@@ -1,6 +1,6 @@
 {
   "name": "@riezler/react-utils",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Mobile First context menu for react",
   "main": "lib/main.js",
   "scripts": {
