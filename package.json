@@ -1,0 +1,33 @@
+{
+  "name": "biotic-ui",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "author": "Michael Riezler <michael@riezler.co> (https://riezler.co)",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-flow": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "@storybook/addon-actions": "^6.0.3",
+    "@storybook/addon-essentials": "^6.0.3",
+    "@storybook/addon-links": "^6.0.3",
+    "@storybook/react": "^6.0.3",
+    "babel-loader": "^8.1.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-is": "^16.13.1",
+    "react-spring": "^8.0.27",
+    "styled-components": "^5.1.1"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {}
+}
