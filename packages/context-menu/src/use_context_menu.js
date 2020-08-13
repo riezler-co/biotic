@@ -5,7 +5,6 @@ import { getContainer, useLongPress } from '@riezler/react-utils'
 import styled from 'styled-components'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { BottomSheet } from '@biotic-ui/bottom-sheet'
-import { Transition } from 'react-spring'
 
 let Nav = ({ position, onClose, children }) => {
 	
