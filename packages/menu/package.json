@@ -41,5 +41,6 @@
     "@riezler/react-utils": "^0.0.2",
     "react-outside-click-handler": "^1.3.0",
     "react-popper": "^2.2.3"
-  }
+  },
+  "gitHead": "ec27fe0f37f91068bb6d26da2b6e109f10bc9f53"
 }
