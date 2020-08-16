@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react'
-import ReactDOM from 'react-dom'
+import { createPortal } from 'react-dom'
 import styled, { createGlobalStyle } from 'styled-components'
-import { getContainer, usePreventScroll, useOnEscape } from '@riezler/react-utils'
+import { useGetContainer
+			 , usePreventScroll
+			 , useOnEscape
+			 , useWindowSize
+			 } from '@riezler/react-utils'
 import { useSpring, animated } from 'react-spring'
 import { Backdrop } from '@biotic-ui/leptons'
-
-let SheetContainer = getContainer('biotic-bottom-drawer-container')
 
 let BottomDrawer = styled.div`
 	--bottom-default-sheet-shadow: 0px 8px 21px -5px rgba(0, 0, 0, 0.5);
@@ -38,30 +40,42 @@ export let BottomSheet = ({
 	onClick
 }) => {
 
+	let SheetContainer = useGetContainer('biotic-bottom-drawer-container')
+
 	let [sheet, setSheet] = useState({
 		height: 0,
 	})
 
 	let sheetRef = useRef(null)
 	useLayoutEffect(() => {
-		if (sheetRef.current) {
-			let { height } = sheetRef.current.getBoundingClientRect()
-			setSheet({ height })
-		}
-	}, [sheetRef])
+		if (!sheetRef.current) return
+		
+		let { height } = sheetRef.current.getBoundingClientRect()
+		setSheet({ height })
+	}, [sheetRef, SheetContainer])
 
-	let [openUntil, setOpenUntil] = React.useState(window.innerHeight)
+	let { innerHeight } = useWindowSize()
+
+	let [openUntil, setOpenUntil] = useState(0)
 	useEffect(() => {
 		let _height = height === null ? 1 : height
-		setOpenUntil(window.innerHeight * _height)
-	}, [height])
+		setOpenUntil(innerHeight * _height)
+	}, [height, innerHeight])
 
 	let sheetHeight = height === 1
-		? window.innerHeight
-		: height === null ? Math.min(sheet.height, openUntil) : openUntil
+		? innerHeight
+		: height !== null 
+			? Math.min(sheet.height, openUntil) 
+			: 0
+
+	let translateY = sheetHeight === 0
+		// trying to hide the bottom sheet until get a container
+		// without causing an animation
+		? '99999px'
+		: `${sheetHeight}px`
 
 	let props = useSpring({
-		transform: open ? 'translateY(0)' : `translateY(${sheetHeight}px)`
+		transform: open ? 'translateY(0)' : `translateY(${translateY})`
 	})
 
 	let wrapperAnimation = useSpring({
@@ -100,7 +114,7 @@ export let BottomSheet = ({
 		</React.Fragment>
 	)
 
-	return ReactDOM.createPortal(Sheet, SheetContainer)
+	return SheetContainer ? createPortal(Sheet, SheetContainer) : null
 }
 
 

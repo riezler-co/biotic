@@ -7,16 +7,11 @@ export { usePreventScroll } from './hook/use_prevent_scroll'
 export { useScroll } from './hook/use_scroll'
 export { useScrollShadow, SHADOWS } from './hook/use_scroll_shadow'
 export { useMatchMedia } from './hook/use_match_media'
-
-export function getContainer (id) {
-	let container = document.querySelector(`#${id}`)
-
-	if (container === null) {
-		let container = document.createElement('div')
-		container.id = id
-		document.body.appendChild(container)
-		return container
-	}
-
-	return container
-}
+export { useForm } from './hook/use_form'
+export { useOnline } from './hook/use_online'
+export { useIdleCallback } from './hook/use_idle_callback'
+export { useThrottle } from './hook/use_throttle'
+export { useDebounce } from './hook/use_debounce'
+export { useGetContainer } from './hook/use_get_container'
+export { useResize } from './hook/use_resize'
+export { useWindowSize } from './hook/use_window_size'

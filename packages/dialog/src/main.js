@@ -1,11 +1,9 @@
 import React from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
-import { getContainer, useOnEscape, usePreventScroll } from '@riezler/react-utils'
+import { useGetContainer, useOnEscape, usePreventScroll } from '@riezler/react-utils'
 import { useSpring, animated } from 'react-spring'
 import { Backdrop } from '@biotic-ui/leptons'
-
-let DialogContainer = getContainer('biotic-dialog')
 
 let Wrapper = styled.div`
 	display: ${p => p.open ? 'flex' : 'none'};
@@ -32,10 +30,11 @@ export let DialogContent = styled.div`
 	max-height: 100vh;
 	overflow: auto;
 	width: ${p => typeof p.width === 'number' ? `${p.width}px` : p.width};
-	height: ${p => typeof p.height === 'number' ? `${p.height}` : p.height};
+	height: ${p => typeof p.height === 'number' ? `${p.height}px` : p.height};
 `
 
 export default function Dialog(props) {
+	let DialogContainer = useGetContainer('biotic-dialog')
 
 	let { open = false
 			, children
@@ -74,5 +73,5 @@ export default function Dialog(props) {
 		</Wrapper>
 	)
 
-	return createPortal(DialogPortal, DialogContainer)
+	return DialogContainer ? createPortal(DialogPortal, DialogContainer) : null
 }

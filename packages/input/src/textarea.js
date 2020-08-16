@@ -44,7 +44,6 @@ export let Textarea = (props = {}) => {
 		if (input.current) {
 			input.current.style.cssText = 'height:auto; padding:0'
 			let { scrollHeight } = input.current
-			console.log(input.current.clientHeight)
 			if (maxHeight === null || scrollHeight < maxHeight) {
 				setHeight(input.current.scrollHeight)
 			}

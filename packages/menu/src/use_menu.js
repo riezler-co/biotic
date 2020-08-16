@@ -1,17 +1,16 @@
 import React, { Children, useState } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
-import { getContainer } from '@riezler/react-utils'
+import { useGetContainer } from '@riezler/react-utils'
 import { createPortal } from 'react-dom'
 import { usePopper } from 'react-popper'
 import { Menu } from './menu'
-
-let MENU_CONTAINER = getContainer('biotic-menu')
 
 let DefaultConfig = {
 	placement: 'bottom-end'
 }
 
 export function useMenu(userConfig = {}) {
+	let MENU_CONTAINER = useGetContainer('biotic-menu')
 	let [show, setShow] = useState(false)
 	let [referenceElement, setReferenceElement] = useState(null)
 	let config = { ...DefaultConfig, ...userConfig }
@@ -52,7 +51,7 @@ export function useMenu(userConfig = {}) {
 			</OutsideClickHandler>
 		)
 
-		return createPortal(PopperMenu, MENU_CONTAINER)
+		return MENU_CONTAINER ? createPortal(PopperMenu, MENU_CONTAINER) : null
 	}
 
 	let onClick = () => {

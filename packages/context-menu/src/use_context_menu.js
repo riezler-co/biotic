@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { getContextMenuPostion } from './utils'
-import { getContainer, useLongPress } from '@riezler/react-utils'
+import { useGetContainer, useLongPress } from '@riezler/react-utils'
 import styled from 'styled-components'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { BottomSheet } from '@biotic-ui/bottom-sheet'
@@ -40,9 +40,8 @@ let Nav = ({ position, onClose, children }) => {
 	})
 }
 
-let Container = getContainer('biotic-context-menu')
-
 export function useContextMenu() {
+	let Container = useGetContainer('biotic-context-menu')
 	let [useConextMenu, setUseContextMenu] = useState(false)
 	let [useBottomSheet, setUseBottomSheet] = useState(false)
 	let [position, setPosition] = useState({ x: 0, y: 0 })
@@ -85,7 +84,7 @@ export function useContextMenu() {
 			</OutsideClickHandler>
 		)
 
-		return createPortal(Menu, Container)
+		return Container ? createPortal(Menu, Container) : null
 	}
 
 	return { onContextMenu, ContextMenu, ...longPress }

@@ -1,11 +1,9 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import styled, { css } from 'styled-components'
-import { getContainer, useOnEscape, usePreventScroll } from '@riezler/react-utils'
+import { createPortal } from 'react-dom'
+import styled from 'styled-components'
+import { useGetContainer, useOnEscape, usePreventScroll } from '@riezler/react-utils'
 import { useSpring, animated } from 'react-spring'
 import { Backdrop } from '@biotic-ui/leptons'
-
-let DrawerContainer = getContainer('biotic-drawer-container')
 
 let StyledDrawer = styled.div`
 	max-width: 100vw;
@@ -34,6 +32,7 @@ export function Drawer(props = {}) {
 			, scrollable = false
 			} = props
 
+	let DrawerContainer = useGetContainer('biotic-drawer-container')
 	let translate = maxWidth === 'auto' ? '100vw' : `${maxWidth}px`
 
 	let transform = left
@@ -69,5 +68,5 @@ export function Drawer(props = {}) {
 			</StyledDrawer>
 		</React.Fragment>
 	)
-	return ReactDOM.createPortal(Drawer, DrawerContainer)
+	return DrawerContainer ? createPortal(Drawer, DrawerContainer) : null
 }
