@@ -1,6 +1,5 @@
 {
   "name": "@biotic-ui/leptons",
-  "private": false,
   "version": "0.1.0",
   "description": "biotic shared components",
   "main": "lib/main.js",
@@ -36,5 +35,8 @@
   "dependencies": {
     "@riezler/react-utils": "^0.1.0"
   },
-  "gitHead": "114cbbb0ebb5c391c10ecb8a1ca3fb1b084afb81"
+  "gitHead": "aa286c278d255c6e014a6714da74e77c0ef15013",
+  "publishConfig": {
+    "access": "public"
+  }
 }
