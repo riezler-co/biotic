@@ -1,11 +1,17 @@
 import React from 'react';
 import styled from 'styled-components'
-import { Menu, MenuItem, Divider, MenuItemTitle, useMenu } from '../packages/menu/src/main'
-import EditIcon from './assets/edit_icon'
-import DeleteIcon from './assets/delete_icon'
+import EditIcon from '../assets/edit_icon'
+import DeleteIcon from '../assets/delete_icon'
+
+import { Menu
+	     , MenuItem
+	     , Divider
+	     , MenuItemTitle
+	     , useMenu
+	     } from '@package/menu/src/main'
 
 export default {
-  title: 'Menu',
+  title: 'Component/Menu',
   component: Menu,
 };
 
@@ -15,10 +21,6 @@ let Wrapper = styled.div`
 	justify-content: center;
 	height: 100%;
 	padding: 200px 0;
-`
-
-let Nested = styled.div`
-	padding: 900px;
 `
 
 export const SimpleMenu = () =>	{
@@ -79,45 +81,43 @@ WithIcon.story = {
 export const WithSubmenu = () =>	{
 	return  (
 		<Wrapper>
-			<Nested>
-				<Menu icon submenu>
-					<MenuItem onClick={() => {}} icon={<EditIcon/>}>
-						<MenuItemTitle>Menu</MenuItemTitle>
-						<Menu icon>
-							<MenuItem>
-								<MenuItemTitle>Fuu</MenuItemTitle>
-							</MenuItem>
-							<MenuItem icon={<DeleteIcon />}>
-								<MenuItemTitle>Bar</MenuItemTitle>
-							</MenuItem>
-							<MenuItem>
-								<MenuItemTitle>Baz</MenuItemTitle>
-							</MenuItem>
-						</Menu>
-					</MenuItem>
-					<Divider />
-					<MenuItem icon={<DeleteIcon />}>
-						<MenuItemTitle>Fuu</MenuItemTitle>
-					</MenuItem>
-					<MenuItem>
-						<MenuItemTitle>Bar</MenuItemTitle>
-					</MenuItem>
-					<MenuItem>
-						<MenuItemTitle>Baz</MenuItemTitle>
-						<Menu icon>
-							<MenuItem>
-								<MenuItemTitle>Fuu</MenuItemTitle>
-							</MenuItem>
-							<MenuItem icon={<DeleteIcon />}>
-								<MenuItemTitle>Bar</MenuItemTitle>
-							</MenuItem>
-							<MenuItem>
-								<MenuItemTitle>Baz</MenuItemTitle>
-							</MenuItem>
-						</Menu>
-					</MenuItem>
-				</Menu>
-			</Nested>
+			<Menu icon submenu>
+				<MenuItem onClick={() => {}} icon={<EditIcon/>}>
+					<MenuItemTitle>Menu</MenuItemTitle>
+					<Menu icon>
+						<MenuItem>
+							<MenuItemTitle>Fuu</MenuItemTitle>
+						</MenuItem>
+						<MenuItem icon={<DeleteIcon />}>
+							<MenuItemTitle>Bar</MenuItemTitle>
+						</MenuItem>
+						<MenuItem>
+							<MenuItemTitle>Baz</MenuItemTitle>
+						</MenuItem>
+					</Menu>
+				</MenuItem>
+				<Divider />
+				<MenuItem icon={<DeleteIcon />}>
+					<MenuItemTitle>Fuu</MenuItemTitle>
+				</MenuItem>
+				<MenuItem>
+					<MenuItemTitle>Bar</MenuItemTitle>
+				</MenuItem>
+				<MenuItem>
+					<MenuItemTitle>Baz</MenuItemTitle>
+					<Menu icon>
+						<MenuItem>
+							<MenuItemTitle>Fuu</MenuItemTitle>
+						</MenuItem>
+						<MenuItem icon={<DeleteIcon />}>
+							<MenuItemTitle>Bar</MenuItemTitle>
+						</MenuItem>
+						<MenuItem>
+							<MenuItemTitle>Baz</MenuItemTitle>
+						</MenuItem>
+					</Menu>
+				</MenuItem>
+			</Menu>
 		</Wrapper>
 	)
 }

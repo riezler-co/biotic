@@ -1,47 +1,31 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { createGlobalStyle } from 'styled-components'
-import { getContainer } from '@riezler/react-utils'
+import { getContainer, usePreventScroll, useOnEscape } from '@riezler/react-utils'
 import { useSpring, animated } from 'react-spring'
+import { Backdrop } from '@biotic-ui/leptons'
 
 let SheetContainer = getContainer('biotic-bottom-drawer-container')
 
-let Wrapper = styled.div`
-	height: 100%;
-	width: 100%;
-	background: var(--mui-bottom-sheet-background, rgba(0,0,0, 0.25));
-	position: fixed;
-	top: 0;
-	left: 0;
-	${p => !p.open && `
-			pointer-events: none;
-	`}
-`
-
 let BottomDrawer = styled.div`
-	--bottom-sheet-shadow: 0px 8px 21px -5px rgba(0, 0, 0, 0.5);
+	--bottom-default-sheet-shadow: 0px 8px 21px -5px rgba(0, 0, 0, 0.5);
 	position: fixed;
 	bottom: 0;
 	left: 0;
 	background: var(--mui-bottom-sheet-bg, #fff);
-	border-top-left-radius: 16px;
-	border-top-right-radius: 16px;
+	border-top-left-radius: var(--bottom-sheet-border-radius, 1em);
+	border-top-right-radius: var(--bottom-sheet-border-radius, 1em);
 	width: 100%;
 	max-height: 100vh;
 	overflow-y: auto;
+	z-index: 11;
+	
 	${p => p.height ? `height: ${p.height}px`: ''};
-	${p => p.open && 'box-shadow: var(--bottom-sheet-shadow);'}
-
+	${p => p.open && 'box-shadow: var(--bottom-sheet-shadow, var(--bottom-default-sheet-shadow));'}
 
 	--menu-box-shadow: none;
 	--menu-width: auto;
 	--menu-padding: 1em;
-`
-
-let Global = createGlobalStyle`
-	body {
-		overflow-y: ${p => p.open ? 'hidden' : 'normal'};
-	}
 `
 
 export let BottomSheet = ({
@@ -84,18 +68,24 @@ export let BottomSheet = ({
 		opacity: open ? 1 : 0
 	})
 
+	useOnEscape(() => open && onClose({ backdrop: false, escape: true }))
+	usePreventScroll(open && !scrollable)
+
+	function handleBackdrop() {
+		onClose && onClose({ backdrop: true, escape: false })
+	}
+
 	let Sheet = (
 		<React.Fragment>
+			
 			{
 				!scrollable &&
-				<React.Fragment>
-					<Global open={open} />
-					<Wrapper as={animated.div}
-									 style={wrapperAnimation}
-									 open={open}
-									 onClick={onClose} />
-				</React.Fragment>
+				<Backdrop as={animated.div}
+								  style={wrapperAnimation}
+								  open={open}
+								  onClick={handleBackdrop} />
 			}
+
 			<BottomDrawer
 				onClick={onClick}
 				as={animated.div}
@@ -106,6 +96,7 @@ export let BottomSheet = ({
 				ref={sheetRef}>
 				{ children }
 			</BottomDrawer>
+			
 		</React.Fragment>
 	)
 

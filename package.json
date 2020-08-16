@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run storybook",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -18,8 +18,10 @@
     "@storybook/addon-actions": "^6.0.3",
     "@storybook/addon-essentials": "^6.0.3",
     "@storybook/addon-links": "^6.0.3",
+    "@storybook/addon-viewport": "^6.0.10",
     "@storybook/react": "^6.0.3",
     "babel-loader": "^8.1.0",
+    "babel-plugin-lodash": "^3.3.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-is": "^16.13.1",
@@ -29,5 +31,7 @@
   "workspaces": [
     "packages/*"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "lodash": "^4.17.20"
+  }
 }

@@ -1,7 +1,8 @@
 {
-  "name": "@biotic-ui/drawer",
+  "name": "@biotic-ui/collapsible",
+  "private": false,
   "version": "0.0.4",
-  "description": "React Drawer",
+  "description": "React Collapsible",
   "main": "lib/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -31,10 +32,6 @@
     "react-dom": "^16.13.1",
     "react-spring": "^8.0.27",
     "styled-components": "^5.1.1"
-  },
-  "dependencies": {
-    "@riezler/react-utils": "^0.0.4",
-    "@biotic-ui/leptons": "^0.0.4"
   },
   "gitHead": "114cbbb0ebb5c391c10ecb8a1ca3fb1b084afb81"
 }

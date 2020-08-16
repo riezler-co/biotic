@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components'
-import { BottomSheet, SheetHeader, SheetTitle, SheetContent } from '../packages/bottom-sheet/src/main'
-import { Menu, MenuItem, Divider, MenuItemTitle, useMenu } from '../packages/menu/src/main'
-import EditIcon from './assets/edit_icon'
-import DeleteIcon from './assets/delete_icon'
+import { BottomSheet, SheetHeader, SheetTitle, SheetContent } from '@package/bottom-sheet/src/main'
+import { Menu, MenuItem, Divider, MenuItemTitle, useMenu } from '@package/menu/src/main'
+import EditIcon from '../assets/edit_icon'
+import DeleteIcon from '../assets/delete_icon'
 
 export default {
-	title: 'Bottom Sheet',
+	title: 'Component/Bottom Sheet',
 	component: BottomSheet
 }
 

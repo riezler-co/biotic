@@ -1,7 +1,8 @@
 {
-  "name": "@biotic-ui/drawer",
+  "name": "@biotic-ui/dialog",
+  "private": false,
   "version": "0.0.4",
-  "description": "React Drawer",
+  "description": "React Dialog",
   "main": "lib/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

@@ -7,7 +7,7 @@ module.exports = function (api) {
     ["@babel/preset-react", { "development": true }]
   ]
 
-  let plugins = []
+  let plugins = ['lodash']
 
   return {
     presets,
