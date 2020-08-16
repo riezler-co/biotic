@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/layout",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "biotic layout components",
   "main": "lib/main.js",
   "scripts": {
@@ -33,8 +33,8 @@
     "styled-components": "^5.1.1"
   },
   "dependencies": {
-    "@biotic-ui/drawer": "^0.1.0",
-    "@riezler/react-utils": "^0.1.0"
+    "@biotic-ui/drawer": "^0.1.1",
+    "@riezler/react-utils": "^0.1.1"
   },
   "gitHead": "aa286c278d255c6e014a6714da74e77c0ef15013",
   "publishConfig": {

@@ -1,6 +1,6 @@
 {
   "name": "@riezler/react-utils",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Utils",
   "main": "lib/main.js",
   "scripts": {

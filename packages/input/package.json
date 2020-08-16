@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/input",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Input",
   "main": "lib/main.js",
   "scripts": {
