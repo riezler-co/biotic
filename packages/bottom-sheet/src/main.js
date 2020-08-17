@@ -5,7 +5,7 @@ import { useGetContainer
 			 , usePreventScroll
 			 , useOnEscape
 			 , useWindowSize
-			 } from '@riezler/react-utils'
+			 } from '@biotic-ui/std'
 import { useSpring, animated } from 'react-spring'
 import { Backdrop } from '@biotic-ui/leptons'
 

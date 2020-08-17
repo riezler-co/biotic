@@ -1,7 +1,12 @@
 import React from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
-import { useGetContainer, useOnEscape, usePreventScroll } from '@riezler/react-utils'
+
+import { useGetContainer
+			 , useOnEscape
+			 , usePreventScroll
+			 } from '@biotic-ui/std'
+
 import { useSpring, animated } from 'react-spring'
 import { Backdrop } from '@biotic-ui/leptons'
 

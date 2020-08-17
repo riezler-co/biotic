@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
-import { useScrollShadow, useMatchMedia } from '@riezler/react-utils'
+import { useScrollShadow, useMatchMedia } from '@biotic-ui/std'
 import { Drawer } from '@biotic-ui/drawer'
 
 export let SidebarLayout = styled.div`

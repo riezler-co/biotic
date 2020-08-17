@@ -12,7 +12,7 @@ import styled, { css } from 'styled-components'
 import ArrowRight from './arrow_right'
 import { getSubmenuPosition } from './utils'
 import ArrowBack from './arrow_back'
-import { useCombinedRefs, useResize } from '@riezler/react-utils'
+import { useCombinedRefs, useResize } from '@biotic-ui/std'
 import { StyledMenu, StyledMenuItem, MenuItemTitle } from './styled'
 
 export let Menu = React.forwardRef((props, outerRef) => {

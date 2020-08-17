@@ -1,6 +1,6 @@
 import React, { Children, useState } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
-import { useGetContainer } from '@riezler/react-utils'
+import { useGetContainer } from '@biotic-ui/std'
 import { createPortal } from 'react-dom'
 import { usePopper } from 'react-popper'
 import { Menu } from './menu'

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { getContextMenuPostion } from './utils'
-import { useGetContainer, useLongPress } from '@riezler/react-utils'
+import { useGetContainer, useLongPress } from '@biotic-ui/std'
 import styled from 'styled-components'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { BottomSheet } from '@biotic-ui/bottom-sheet'
