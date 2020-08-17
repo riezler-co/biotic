@@ -1,5 +1,11 @@
-import React from 'react'
+import React
+		 , { useMemo
+		 	 , useState
+		 	 , useLayoutEffect
+		 	 , forwardRef
+		 	 } from 'react'
 import styled from 'styled-components'
+import { useCombinedRefs, useResize, useThrottle } from '@biotic-ui/std'
 
 let StyledText = styled.textarea`
 	--default-border: 1px solid rgba(34,36,38,.15);
@@ -12,10 +18,14 @@ let StyledText = styled.textarea`
 	overflow-y: auto;
 	padding: .38em 0.62em;
 	border-radius: var(--input-border-radius, .28571429rem);
-	height: ${p => p.height}px;
 	min-height: 33px;
 	resize: none;
 	line-height: 1.21428571em;
+	max-height: ${p => p.maxHeight === null
+		? 'auto' 
+		: typeof p.maxHeight === 'number'
+				? `${p.maxHeight}px`
+				: p.maxHeight  };
 
   scrollbar-width: ${p => p.maxHeight === null ? 'none' : 'thin'};
   scrollbar-color: var(--scrollbar, #cdcdcd);
@@ -34,51 +44,51 @@ let StyledText = styled.textarea`
 	    border-radius: ${p => p.maxHeight === null ? '0' : '10px'};
 	}
 `
-export let Textarea = (props = {}) => {
-	let { maxHeight = null, minRows = 1 } = props
-	let input = React.useRef(null)
-	let [dirty, setDirty] = React.useState(false)
-	let [height, setHeight] = React.useState(0)
+export let Textarea = forwardRef((props = {}, userRef) => {
+	let { maxHeight = null
+		  , minRows = 1
+		  , className = ''
+		  , name = ''
+		  , placeholder = ''
+		  , value = ''
+		  , style = {}
+		  } = props
+
+	let [input, setInput] = useState(null)
+	let ref = useCombinedRefs(setInput, userRef)
+
+	let { paddingBottom } = useMemo(() => {
+		if (!input) return { paddingBottom: '0px' }
+		return window.getComputedStyle(input)
+	}, [input])
 
 	function resize() {
-		if (input.current) {
-			input.current.style.cssText = 'height:auto; padding:0'
-			let { scrollHeight } = input.current
-			if (maxHeight === null || scrollHeight < maxHeight) {
-				setHeight(input.current.scrollHeight)
-			}
-			input.current.style.cssText = ''
-		}
+		if (!input) return
+		input.style.cssText = 'height:auto;'
+		requestAnimationFrame(() => {
+			let { scrollHeight, offsetHeight } = input
+			input.style.cssText = ''
+			input.style.height = `calc(${scrollHeight}px + ${paddingBottom})`
+		})
 	}
 
-	React.useLayoutEffect(resize, [input, props.value])
+	useLayoutEffect(resize, [input, props.value])
 
-	function handleChange(event) {
-		if (dirty) {
-			props.onChange(event)
-		}
-	}
-
-	function handleRef(ref) {
-		input.current = ref
-		if (props.focus && ref) {
-			ref.focus()
-		}
-	}
+	let throttledResize = useThrottle(resize, 200, [input])
+	useResize(throttledResize)
 
 	return (
 		<StyledText
-			ref={handleRef}
-			name={props.name}
-			className={props.className}
-			placeholder={props.placeholder}
-			onChange={handleChange}
-			onKeyDown={() => setDirty(true)}
+			style={style}
+			ref={ref}
+			name={name}
+			className={className}
+			placeholder={placeholder}
+			onChange={props.onChange}
 			onBlur={props.onBlur}
 			value={props.value}
-			height={height}
 			rows={minRows}
 			maxHeight={maxHeight}
 		></StyledText>
 	)
-}
+})
