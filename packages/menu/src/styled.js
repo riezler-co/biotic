@@ -6,7 +6,7 @@ export let StyledMenu = styled.ul`
 	--default-padding: 4px 0;
 
 	width: var(--menu-width, 300px);
-	max-width: calc(100vw - 1em);
+	max-width: var(--menu-max-width, calc(100vw - 1em));
 	background: var(--menu-bg, #fff);
 	color: var(--menu-color, #444);
 	border-color: var(--border-color);

@@ -28,6 +28,8 @@ let BottomDrawer = styled.div`
 	--menu-box-shadow: none;
 	--menu-width: auto;
 	--menu-padding: 1em;
+	--menu-max-width: 100%;
+	--menu-border: none;
 `
 
 export let BottomSheet = ({
