@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/menu",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React Menu",
   "main": "lib/main.js",
   "scripts": {
@@ -22,16 +22,16 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
+    "@biotic-ui/std": "^0.1.2",
     "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "@biotic-ui/std": "^0.1.1"
+    "webpack-cli": "^3.3.12"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
+    "@biotic-ui/std": "^0.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "styled-components": "^5.1.1",
-    "@biotic-ui/std": "^0.1.1"
+    "styled-components": "^5.1.1"
   },
   "dependencies": {
     "@popperjs/core": "^2.4.4",
