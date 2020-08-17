@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input } from '@package/input/src/main'
+import { Input } from '@package/input/main'
 
 export default {
 	title: 'Form/Input',

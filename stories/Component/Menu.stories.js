@@ -8,7 +8,7 @@ import { Menu
 	     , Divider
 	     , MenuItemTitle
 	     , useMenu
-	     } from '@package/menu/src/main'
+	     } from '@package/menu/main'
 
 export default {
   title: 'Component/Menu',

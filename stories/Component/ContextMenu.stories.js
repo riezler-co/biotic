@@ -3,12 +3,12 @@ import styled from 'styled-components'
 import EditIcon from '../assets/edit_icon'
 import DeleteIcon from '../assets/delete_icon'
 
-import { useContextMenu } from '@package/context-menu/src/main'
+import { useContextMenu } from '@package/context-menu/main'
 import { Menu
 			 , MenuItem
 			 , Divider
 			 , MenuItemTitle
-			 } from '@package/menu/src/main'
+			 } from '@package/menu/main'
 
 export default {
   title: 'Component/Context Menu',

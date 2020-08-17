@@ -3,13 +3,13 @@ import styled from 'styled-components'
 import EditIcon from '../assets/edit_icon'
 import DeleteIcon from '../assets/delete_icon'
 
-import { Drawer } from '@package/drawer/src/main'
+import { Drawer } from '@package/drawer/main'
 import { Menu
 	   	 , MenuItem
 	   	 , Divider
 	   	 , MenuItemTitle
 	   	 , useMenu
-	   	 } from '@package/menu/src/main'
+	   	 } from '@package/menu/main'
 
 export default {
 	title: 'Component/Drawer',

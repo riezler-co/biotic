@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
-import { useScrollShadow } from '@package/react-utils/src/main'
+import { useScrollShadow } from '@package/std/main'
 
 
 let Wrapper = styled.div`

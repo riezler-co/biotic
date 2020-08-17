@@ -9,14 +9,14 @@ import { Collapsible
 			 , AccordionItem
 			 , AccordionTitle
 			 , AccordionConent
-			 } from '@package/collapsible/src/main'
+			 } from '@package/collapsible/main'
 
 import { Menu
 			 , MenuItem
 			 , Divider
 			 , MenuItemTitle
 			 , useMenu
-			 } from '@package/menu/src/main'
+			 } from '@package/menu/main'
 
 export default {
 	title: 'Component/Collapsible',

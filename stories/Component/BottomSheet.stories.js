@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
-import { BottomSheet, SheetHeader, SheetTitle, SheetContent } from '@package/bottom-sheet/src/main'
-import { Menu, MenuItem, Divider, MenuItemTitle, useMenu } from '@package/menu/src/main'
+import { BottomSheet, SheetHeader, SheetTitle, SheetContent } from '@package/bottom-sheet/main'
+import { Menu, MenuItem, Divider, MenuItemTitle, useMenu } from '@package/menu/main'
 import EditIcon from '../assets/edit_icon'
 import DeleteIcon from '../assets/delete_icon'
 

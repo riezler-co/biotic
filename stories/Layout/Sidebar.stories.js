@@ -5,14 +5,14 @@ import DeleteIcon from '../assets/delete_icon'
 import { SidebarLayout
 			 , Aside
 			 , Main
-			 } from '@package/layout/src/main'
+			 } from '@package/layout/main'
 
 import { Menu
 	   	 , MenuItem
 	   	 , Divider
 	   	 , MenuItemTitle
 	   	 , useMenu
-	   	 } from '@package/menu/src/main'
+	   	 } from '@package/menu/main'
 
 export default {
 	title: 'Layout/Sidebar'
