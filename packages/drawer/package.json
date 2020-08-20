@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/drawer",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "React Drawer",
   "main": "lib/main.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/std": "^0.1.2",
+    "@biotic-ui/std": "^0.1.3",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
