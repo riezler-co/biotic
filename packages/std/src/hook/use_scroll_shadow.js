@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import _ from 'lodash'
 
 let shadowColor = 'var(--scroll-shadow, var(--default-scroll-shadow))'
@@ -15,7 +15,7 @@ let DefaultConfig = {
 	bottom: true,
 	left: true,
 	right: true,
-	shadows: SHADOWS
+	shadows: SHADOWS,
 }
 
 export function useScrollShadow(ref, userConfig = {}) {
@@ -45,20 +45,20 @@ export function useScrollShadow(ref, userConfig = {}) {
 
 			setShadow({
 				top: config.top ? scrollTop > 0 : false,
-				bottom: config.bottom ? scrollHeight > (scrollTop + clientHeight) : false,
+				bottom: config.bottom ? scrollHeight > (Math.ceil(scrollTop) + clientHeight) : false,
 				left: config.left ? scrollLeft > 0 : false,
-				right: config.right ? scrollWidth > (scrollLeft + clientWidth) : false,
+				right: config.right ? scrollWidth > (Math.ceil(scrollLeft) + clientWidth) : false,
 			})
 
 		}, 500, { leading: true, trailing: true })
 		, [config, setShadow, ref]
 	)
 
-	useLayoutEffect(getShadow, [ref, setShadow])
+	useEffect(getShadow, [ref, setShadow])
 	
 	useEffect(() => getShadow.cancel, [getShadow])
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		if (!ref.current) return
 
 		let { clientWidth, offsetWidth, offsetHeight, clientHeight } = ref.current

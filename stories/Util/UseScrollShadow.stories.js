@@ -6,15 +6,20 @@ import { useScrollShadow } from '@package/std/main'
 let Wrapper = styled.div`
 	display: flex;
 	width: 100%;
-	height: 100%;
+	min-height: 100%;
 	align-items: center;
 	justify-content: center;
+	flex-direction: column;
 `
 
 let ScrollArea = styled.div`
 	overflow: auto;
 	width: 500px;
+	max-width: 90vw;
 	height: 500px;
+	max-height: 80vh;
+	flex-shrink: 0;
+	margin-bottom: 2rem;
 	-ms-overflow-style: none;  /* IE and Edge */
 	scrollbar-width: none;  /* Firefox */
 	&::-webkit-scrollbar {
@@ -26,6 +31,8 @@ let ScrollAreaScrollBar = styled.div`
 	overflow: auto;
 	width: 500px;
 	height: 500px;
+	max-height: 80vh;
+	max-width: 90vw;
 `
 
 let Content = styled.div`
@@ -40,7 +47,7 @@ export default {
 
 export let ScrollShadow = () => {
 	let ref = useRef(null)
-	let [onScroll, style] = useScrollShadow(ref)
+	let [onScroll, style] = useScrollShadow(ref, { debug: true })
 
 	return (
 		<Wrapper>

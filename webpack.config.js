@@ -38,6 +38,7 @@ module.exports = function createConfig (webpackEnv) {
         },
      },
     output: {
+      globalObject: 'this',
       filename: '[name].js',
       path: cwd + '/lib',
       libraryTarget: 'umd'

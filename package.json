@@ -7,7 +7,8 @@
     "start": "npm run storybook",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build": "build-storybook"
+    "build": "build-storybook",
+    "browser-sync": "browser-sync start --proxy localhost:6006"
   },
   "author": "Michael Riezler <michael@riezler.co> (https://riezler.co)",
   "license": "MPL-2.0",
@@ -25,6 +26,7 @@
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-macros": "^2.8.0",
     "babel-plugin-styled-components": "^1.11.1",
+    "browser-sync": "^2.26.12",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-is": "^16.13.1",
