@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
-import _ from 'lodash'
+import { useDebounce } from './use_debounce'
 
 let shadowColor = 'var(--scroll-shadow, var(--default-scroll-shadow))'
 
@@ -31,8 +31,8 @@ export function useScrollShadow(ref, userConfig = {}) {
 
 	let [scrollBar, setScrollBar] = useState({ bottom: 0, right: 0 })
 
-	let getShadow = useCallback(
-		_.debounce(() => {
+	let getShadow = useDebounce(
+		() => {
 			if (!ref.current) return
 
 			let { scrollHeight
@@ -45,13 +45,12 @@ export function useScrollShadow(ref, userConfig = {}) {
 
 			setShadow({
 				top: config.top ? scrollTop > 0 : false,
-				bottom: config.bottom ? scrollHeight > (Math.ceil(scrollTop) + clientHeight) : false,
+				bottom: config.bottom ? scrollHeight > (Math.ceil(scrollTop) + clientHeight + 5) : false,
 				left: config.left ? scrollLeft > 0 : false,
-				right: config.right ? scrollWidth > (Math.ceil(scrollLeft) + clientWidth) : false,
+				right: config.right ? scrollWidth > (Math.ceil(scrollLeft) + clientWidth + 5): false,
 			})
 
-		}, 500, { leading: true, trailing: true })
-		, [config, setShadow, ref]
+		}, 500, [config, setShadow, ref], { leading: true, trailing: true }
 	)
 
 	useEffect(getShadow, [ref, setShadow])

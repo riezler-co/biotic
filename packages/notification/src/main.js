@@ -1,31 +1,3 @@
-
-/*
-
-	import { Notification, useNotification, notification } from '@biotic/notification'
-
-	Root Element
-	<Notification />
-
-
-	Component
-	let { open, close } = useNotification(({ onClose }) => {
-		return (
-			<Text>
-				<button onClick={onClose}></button>
-			</Text>
-		)
-	})
-
-
-	outsite react
-	let id = notification.open(({ onClose }) => {
-		return (<div>...</div>)
-	})
-
-	notification.close(id)
-
-*/
-
 import React,
 		 { createElement
 		 , useRef
@@ -34,12 +6,14 @@ import React,
 		 , cloneElement
 		 , useState
 		 , useLayoutEffect
+		 , forwardRef
 		 } from 'react'
 import { createPortal } from 'react-dom'
 import create from 'zustand'
 import { useGetContainer } from '@biotic-ui/std'
 import styled from 'styled-components'
 import { animated, useSpring } from 'react-spring'
+import OutsideClickHandler from 'react-outside-click-handler'
 
 let getId = (() => {
 	let currentId = 0
@@ -50,8 +24,10 @@ let getId = (() => {
 	}
 })()
 
-let useStore = create(set => ({
+let useStore = create((set, get) => ({
   notifications: [],
+  hover: Promise.resolve(),
+  setHover: (hover) => set({ hover }), 
 
   open: (notification) => set(state => {
 
@@ -64,16 +40,31 @@ let useStore = create(set => ({
   	return { notifications }
   }),
 
-  close: (id) => set(state => {
+  close: async (id) => {
+  	await get().hover
+  	return set(state => {
+	  	let notifications = state.notifications.filter(x => x.id !== id)
+	  	return { notifications }
+	  })
+  },
+
+  closeImmediate: (id) => set(state => {
   	let notifications = state.notifications.filter(x => x.id !== id)
   	return { notifications }
   })
 
 }))
 
+export let useNotificationStore = useStore
+
 function close(id) {
 	let state = useStore.getState()
 	state.close(id)
+}
+
+function closeImmediate(id) {
+	let state = useStore.getState()
+	state.closeImmediate(id)
 }
 
 function open(Component) {
@@ -85,44 +76,70 @@ function open(Component) {
 
 export let notification = {
 	open,
-	close
+	close,
+	closeImmediate
 }
 
 export function useNotification(Component, props) {
 	let id = useRef(getId())
 	let component = useRef(null)
-	let { open, close, setComponent } = useStore(state => state)
+	let { open, close, setComponent, closeImmediate } = useStore(state => state)
 
 	let _open = useCallback(() => {
 		open({ id: id.current , Component: component.current })
 	}, [])
 
 	let _close = useCallback(() => close(id.current), [])
+	let _closeImmediate = useCallback(() => closeImmediate(id.current), [])
 
 	useEffect(() => {
 		component.current = Component
 	})
 
-	return { open: _open, close: _close }
+	return { open: _open, close: _close, closeImmediate: _closeImmediate }
 }
 
 export function Notifications() {
 
 	let Container = useGetContainer('biotic-notifications')
-	let notifications = useStore(state => state.notifications)
+	let { notifications, ...state } = useStore(state => state)
+	let [hover, setHover] = useState(false)
+	let [nodes, setNodex] = useState([])
+	let resolver = useRef(() => {})
+
+	function onMouseEnter() {
+		setHover(true)
+		let promise = new Promise((resolve) => {
+			resolver.current = resolve
+		})
+
+		state.setHover(promise)
+	}
+
+	function onMouseLeave() {
+		setHover(false)
+		resolver.current()
+	}
 
 	let NotificationContainer = (
-		<StyledNotifications>
-			{ 
-				notifications.map(({ id, Component }, index) => {
-					return (
-						<ListItem key={id}>
-							{ createElement(Component, { onClose: () => close(id) }) }
-						</ListItem>
-					)
-				}) 
-			}
-		</StyledNotifications>
+		<OutsideClickHandler onOutsideClick={onMouseLeave}>
+			<StyledNotifications onMouseEnter={onMouseEnter}
+													 onClick={onMouseEnter}
+											     onMouseLeave={onMouseLeave}>
+				{ 
+					notifications.map(({ id, Component }, index) => {
+						return (
+							<ListItem key={id} 
+											  index={index}
+											  open={hover}
+											  lastIndex={notifications.length - 1}>
+								{ createElement(Component, { onClose: () => state.closeImmediate(id) }) }
+							</ListItem>
+						)
+					}) 
+				}
+			</StyledNotifications>
+		</OutsideClickHandler>
 	)
 
 	return Container ? createPortal(NotificationContainer, Container) : null
@@ -130,37 +147,47 @@ export function Notifications() {
 
 let StyledNotifications = styled.ul`
 	position: fixed;
-	bottom: 1em;
-	right: 1em;
+	bottom: var(--notification-bottom, 1em);
+	right: var(--notification-right, 1em);
 	display: flex;
 	padding: 0;
 	list-style-type: none;
 	align-items: stretch;
 	flex-direction: column-reverse;
+	margin-bottom: 0;
 `
 
 let StyledNotification = styled.li`
-	margin-bottom: 0.38em;
-	border: 1px solid #fff;
+	margin-top: var(--notification-spacing, 0.38em);
+	z-index: ${p => 3 - p.index};
+	user-select: ${p => p.open ? 'auto' : 'none'};
 `
 
-function ListItem({ index, children, open }) {
+let ListItem = forwardRef(({ index, children, open , lastIndex }, ref) => {
+
+	let style = useSpring({
+		transform: open ? `scale(1) translateY(0px)` : `scale(${1 - index * 0.08}) translateY(${index * 42}px)` 
+	})
+
 	return (
-		<StyledNotification>
+		<StyledNotification as={animated.div} style={style} ref={ref} index={index} open={open}>
 			{ children }
 		</StyledNotification>
 	)
-}
+})
 
 export let Notification = styled.div`
+	--default-border: 1px solid #fff;
 	background: var(--notification-background, #222);
 	color: var(--notification-color, #fff);
 	padding: 0.62em 1.38em;
+	border: var(--notification-border, var(--default-border));
 	border-radius: 0.3em;
 	width: 300px;
 	display: flex;
 	justify-content: space-between;
 	padding-right: 0.62em;
+	max-width: 95vw;
 `
 
 let Button = styled.button`
@@ -168,6 +195,8 @@ let Button = styled.button`
 	border: none;
 	cursor: pointer;
 	display: flex;
+	align-items: center;
+
 	svg {
 		fill: var(--notification-color, #fff);
 		width: 1em;

@@ -12,7 +12,7 @@ export let Default = () => {
 
 	let first = useNotification(({ onClose }) => {
 		return (
-			<Notification>
+			<Notification role='status'>
 				<span>First Notifications!!! { count }</span>
 				<Close onClick={onClose}/>
 			</Notification>
@@ -31,7 +31,7 @@ export let Default = () => {
 		setTimeout(() => {
 
 			let id = notification.open(({ onClose }) => {
-				return <Notification>Third Notifications!!! <Close onClick={onClose}/></Notification>
+				return <Notification>Open programmatically <Close onClick={onClose}/></Notification>
 			})
 
 		}, 2000)
@@ -47,8 +47,8 @@ export let Default = () => {
 
 	return (
 		<React.Fragment>
-			<button onClick={first.open}>First</button>
-			<button onClick={openSecond}>Second</button>
+			<button onClick={first.open}>Default Persistant</button>
+			<button onClick={openSecond}>Auto Close</button>
 			<button onClick={third.open}>One More</button>
 
 			<button onClick={() => setCount(count + 1)}>Count: { count }</button>
