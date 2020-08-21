@@ -38,7 +38,7 @@
     "@biotic-ui/bottom-sheet": "^0.1.4",
     "react-outside-click-handler": "^1.3.0"
   },
-  "gitHead": "aa286c278d255c6e014a6714da74e77c0ef15013",
+  "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
   "publishConfig": {
     "access": "public"
   }

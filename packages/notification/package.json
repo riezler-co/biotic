@@ -34,7 +34,7 @@
     "react-spring": "^8.0.27",
     "styled-components": "^5.1.1"
   },
-  "gitHead": "aa286c278d255c6e014a6714da74e77c0ef15013",
+  "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
   "publishConfig": {
     "access": "public"
   },
