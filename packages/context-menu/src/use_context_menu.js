@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { getContextMenuPostion } from './utils'
-import { useGetContainer, useLongPress } from '@biotic-ui/std'
+import { useGetContainer, useLongPress, useOnEscape } from '@biotic-ui/std'
 import styled from 'styled-components'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { BottomSheet } from '@biotic-ui/bottom-sheet'
@@ -33,8 +33,10 @@ let Nav = ({ position, onClose, children }) => {
 		node.style.left = left
 	}, [ref, position])
 
+	useOnEscape(onClose)
+
 	return React.cloneElement(children, {
-		style: { position: 'absolute' },
+		style: { position: 'absolute', zIndex: 9999 },
 		ref: setRef,
 		onClick: onClose
 	})
