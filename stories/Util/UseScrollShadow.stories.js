@@ -47,12 +47,13 @@ export default {
 
 export let ScrollShadow = () => {
 	let ref = useRef(null)
-	let [onScroll, style] = useScrollShadow(ref, { debug: true })
+	let [onScroll, style, ShadowBox] = useScrollShadow(ref, { debug: true })
 
 	return (
 		<Wrapper>
-			<ScrollArea ref={ref} onScroll={onScroll} style={style}>
+			<ScrollArea ref={ref} onScroll={onScroll}>
 				<Content>useScrollShadow</Content>
+				<ShadowBox style={style} />
 			</ScrollArea>
 		</Wrapper>
 	)
@@ -62,12 +63,13 @@ ScrollShadow.storyName = 'All sides'
 
 export let ScrollShadowWithScrollBar = () => {
 	let ref = useRef(null)
-	let [onScroll, style] = useScrollShadow(ref)
+	let [onScroll, style, ShadowBox] = useScrollShadow(ref)
 
 	return (
 		<Wrapper>
-			<ScrollAreaScrollBar ref={ref} onScroll={onScroll} style={style}>
+			<ScrollAreaScrollBar ref={ref} onScroll={onScroll}>
 				<Content>useScrollShadow</Content>
+				<ShadowBox style={style} />
 			</ScrollAreaScrollBar>
 		</Wrapper>
 	)
@@ -77,12 +79,13 @@ ScrollShadowWithScrollBar.storyName = 'With Scrollbar'
 
 export let TopBottom = () => {
 	let ref = useRef(null)
-	let [onScroll, style] = useScrollShadow(ref, { left: false, right: false })
+	let [onScroll, style, ShadowBox] = useScrollShadow(ref, { left: false, right: false })
 
 	return (
 		<Wrapper>
-			<ScrollArea ref={ref} onScroll={onScroll} style={style}>
+			<ScrollArea ref={ref} onScroll={onScroll}>
 				<Content>useScrollShadow</Content>
+				<ShadowBox style={style} />
 			</ScrollArea>
 		</Wrapper>
 	)
@@ -92,12 +95,13 @@ TopBottom.storyName = 'Top and Bottom'
 
 export let LeftRight = () => {
 	let ref = useRef(null)
-	let [onScroll, style] = useScrollShadow(ref, { top: false, bottom: false })
+	let [onScroll, style, ShadowBox] = useScrollShadow(ref, { top: false, bottom: false })
 
 	return (
 		<Wrapper>
-			<ScrollArea ref={ref} onScroll={onScroll} style={style}>
+			<ScrollArea ref={ref} onScroll={onScroll}>
 				<Content>useScrollShadow</Content>
+				<ShadowBox style={style} />
 			</ScrollArea>
 		</Wrapper>
 	)

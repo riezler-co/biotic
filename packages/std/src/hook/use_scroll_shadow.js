@@ -1,13 +1,14 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useDebounce } from './use_debounce'
+import styled from 'styled-components'
 
 let shadowColor = 'var(--scroll-shadow, var(--default-scroll-shadow))'
 
 export let SHADOWS = {
 	top: `${shadowColor} 0px 12px 8px -13px inset`,
-	bottom: `${shadowColor} 0px calc(-12px - var(--shadow-offset-bottom)) 8px -13px inset`,
+	bottom: `${shadowColor} 0px -12px 8px -13px inset`,
 	left: `${shadowColor} 12px 0 8px -13px inset`,
-	right: `${shadowColor} calc(-12px - var(--shadow-offset-right)) 0 8px -13px inset`,
+	right: `${shadowColor} -12px 0 8px -13px inset`,
 }
 
 let DefaultConfig = {
@@ -17,6 +18,16 @@ let DefaultConfig = {
 	right: true,
 	shadows: SHADOWS,
 }
+
+let ShadowBox = styled.div`
+	width: 0;
+	height: 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+	overflow: hidden;
+`
 
 export function useScrollShadow(ref, userConfig = {}) {
 
@@ -69,14 +80,32 @@ export function useScrollShadow(ref, userConfig = {}) {
 
 	}, [ref, setScrollBar])
 
+	let [boundingBox, setBoundingBox] = useState({
+		top: 0,
+		left: 0,
+		width: 0,
+		height: 0
+	})
+
+	useEffect(() => {
+		if (!ref.current) return
+
+		let rect = ref.current.getBoundingClientRect()
+		setBoundingBox(rect)
+	}, [ref])
+
 	let style = {
 		'--default-scroll-shadow': 'rgba(0, 0, 0, 0.3)',
 		'--shadow-offset-bottom': `${scrollBar.bottom}px`,
 		'--shadow-offset-right': `${scrollBar.right}px`,
+		top: `${boundingBox.top}px`,
+		left: `${boundingBox.left}px`,
+		width: `${boundingBox.width - scrollBar.right}px`,
+		height: `${boundingBox.height - scrollBar.bottom}px`,
 		boxShadow: getShadows(shadow, config.shadows)
 	}
 
-	return [getShadow, style, shadow]
+	return [getShadow, style, ShadowBox]
 }
 
 function getShadows(shadow, shadows) {
