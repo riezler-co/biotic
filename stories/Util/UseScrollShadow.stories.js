@@ -61,6 +61,34 @@ export let ScrollShadow = () => {
 
 ScrollShadow.storyName = 'All sides'
 
+export let Size = () => {
+	let ref = useRef(null)
+	let [onScroll, style, ShadowBox] = useScrollShadow(ref, { debug: true })
+
+	let [size, setSize] = React.useState({ width: 500, height: 500 })
+
+	return (
+		<Wrapper>
+			<form>
+				<label>
+					Width: 
+					<input name='width' value={size.width} onChange={e => setSize({ ...size, width: parseInt(e.target.value) })} />
+				</label>
+				<label>
+					Height: 
+					<input name='height' value={size.height} onChange={e => setSize({ ...size, height: parseInt(e.target.value) })} />
+				</label>
+			</form>
+			<ScrollArea ref={ref} onScroll={onScroll} style={size}>
+				<Content>useScrollShadow</Content>
+				<ShadowBox style={style} />
+			</ScrollArea>
+		</Wrapper>
+	)
+}
+
+Size.storyName = 'Change Size'
+
 export let ScrollShadowWithScrollBar = () => {
 	let ref = useRef(null)
 	let [onScroll, style, ShadowBox] = useScrollShadow(ref)

@@ -1,5 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useDebounce } from './use_debounce'
+import { useThrottle } from './use_throttle'
+import { useResize } from './use_resize'
 import styled from 'styled-components'
 
 let shadowColor = 'var(--scroll-shadow, var(--default-scroll-shadow))'
@@ -90,9 +92,29 @@ export function useScrollShadow(ref, userConfig = {}) {
 	useEffect(() => {
 		if (!ref.current) return
 
+		let resizeObserver = new ResizeObserver(entries => {
+		  entries.forEach(entry => {
+		  	if (entry.target) {
+		  		let rect = entry.target.getBoundingClientRect()
+		  		setBoundingBox(rect)
+		  	}
+		  })
+		})
+
+		resizeObserver.observe(ref.current)
+
+		return () => {
+			resizeObserver.disconnect()
+		}
+	}, [ref])
+
+	let handleBoundingBox = useThrottle(() => {
+		if (!ref.current) return
 		let rect = ref.current.getBoundingClientRect()
 		setBoundingBox(rect)
-	}, [ref])
+	}, 50, [ref])
+	
+	useResize(handleBoundingBox)
 
 	let style = {
 		'--default-scroll-shadow': 'rgba(0, 0, 0, 0.3)',
