@@ -23,11 +23,11 @@ let ItemWrapper = styled.div`
 
 let Item = ({ title, justify, align }) => {
 	let { ContextMenu, ...props } = useContextMenu()
-
+	let [count, setCount] = React.useState(0)
 	return (
 		<React.Fragment>
 			<ItemWrapper justify={justify} align={align}>
-				<span {...props}>{ title }</span>
+				<span {...props} onClick={() => setCount(count + 1)}>{ title }: { count }</span>
 			</ItemWrapper>
 			<ContextMenu>
 				<Menu icon submenu>

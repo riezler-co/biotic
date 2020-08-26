@@ -56,7 +56,7 @@ export function useContextMenu() {
 
 	let longPress = useLongPress(function onLongPress() {
 		setUseBottomSheet(true)
-	})
+	}, { shouldPreventDefault: false })
 
 	let ContextMenu = ({ children }) => {
 

@@ -45,6 +45,7 @@ export let MenuItemTitle = styled.button`
 	cursor: ${p => p.cursor};
 	color: inherit;
 	text-decoration: none;
+	user-select: none;
 
 	span.arrow_right {
 		position: absolute;
