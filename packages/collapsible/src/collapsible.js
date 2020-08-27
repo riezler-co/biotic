@@ -4,7 +4,7 @@ import { useSpring, animated } from 'react-spring'
 import { useResizeObserver } from '@biotic-ui/std'
 
 let StyledCollapsible = styled.div`
-	overflow: hidden;
+	overflow: ${p => p.open ? 'unset' : 'hidden'};
 `
 
 export function Collapsible({ children, open, className }) {
@@ -36,7 +36,8 @@ export function Collapsible({ children, open, className }) {
 	return (
 		<StyledCollapsible as={animated.div}
 											 style={aimation}
-											 className={className}>
+											 className={className}
+											 open={open}>
 			<animated.div style={content} ref={ref}>
 				{ children }
 			</animated.div>
