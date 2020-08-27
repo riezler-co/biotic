@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/collapsible",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "React Collapsible",
   "main": "lib/main.js",
   "scripts": {
