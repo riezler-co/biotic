@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/layout",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "description": "biotic layout components",
   "main": "lib/main.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/std": "^0.1.7",
+    "@biotic-ui/std": "^0.1.9",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
