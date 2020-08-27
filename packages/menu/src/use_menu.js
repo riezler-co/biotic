@@ -1,6 +1,6 @@
 import React, { Children, useState } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
-import { useGetContainer } from '@biotic-ui/std'
+import { useGetContainer, useOnEscape } from '@biotic-ui/std'
 import { createPortal } from 'react-dom'
 import { usePopper } from 'react-popper'
 import { Menu } from './menu'
@@ -14,6 +14,8 @@ export function useMenu(userConfig = {}) {
 	let [show, setShow] = useState(false)
 	let [referenceElement, setReferenceElement] = useState(null)
 	let config = { ...DefaultConfig, ...userConfig }
+
+	useOnEscape(() => setShow(false))
 
 	let MenuContainer = ({ children: menu }) => {
 		let [popperElement, setPopperElement] = useState(null)
@@ -45,7 +47,7 @@ export function useMenu(userConfig = {}) {
 
 		let PopperMenu = (
 			<OutsideClickHandler onOutsideClick={() => setShow(false)}>
-				<div ref={setPopperElement} style={styles.popper} {...attributes.popper}>
+				<div ref={setPopperElement} style={{ ...styles.popper, zIndex: 9999 }} {...attributes.popper}>
 					{ Menu }
 				</div>
 			</OutsideClickHandler>

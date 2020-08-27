@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
+import { useResizeObserver } from '@biotic-ui/std'
 
 let StyledCollapsible = styled.div`
 	overflow: hidden;
@@ -8,16 +9,15 @@ let StyledCollapsible = styled.div`
 
 export function Collapsible({ children, open, className }) {
 
-	let ref = React.useRef()
 	let [height, setHeight] = React.useState(0)
 
-	React.useLayoutEffect(() => {
-		if (ref.current) {
-			ref.current.style.cssText = 'height:auto'
-			setHeight(ref.current.scrollHeight)
-			ref.current.style.cssText = ''
-		}
-	}, [ref, children])
+	let ref = useResizeObserver(entries => {
+		entries.forEach(entry => {
+			if (entry.contentRect) {
+				setHeight(entry.contentRect.height)
+			}
+		})
+	})
 
 	let aimation = useSpring({
 		height: open ? height : 0,

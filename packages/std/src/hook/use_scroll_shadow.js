@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { useDebounce } from './use_debounce'
 import { useThrottle } from './use_throttle'
 import { useResize } from './use_resize'
+import { useResizeObserver } from './use_resize_observer'
 import styled from 'styled-components'
 
 let shadowColor = 'var(--scroll-shadow, var(--default-scroll-shadow))'
@@ -67,7 +68,6 @@ export function useScrollShadow(ref, userConfig = {}) {
 	)
 
 	useEffect(getShadow, [ref, setShadow])
-	
 	useEffect(() => getShadow.cancel, [getShadow])
 
 	useEffect(() => {
@@ -89,24 +89,18 @@ export function useScrollShadow(ref, userConfig = {}) {
 		height: 0
 	})
 
-	useEffect(() => {
-		if (!ref.current) return
-
-		let resizeObserver = new ResizeObserver(entries => {
-		  entries.forEach(entry => {
-		  	if (entry.target) {
-		  		let rect = entry.target.getBoundingClientRect()
-		  		setBoundingBox(rect)
-		  	}
-		  })
+	let resizeRef = useResizeObserver(entries => {
+		entries.forEach(entry => {
+			if (entry.target) {
+				let rect = entry.target.getBoundingClientRect()
+				setBoundingBox(rect)
+			}
 		})
+	})
 
-		resizeObserver.observe(ref.current)
-
-		return () => {
-			resizeObserver.disconnect()
-		}
-	}, [ref])
+	useEffect(() => {
+		resizeRef(ref.current)
+	}, [ref, resizeRef])
 
 	let handleBoundingBox = useThrottle(() => {
 		if (!ref.current) return

@@ -40,6 +40,36 @@ export let Sheet = () => {
 
 Sheet.storyName = 'Simple Collapsible'
 
+export let Dynamic = () => {
+	let [children, setChildren] = React.useState([
+		<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum dolores, sit odio nesciunt enim earum quod iusto molestias, quos excepturi.</li>
+	])
+
+	let [open, setOpen] = React.useState(false)
+
+
+	function addChild() {
+		setChildren([
+			...children,
+			<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum dolores, sit odio nesciunt enim earum quod iusto molestias, quos excepturi.</li>
+		])
+	}
+
+	return (
+		<React.Fragment>
+			<button onClick={addChild}>Add child</button>
+			<button onClick={() => setOpen(!open)}>Toggle Collapsible</button>
+			<Collapsible open={open}>
+				<ul>
+					{ children }
+				</ul>
+			</Collapsible>
+		</React.Fragment>
+	)
+}
+
+Dynamic.storyName = 'Dynamic Content'
+
 export let SimpleAcc = () => {
 	let accordion = useAccordion()
 

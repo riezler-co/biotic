@@ -42,7 +42,12 @@ let Nav = ({ position, onClose, children }) => {
 	})
 }
 
-export function useContextMenu() {
+let DefaultOptions = {
+	delay: 1000
+}
+
+export function useContextMenu(userOptions = {}) {
+	let options = { ...DefaultOptions, ...userOptions }
 	let Container = useGetContainer('biotic-context-menu')
 	let [useConextMenu, setUseContextMenu] = useState(false)
 	let [useBottomSheet, setUseBottomSheet] = useState(false)
@@ -54,9 +59,10 @@ export function useContextMenu() {
 		setUseContextMenu(true)
 	}
 
-	let longPress = useLongPress(function onLongPress() {
-		setUseBottomSheet(true)
-	}, { shouldPreventDefault: false })
+	let longPress = useLongPress(
+		() => setUseBottomSheet(true),
+		{ shouldPreventDefault: false, delay: options.delay }
+	)
 
 	let ContextMenu = ({ children }) => {
 

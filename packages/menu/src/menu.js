@@ -44,7 +44,13 @@ export let Menu = React.forwardRef((props, outerRef) => {
 	useResize(shouldHover)
 
 	let [submenu, setSubmenu] = useState(null) 
-	let { children, icon: hasIcon, submenu: hasSubmenu, replace = false } = props
+	let { children
+		  , icon: hasIcon
+		  , submenu: hasSubmenu
+		  , replace = false
+		  , className = ''
+		  , style = {}
+		  } = props
 
 	function handleSetSubmenu(submenu) {
 
@@ -87,8 +93,9 @@ export let Menu = React.forwardRef((props, outerRef) => {
 	if (submenu) {
 		return (
 			<div ref={ref}
-					 style={props.style}
 					 onContextMenu={e => e.preventDefault()}
+					 className={className}
+					 style={style}
 					 onClick={props.onClick}>
 				{ submenu }
 			</div>
@@ -97,8 +104,9 @@ export let Menu = React.forwardRef((props, outerRef) => {
 
 	return (
 		<StyledMenu ref={ref}
-							  style={props.style}
 							  onContextMenu={e => e.preventDefault()}
+							  className={className}
+							  style={style}
 							  onClick={props.onClick}>
 			{ _children }
 		</StyledMenu>
