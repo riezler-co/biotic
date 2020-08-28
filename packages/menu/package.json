@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/menu",
-  "version": "0.1.9",
+  "version": "0.1.11",
   "description": "React Menu",
   "main": "lib/main.js",
   "scripts": {

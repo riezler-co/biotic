@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/bottom-sheet",
-  "version": "0.1.9",
+  "version": "0.1.11",
   "description": "React Bottom Sheet",
   "main": "lib/main.js",
   "scripts": {
