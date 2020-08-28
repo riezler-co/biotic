@@ -1,7 +1,7 @@
 {
-  "name": "@biotic-ui/layout",
+  "name": "@biotic-ui/stepper",
   "version": "0.1.9",
-  "description": "biotic layout components",
+  "description": "React Stepper",
   "main": "lib/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,19 +22,19 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/std": "^0.1.9",
-    "@biotic-ui/drawer": "^0.1.9",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
-    "@biotic-ui/drawer": "^0.1.9",
-    "@biotic-ui/std": "^0.1.9",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-spring": "^8.0.27",
     "styled-components": "^5.1.1"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.4.4",
+    "react-outside-click-handler": "^1.3.0",
+    "react-popper": "^2.2.3"
   },
   "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
   "publishConfig": {
