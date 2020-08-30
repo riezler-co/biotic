@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/std",
-  "version": "0.1.9",
+  "version": "0.1.12",
   "description": "React Utils",
   "main": "lib/main.js",
   "scripts": {
