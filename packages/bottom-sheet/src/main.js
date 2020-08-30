@@ -5,6 +5,7 @@ import { useGetContainer
 			 , usePreventScroll
 			 , useOnEscape
 			 , useWindowSize
+			 , useResizeObserver
 			 } from '@biotic-ui/std'
 import { useSpring, animated } from 'react-spring'
 import { Backdrop } from '@biotic-ui/leptons'
@@ -20,7 +21,7 @@ let BottomDrawer = styled.div`
 	width: 100%;
 	max-height: 100vh;
 	overflow-y: auto;
-	z-index: 11;
+	z-index: var(--bottom-sheet-z-index, 9999);
 	
 	${p => p.height ? `height: ${p.height}px`: ''};
 	${p => p.open && 'box-shadow: var(--bottom-sheet-shadow, var(--bottom-default-sheet-shadow));'}
@@ -37,6 +38,7 @@ export let BottomSheet = ({
 	open = false,
 	onClose = () => {},
 	height = null,
+	minHeight = 0,
 	scrollable = false,
 	className,
 	onClick
@@ -48,15 +50,7 @@ export let BottomSheet = ({
 		height: 0,
 	})
 
-	let sheetRef = useRef(null)
-	useLayoutEffect(() => {
-		if (!sheetRef.current) return
-		
-		let { height } = sheetRef.current.getBoundingClientRect()
-		setSheet({ height })
-	}, [sheetRef, SheetContainer])
-
-	let { innerHeight } = useWindowSize()
+	let { innerHeight = 0 } = useWindowSize()
 
 	let [openUntil, setOpenUntil] = useState(0)
 	useEffect(() => {
@@ -64,11 +58,13 @@ export let BottomSheet = ({
 		setOpenUntil(innerHeight * _height)
 	}, [height, innerHeight])
 
-	let sheetHeight = height === 1
-		? innerHeight
-		: height !== null 
-			? Math.min(sheet.height, openUntil) 
-			: 0
+	let sheetHeight = getSheetHeight({
+		height,
+		innerHeight,
+		sheet,
+		minHeight,
+		openUntil
+	})
 
 	let translateY = sheetHeight === 0
 		// trying to hide the bottom sheet until get a container
@@ -91,6 +87,22 @@ export let BottomSheet = ({
 		onClose && onClose({ backdrop: true, escape: false })
 	}
 
+	let sheetRef = useResizeObserver(entries => {
+		let ids = entries.map(entry => {
+			if (!entry.contentRect) return
+			return requestAnimationFrame(() => {
+				let { height } = entry.contentRect
+				setSheet({ height })
+			})
+		})
+
+		return () => {
+			ids
+				.filter(id => id !== undefined)
+				.forEach(cancelAnimationFrame)
+		}
+	})
+
 	let Sheet = (
 		<React.Fragment>
 			
@@ -109,8 +121,10 @@ export let BottomSheet = ({
 				className={className}
 				open={open}
 				height={sheetHeight}
-				ref={sheetRef}>
-				{ children }
+				>
+				<div ref={sheetRef}>
+					{ children }
+				</div>
 			</BottomDrawer>
 			
 		</React.Fragment>
@@ -132,3 +146,16 @@ export let SheetTitle = styled.h3`
 export let SheetContent = styled.div`
 	padding: 0 1.38em;
 `
+
+function getSheetHeight({ height, innerHeight, minHeight, sheet, openUntil }) {
+
+	if (height === 1) {
+		return innerHeight
+	}
+
+	if (height !== null) {
+		return Math.min(sheet.height, openUntil)
+	}
+
+	return innerHeight * minHeight
+}

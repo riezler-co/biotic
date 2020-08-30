@@ -49,6 +49,60 @@ Sheet.story = {
 	name: 'Simple Sheet'
 }
 
+export let Dynamic = () => {
+	let [children, setChildren] = React.useState([
+		<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum dolores, sit odio nesciunt enim earum quod iusto molestias, quos excepturi.</li>
+	])
+
+	let [open, setOpen] = React.useState(false)
+
+
+	function addChild() {
+		setChildren([
+			...children,
+			<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum dolores, sit odio nesciunt enim earum quod iusto molestias, quos excepturi.</li>
+		])
+	}
+
+	function add100(argument) {
+		let items = []
+
+		for(let i = 0; i < 100; i = i + 1) {
+			items.push(
+				<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum dolores, sit odio nesciunt enim earum quod iusto molestias, quos excepturi.</li>
+			)
+		}
+
+		setChildren([
+			...children,
+			...items
+		])
+	}
+
+	return (
+		<React.Fragment>
+			<button onClick={addChild}>Add child</button>
+			<button onClick={add100}>Add 100</button>
+			<button onClick={() => setOpen(true)}>Open Sheet</button>
+			<BottomSheet scrollable open={open} minHeight={0.8} onClose={() => setOpen(false)}>
+				<SheetHeader>
+					<button onClick={() => setOpen(false)}>Close</button>
+					<SheetTitle>Bottom Sheet</SheetTitle>
+				</SheetHeader>
+				<SheetContent>
+					<ul style={{ marginBottom: 0 }}>
+						{ children }
+					</ul>
+				</SheetContent>
+			</BottomSheet>
+		</React.Fragment>
+	)
+}
+
+Dynamic.story = {
+	name: 'Dynamic Content Sheet'
+}
+
 export let SheetMenu = () => {
 	return (
 		<React.Fragment>
