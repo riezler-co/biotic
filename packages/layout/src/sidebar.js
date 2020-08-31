@@ -52,8 +52,6 @@ export let Aside = (props) => {
 		transform: open ? 'translateX(0px)' : `translateX(-${width}px)`
 	})
 
-	let ref = useRef(null)
-	let [onScroll, shadowStyles] = useScrollShadow(ref, { left: false, right: false })
 	let useDrawer = useMatchMedia(drawer)
 
 	if (useDrawer) {
@@ -75,9 +73,7 @@ export let Aside = (props) => {
 
 	return (
 		<StyledAside as={animated.aside}
-		             style={{ ...wrapperAnimation, ...shadowStyles }}
-		             onScroll={onScroll}
-		             ref={ref}>
+		             style={wrapperAnimation}>
 		  <ContentWrapper as={animated.div}
 		  								style={contentAnimation}
 		  								width={width}>
