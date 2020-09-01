@@ -178,7 +178,7 @@ export function useData(initialState) {
 	
 	let setData = useCallback((data) => {
 		dispatch({ type: 'setData', key, data })
-	}, [step])
+	}, [step, key])
 
 	return [stepData, setData]
 }
