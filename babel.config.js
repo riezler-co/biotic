@@ -3,8 +3,9 @@ module.exports = function (api) {
 
   let presets =
     [ '@babel/preset-flow'
-    , '@babel/preset-env'
+    , '@babel/typescript'
     , ['@babel/preset-react', { 'development': true }]
+    , '@babel/preset-env'
     ]
 
   let plugins = 

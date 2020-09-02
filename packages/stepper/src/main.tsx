@@ -7,23 +7,44 @@ import React,
 		 , useMemo
 		 , useCallback
 		 , Suspense
-		 } from 'react'
+		 } from 'react';
 
-export let StepperCtx = createContext({
-	state: {},
-	dispatch: () => {}
-})
-
-export let initialState = {
-	steps: 0,
-	step: 0,
-	wait: false,
-	data: {},
-	infos: [],
-	names: []
+interface State {
+	steps: number;
+	step: number;
+	data: { [key:string]: any };
+	infos: Array<any>;
+	names: Array<string | number>;
+	defaultData: any;
 }
 
-export function reducer(state, action) {
+export let initialState: State = {
+	steps: 0,
+	step: 0,
+	data: {},
+	infos: [],
+	names: [],
+	defaultData: {}
+}
+
+interface CtxState {
+	state: State;
+	dispatch: React.Dispatch<any>;
+};
+
+export let StepperCtx = createContext<CtxState>({
+	state: initialState,
+	dispatch: () => null
+})
+
+type Action =
+	| { type: 'setSteps', steps: number, names: Array<string | number>, infos: Array<any> }
+	| { type: 'next' }
+	| { type: 'prev' }
+	| { type: 'setData', key: string, data: any }
+;
+
+export function reducer(state: State, action: Action): State {
 	switch(action.type) {
 		case 'setSteps':
 			return {
@@ -47,12 +68,6 @@ export function reducer(state, action) {
 				wait: action.wait
 			}
 
-		case 'loaded':
-			return {
-				...state,
-				wait: false
-			}
-
 		case 'setData':
 			return {
 				...state,
@@ -67,20 +82,27 @@ export function reducer(state, action) {
 	}
 }
 
+interface StepperProps {
+	children?: JSX.Element | Array<JSX.Element>;
+	defaultData?: any
+};
 
-export function Stepper({ children, fallback }) {
-	let [state, dispatch] = useReducer(reducer, initialState); 
+export function Stepper({ children, defaultData }: StepperProps) {
+	let [state, dispatch] = useReducer(reducer, initialState);
 
 	return (
-		<StepperCtx.Provider value={{ state, dispatch }}>
+		<StepperCtx.Provider value={{ state: { ...state, defaultData }, dispatch }}>
 			{ children }
 		</StepperCtx.Provider>
 	)
 }
 
-export function Steps(props) {
+interface StepProps {
+	children?: JSX.Element | Array<JSX.Element>;
+};
+export function Steps(props: StepProps) {
 	let { state, dispatch } = useContext(StepperCtx)
-	let children = useMemo(() => Children.toArray(props.children), [props.children])
+	let children = useMemo(() => Children.toArray(props.children), [props.children]) as Array<JSX.Element>
 
 	useEffect(() => {
 
@@ -98,55 +120,28 @@ export function Steps(props) {
 	return children[state.step]  
 }
 
-export function AsyncSteps(props) {
-	let { state, dispatch } = useContext(StepperCtx)
-	let children = useMemo(() => Children.toArray(props.children), [props.children])
-
-	useEffect(() => {
-
-		let infos = children.map(getInfo)
-		let names = children.map(getName)
-
-		dispatch({
-			type: 'setSteps',
-			steps: children.length,
-			infos,
-			names
-		})
-	}, [children])
-
-	if (state.wait === false) {
-		return children[state.step]  
-	}
-
-	let Child = React.lazy(async () => {
-		await state.wait
-		dispatch({ type: 'loaded' })
-		return { default: () => children[state.step] }
-	})
-
-	return <Child />
-}
-
 export function useNext() {
 	let { state, dispatch } = useContext(StepperCtx)
-	let onNext = useCallback((wait = false) => dispatch({ type: 'next', wait }), [dispatch])
+	let onNext = useCallback(() => dispatch({ type: 'next' }), [dispatch])
 	let allowNext = state.wait === false && state.step + 1 < state.steps 
 	return allowNext ? onNext : null
 }
 
 export function usePrev() {
 	let { state, dispatch } = useContext(StepperCtx)
-	let onPrev = useCallback((wait = false) => dispatch({ type: 'prev', wait }), [dispatch])
+	let onPrev = useCallback(() => dispatch({ type: 'prev' }), [dispatch])
 	let allowPrev = state.wait === false && state.step > 0
 	return allowPrev ? onPrev : null
 }
 
-export function Controls({ children }) {
+interface ControlsProps {
+	children?: JSX.Element | Array<JSX.Element>;
+};
+export function Controls({ children }: ControlsProps) {
 	let onPrev = usePrev()
 	let onNext = useNext()
 	
-	return React.cloneElement(children,  {
+	return React.cloneElement(children as React.ReactElement<any>,  {
 		onPrev,
 		onNext
 	})
@@ -154,12 +149,26 @@ export function Controls({ children }) {
 
 export function useProgress() {
 	let { state } = useContext(StepperCtx)
-	return state
+	
+	let data = {
+		...state.defaultData,
+		...state.data
+	}
+
+	return { ...state, data }
 }
 
-export function Progress({ children }) {
+interface ProgressProps {
+	children?: JSX.Element | Array<JSX.Element>;
+};
+export function Progress({ children }: ProgressProps) {
 	let { state } = useContext(StepperCtx)
-	return React.cloneElement(children, {
+
+	if (children === undefined) {
+		return null
+	}
+
+	return React.cloneElement(children as React.ReactElement<any>, {
 		steps: state.steps,
 		step: state.step,
 		wait: state.wait,
@@ -169,7 +178,7 @@ export function Progress({ children }) {
 	}) 
 } 
 
-export function useData(initialState) {
+export function useData(initialState: any) {
 	let { state, dispatch } = useContext(StepperCtx)
 	let { step, data, names } = state
 	let key = names[step]
@@ -183,14 +192,14 @@ export function useData(initialState) {
 	return [stepData, setData]
 }
 
-export function useInfo(step, infos) {
+export function useInfo(step: number, infos: any) {
 	return useMemo(() => infos[step] || {}, [step, infos])
 }
 
-function getInfo(node) {
+function getInfo(node: JSX.Element) {
 	return node.props.info || {}
 }
 
-function getName(node, index) {
+function getName(node: JSX.Element, index: number) {
 	return node.props.name ? node.props.name : index
 }

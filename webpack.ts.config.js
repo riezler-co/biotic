@@ -12,7 +12,7 @@ module.exports = function createConfig (webpackEnv) {
   
   return {
     entry: {
-      main: cwd + '/src/main.js'
+      main: cwd + '/src/main.tsx'
     },
     externals: {
         'styled-components': {
@@ -45,6 +45,14 @@ module.exports = function createConfig (webpackEnv) {
     },
     module: {
       rules: [
+        {
+          test: /\.(ts|tsx)$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+          options: {
+            rootMode: 'upward'
+          }
+        },
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,

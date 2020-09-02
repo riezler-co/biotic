@@ -5,7 +5,7 @@
   "main": "lib/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config ../../webpack.config.js --mode production",
+    "build": "webpack --config ../../webpack.ts.config.js --mode production",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -22,6 +22,7 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
+    "typescript": "^4.0.2",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
@@ -33,6 +34,8 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.4.4",
+    "@types/react": "^16.9.49",
+    "@types/react-dom": "^16.9.8",
     "react-outside-click-handler": "^1.3.0",
     "react-popper": "^2.2.3"
   },
