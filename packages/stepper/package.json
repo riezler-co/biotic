@@ -5,7 +5,9 @@
   "main": "lib/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config ../../webpack.ts.config.js --mode production",
+    "build": "npm run webpack && npm run types",
+    "webpack": "webpack --config ../../webpack.ts.config.js --mode production",
+    "types": "tsc --emitDeclarationOnly --declaration --declarationDir ./lib",
     "prepublish": "npm run build"
   },
   "repository": {

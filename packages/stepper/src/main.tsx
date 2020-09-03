@@ -58,14 +58,12 @@ export function reducer(state: State, action: Action): State {
 			return {
 				...state,
 				step: state.step + 1,
-				wait: action.wait
 			}
 
 		case 'prev': 
 			return {
 				...state,
 				step: state.step - 1,
-				wait: action.wait
 			}
 
 		case 'setData':
@@ -123,14 +121,14 @@ export function Steps(props: StepProps) {
 export function useNext() {
 	let { state, dispatch } = useContext(StepperCtx)
 	let onNext = useCallback(() => dispatch({ type: 'next' }), [dispatch])
-	let allowNext = state.wait === false && state.step + 1 < state.steps 
+	let allowNext = state.step + 1 < state.steps 
 	return allowNext ? onNext : null
 }
 
 export function usePrev() {
 	let { state, dispatch } = useContext(StepperCtx)
 	let onPrev = useCallback(() => dispatch({ type: 'prev' }), [dispatch])
-	let allowPrev = state.wait === false && state.step > 0
+	let allowPrev = state.step > 0
 	return allowPrev ? onPrev : null
 }
 
@@ -171,7 +169,6 @@ export function Progress({ children }: ProgressProps) {
 	return React.cloneElement(children as React.ReactElement<any>, {
 		steps: state.steps,
 		step: state.step,
-		wait: state.wait,
 		data: state.data,
 		infos: state.infos,
 		names: state.names
