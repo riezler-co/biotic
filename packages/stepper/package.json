@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/stepper",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "React Stepper",
   "main": "lib/main.js",
   "scripts": {
