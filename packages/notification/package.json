@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/notification",
-  "version": "0.1.19",
+  "version": "0.2.0",
   "description": "React Notification",
   "main": "lib/main.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/std": "^0.1.19",
+    "@biotic-ui/std": "^0.2.0",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
