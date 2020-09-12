@@ -10,34 +10,6 @@ import { useGetContainer
 import { useSpring, animated } from 'react-spring'
 import { Backdrop } from '@biotic-ui/leptons'
 
-let Wrapper = styled.div`
-	display: ${p => p.open ? 'flex' : 'none'};
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	align-items: center;
-	justify-content: center;
-	height: 100vh;
-	width: 100vw;
-`
-
-export let DialogContent = styled.div`
-	--dialog-default-shadow: 0px 8px 21px -5px rgba(0, 0, 0, 0.2);
-	box-shadow: var(--dialog-shadow, var(--dialog-default-shadow));
-	position: absolute;
-	background: var(--dialog-background, #fff);
-	z-index: 11;
-	padding: var(--dialog-padding, 1em);
-	border-radius: var(--border-radius, 0.5em);
-	max-width: 100vw;
-	max-height: 100vh;
-	overflow: auto;
-	width: ${p => typeof p.width === 'number' ? `${p.width}px` : p.width};
-	height: ${p => typeof p.height === 'number' ? `${p.height}px` : p.height};
-`
-
 export default function Dialog(props) {
 	let DialogContainer = useGetContainer('biotic-dialog')
 
@@ -80,3 +52,31 @@ export default function Dialog(props) {
 
 	return DialogContainer ? createPortal(DialogPortal, DialogContainer) : null
 }
+
+let Wrapper = styled.div`
+	display: ${p => p.open ? 'flex' : 'none'};
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	width: 100vw;
+`
+
+export let DialogContent = styled.div`
+	--dialog-default-shadow: 0px 8px 21px -5px rgba(0, 0, 0, 0.2);
+	box-shadow: var(--dialog-shadow, var(--dialog-default-shadow));
+	position: absolute;
+	background: var(--dialog-background, #fff);
+	z-index: 11;
+	padding: var(--dialog-padding, var(--baseline));
+	border-radius: var(--border-radius, calc(var(--baseline) * 0.5));
+	max-width: 100vw;
+	max-height: 100vh;
+	overflow: auto;
+	width: ${p => typeof p.width === 'number' ? `${p.width}px` : p.width};
+	height: ${p => typeof p.height === 'number' ? `${p.height}px` : p.height};
+`

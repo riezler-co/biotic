@@ -13,7 +13,7 @@ let StyledInput = styled.input`
   background: var(--input-bg, none);
   border: var(--input-border, var(--default-border));
   color: var(--input-color, rgba(0,0,0,.87));
-  border-radius: var(--input-border-radius, .28571429rem);
+  border-radius: var(--input-border-radius, calc(var(--baseline) * 0.28571429));
   -webkit-transition: box-shadow .1s ease,border-color .1s ease;
   transition: box-shadow .1s ease, border-color .1s ease;
   box-shadow: none;

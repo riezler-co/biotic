@@ -147,8 +147,8 @@ export function Notifications() {
 
 let StyledNotifications = styled.ul`
 	position: fixed;
-	bottom: var(--notification-bottom, 1em);
-	right: var(--notification-right, 1em);
+	bottom: var(--notification-bottom, var(--baseline));
+	right: var(--notification-right, var(--baseline));
 	display: flex;
 	padding: 0;
 	list-style-type: none;
@@ -158,7 +158,7 @@ let StyledNotifications = styled.ul`
 `
 
 let StyledNotification = styled.li`
-	margin-top: var(--notification-spacing, 0.38em);
+	margin-top: var(--notification-spacing, calc(var(--baseline) * 0.38));
 	z-index: ${p => 3 - p.index};
 	user-select: ${p => p.open ? 'auto' : 'none'};
 `
@@ -180,13 +180,13 @@ export let Notification = styled.div`
 	--default-border: 1px solid #fff;
 	background: var(--notification-background, #222);
 	color: var(--notification-color, #fff);
-	padding: 0.62em 1.38em;
+	padding: calc(var(--baseline) * 0.62) calc(var(--baseline) * 1.38);
 	border: var(--notification-border, var(--default-border));
-	border-radius: 0.3em;
+	border-radius: calc(var(--baseline) * 0.3);
 	width: 300px;
 	display: flex;
 	justify-content: space-between;
-	padding-right: 0.62em;
+	padding-right: calc(var(--baseline) * 0.62);
 	max-width: 95vw;
 `
 

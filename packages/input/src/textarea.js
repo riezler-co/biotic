@@ -17,7 +17,7 @@ let StyledText = styled.textarea`
 	background: var(--textarea-background, none);
 	overflow-y: auto;
 	padding: .38em 0.62em;
-	border-radius: var(--input-border-radius, .28571429rem);
+	border-radius: var(--input-border-radius, calc(var(--baseline) * 0.28571429));
 	min-height: 33px;
 	resize: none;
 	line-height: 1.21428571em;

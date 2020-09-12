@@ -5,7 +5,6 @@ import { Stepper
 			 , useProgress
 			 , useData
 			 , useInfo
-			 , AsyncSteps
 			 , Progress
 			 , Controls
 			 } from '@package/stepper/main'
@@ -101,51 +100,6 @@ export let WithInfo = () => {
 }
 
 WithInfo.storyName = 'With Info Stepper'
-
-
-let AsyncButtons = ({ onNext, onPrev }) => {
-
-	function handleNext() {
-		let promise = new Promise(resolve => {
-			setTimeout(resolve, 2000)
-		})
-
-		onNext(promise)
-	}
-
-	return (
-		<div>
-			<button disabled={onPrev === null} onClick={() => onPrev()}>Prev</button>
-			<button disabled={onNext === null} onClick={handleNext}>Next</button>
-		</div>
-	)
-}
-
-
-export let Async = () => {
-	return (
-		<Stepper fallback={<p>...loading</p>}>
-			<Progress>
-				<CurrentProgress />
-			</Progress>
-
-			<Suspense fallback={<div>....loading</div>}>
-				<AsyncSteps>
-					<Step1 />
-					<Step2 />
-					<Step3 />
-				</AsyncSteps>
-			</Suspense>
-
-			<Controls>
-				<AsyncButtons />
-			</Controls>
-		</Stepper>
-	)
-}
-
-Async.storyName = 'Async Stepper'
-
 
 let Data1 = () => {
 	let [data, setData] = useData({ counter: 0 })

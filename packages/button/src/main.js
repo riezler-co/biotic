@@ -6,11 +6,11 @@ export let Button = styled.button`
 	--defaut-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 	border: none;
 	text-decoration: none;
-	padding: 1rem 3rem;
+	padding: var(--baseline) calc(var(--baseline) * 3);
 	display: inline-block;
 	width: ${p => p.fullwidth ? '100%' : 'auto'};
 	text-align: center;
-	border-radius: 0.8rem;
+	border-radius: calc(var(--baseline) * 0.8);
 	font-weight: bold;
 	letter-spacing: 1px;
 	cursor: ${p => p.disabled ? 'default' : 'pointer'};;
@@ -46,12 +46,13 @@ export function CloseButton({ className, ...props }) {
 }
 
 export let Fab = styled.button`
-	width: 5rem;
-	height: 5rem;
+	--size: calc(var(--baseline) * 5);
+	width: var(--size);
+	height: var(--size);
 	border-radius: 50%;
 	position: fixed;
-	bottom: 2rem;
-	right: 2rem;
+	bottom: calc(var(--baseline) * 2);
+	right: calc(var(--baseline) * 2);
 	z-index: 2;
 	border: none;
 	display: flex;
