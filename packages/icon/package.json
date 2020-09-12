@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/icon",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "React Material Icons",
   "main": "lib/main.js",
   "scripts": {
