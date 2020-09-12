@@ -1,0 +1,38 @@
+{
+  "name": "@biotic-ui/button",
+  "version": "0.1.12",
+  "description": "biotic button",
+  "main": "lib/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config ../../webpack.config.js --mode production",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riezler-co/biotic.git"
+  },
+  "keywords": [
+    "react.js",
+    "pwa"
+  ],
+  "author": "Michael Riezler <michael@riezler.co> (https://riezler.co)",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/riezler-co/biotic/issues"
+  },
+  "devDependencies": {
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "@biotic-ui/icon": "^0.1.12"
+  },
+  "homepage": "https://github.com/riezler-co/biotic#readme",
+  "peerDependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "@biotic-ui/icon": "^0.1.12"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
