@@ -19,6 +19,7 @@ let StyledInput = styled.input`
   box-shadow: none;
   width: 100%;
   font-size: inherit;
+  box-sizing: border-box;
 
   ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: var(--input-color-placeholder);
