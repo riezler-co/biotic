@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/input",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "React Input",
   "main": "lib/main.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/std": "^0.2.0",
+    "@biotic-ui/std": "^0.2.2",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
