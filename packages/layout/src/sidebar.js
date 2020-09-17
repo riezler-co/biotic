@@ -30,6 +30,9 @@ let ContentWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 
+	--drawer-background: var(--aside-background, #fff);
+	--menu-bg: var(--aside-background, #fff);
+
 	--menu-box-shadow: none;
 	--menu-width: auto;
 	--menu-padding: 0;

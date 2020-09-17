@@ -114,7 +114,14 @@ export let Menu = React.forwardRef((props, outerRef) => {
 }) 
 
 export let MenuItem = (props) => {
-	let { children, onClick, hasSubmenu, hasIcon, icon, replace, setSubmenu } = props
+	let { children
+			, onClick
+			, hasSubmenu
+			, hasIcon
+			, icon
+			, replace
+			, setSubmenu
+			} = props
 	let _children = useMemo(() => Children.toArray(children), [children, hasSubmenu, hasIcon])
 	let title = useMemo(() => _children.find(node => node.type === MenuItemTitle), [children, hasSubmenu, hasIcon])
 	let submenuRef = useRef(null)
