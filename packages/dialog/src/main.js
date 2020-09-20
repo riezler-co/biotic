@@ -19,6 +19,7 @@ export default function Dialog(props) {
 			, onClose = () => {}
 			, width = 'auto'
 			, height = 'auto'
+			, className = ''
 		  } = props
 
 	let dialogAnimation = useSpring({
@@ -37,7 +38,7 @@ export default function Dialog(props) {
 	}
 
 	let DialogPortal = (
-		<Wrapper open={open}>
+		<Wrapper open={open} className={className}>
 			{ backdrop && <Backdrop open={open} style={backdropAnimation} onClick={handleBackdrop} /> }
 			<DialogContent as={animated.div}
 										 style={dialogAnimation}

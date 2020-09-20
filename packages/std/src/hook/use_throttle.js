@@ -1,6 +1,12 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import _ from 'lodash'
 
 export function useThrottle(cb, timeout = 0, dep = [], options = {}) {
-	return useCallback(_.throttle(cb, timeout, options), dep)
+	let fn = useRef(cb)
+
+	useEffect(() => {
+		fn.current = cb
+	})
+
+	return useCallback(_.throttle(() => fn.current(), timeout, options), dep)
 }
