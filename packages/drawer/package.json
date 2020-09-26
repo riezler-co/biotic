@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/drawer",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "React Drawer",
   "main": "lib/main.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/std": "^0.2.3",
+    "@biotic-ui/std": "^0.2.4",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
@@ -35,7 +35,7 @@
     "styled-components": "^5.1.1"
   },
   "dependencies": {
-    "@biotic-ui/leptons": "^0.2.0"
+    "@biotic-ui/leptons": "^0.2.4"
   },
   "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
   "publishConfig": {
