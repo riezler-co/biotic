@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
 import { useScrollShadow, useMatchMedia } from '@biotic-ui/std'
 import { Drawer } from '@biotic-ui/drawer'
+import { Scrollbar } from '@biotic-ui/leptons'
 
 export let SidebarLayout = styled.div`
 	display: grid;
@@ -90,4 +91,5 @@ export let Main = styled.main`
 	overflow: auto;
 	height: 100%;
 	width: 100%;
+	${Scrollbar}
 `

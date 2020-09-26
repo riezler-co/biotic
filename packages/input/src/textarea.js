@@ -6,6 +6,7 @@ import React
 		 	 } from 'react'
 import styled from 'styled-components'
 import { useCombinedRefs, useResize, useThrottle } from '@biotic-ui/std'
+import { InputBase } from '@biotic-ui/leptons'
 
 export let Textarea = forwardRef((props = {}, userRef) => {
 	let { maxHeight = null
@@ -58,20 +59,8 @@ export let Textarea = forwardRef((props = {}, userRef) => {
 
 
 let StyledText = styled.textarea`
-	--default-border: 1px solid rgba(34,36,38,.15);
-	width: 100%;
-	box-sizing: border-box;
-	font-family: inherit;
-	font-size: inherit;
-	font-weight: inherit;
-	border: var(--textarea-border, var(--default-border));
-	background: var(--textarea-background, none);
-	overflow-y: auto;
-	padding: .38em 0.62em;
-	border-radius: var(--input-border-radius, calc(var(--baseline) * 0.28571429));
-	min-height: 33px;
-	resize: none;
-	line-height: 1.21428571em;
+	${InputBase}
+	
 	max-height: ${p => p.maxHeight === null
 		? 'auto' 
 		: typeof p.maxHeight === 'number'

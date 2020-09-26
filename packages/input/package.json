@@ -23,15 +23,15 @@
   },
   "devDependencies": {
     "@biotic-ui/std": "^0.2.3",
+    "@biotic-ui/leptons": "^0.2.0",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
-    "@biotic-ui/std": "^0.1.1",
+    "@biotic-ui/std": "^0.2.3",
+    "@biotic-ui/leptons": "^0.2.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-spring": "^8.0.27",
     "styled-components": "^5.1.1"
   },
   "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
