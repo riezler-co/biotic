@@ -1,7 +1,9 @@
 import { useCallback, useRef, useEffect } from 'react'
 import _ from 'lodash'
 
-export function useDebounce(cb, timeout = 0, dep = [], options = {}) {
+type Dep = Array<any>
+
+export function useDebounce<T>(cb: () => T, timeout = 0, dep: Dep = [], options = {}) {
 
 	let fn = useRef(cb)
 

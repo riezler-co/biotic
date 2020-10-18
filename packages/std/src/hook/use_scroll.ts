@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { RefObject } from 'react'
 import _ from 'lodash'
 
-function scrollTop(elm) {
+function scrollTop(elm: HTMLElement | null) {
   if (!elm) {
     return window.pageYOffset
   }
@@ -9,7 +9,7 @@ function scrollTop(elm) {
   return elm.scrollTop
 }
 
-function scrollLeft(elm) {
+function scrollLeft(elm: HTMLElement | null) {
   if (!elm) {
     return window.pageXOffset
   }
@@ -17,10 +17,19 @@ function scrollLeft(elm) {
   return elm.scrollLeft
 }
 
-export function useScroll(fn, container = {}) {
+type ScrollState =
+  { y: number
+  ; x: number
+  ; delta:
+      { y: number
+      ; x: number
+      }
+  }
+
+export function useScroll(fn: (s: ScrollState) => void, container: RefObject<HTMLElement> = { current: null }) {
   let elm = container.current
 
-  let [scroll, setScroll] = React.useState({
+  let [scroll, setScroll] = React.useState<ScrollState>({
 		y: scrollTop(elm),
 		x: scrollLeft(elm),
 		delta: {
@@ -29,7 +38,7 @@ export function useScroll(fn, container = {}) {
 		}
 	})
 
-  let cb = React.useRef()
+  let cb = React.useRef((state: ScrollState) => {})
   React.useEffect(() => {
     cb.current = fn
   })

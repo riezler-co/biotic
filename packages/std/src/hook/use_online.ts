@@ -5,7 +5,7 @@ export function useOnline() {
 
   useEffect(() => {
 
-  	function updateOnlineStatus(event) {
+  	function updateOnlineStatus(event: Event) {
   	  setOnline(navigator.onLine)
   	}
   	

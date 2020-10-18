@@ -1,8 +1,8 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, RefObject } from 'react'
 import { useDebounce } from './use_debounce'
 import { useThrottle } from './use_throttle'
 import { useResize } from './use_resize'
-import { useResizeObserver } from './use_resize_observer'
+import { useResizeObserver, ResizeObserverEntry } from './use_resize_observer'
 import styled from 'styled-components'
 
 let shadowColor = 'var(--scroll-shadow, var(--default-scroll-shadow))'
@@ -32,7 +32,7 @@ let ShadowBox = styled.div`
 	overflow: hidden;
 `
 
-export function useScrollShadow(ref, userConfig = {}) {
+export function useScrollShadow(ref: RefObject<HTMLElement>, userConfig = {}) {
 
 	let config = { ...DefaultConfig, ...userConfig }
 
@@ -47,7 +47,7 @@ export function useScrollShadow(ref, userConfig = {}) {
 
 	let getShadow = useDebounce(
 		() => {
-			if (!ref.current) return
+			if (ref.current === null) return
 
 			let { scrollHeight
 				  , scrollWidth
@@ -89,8 +89,8 @@ export function useScrollShadow(ref, userConfig = {}) {
 		height: 0
 	})
 
-	let resizeRef = useResizeObserver(entries => {
-		entries.forEach(entry => {
+	let resizeRef = useResizeObserver((entries): void => {
+		entries.forEach((entry: ResizeObserverEntry) => {
 			if (entry.target) {
 				let rect = entry.target.getBoundingClientRect()
 				setBoundingBox(rect)
@@ -124,10 +124,21 @@ export function useScrollShadow(ref, userConfig = {}) {
 	return [getShadow, style, ShadowBox]
 }
 
-function getShadows(shadow, shadows) {
+type WithShadows =
+	{ [key:string]: boolean
+	}
+
+type Shadows =
+	{ [key:string]: string
+	}
+
+type KV
+	= [string, boolean]
+
+function getShadows(shadow: WithShadows, shadows: Shadows): string {
 	return Object
 		.entries(shadow)
-		.filter(kv => kv[1] === true)
-		.map(kv => shadows[kv[0]])
+		.filter((kv): boolean => kv[1] === true)
+		.map((kv: KV): string => shadows[kv[0]])
 		.join(',')
 }

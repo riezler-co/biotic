@@ -1,15 +1,29 @@
 import { useRef, useEffect } from 'react'
 
-export function useIdleCallback(cb) {
+type CB =
+  { didTimeout: boolean
+  ; timeRemaining: () => number
+  }
 
-	let savedCallback = useRef()
 
-  let requestIdleCallback = useRef(() => {})
-  let cancelIdleCallback = useRef(() => {})
+type IdelFn = (e: CB) => void
+type IdelCallback = (fn: IdelFn) => number
+type CancelIdleCallback = (id: number) => void
+
+function NoOp (fn: IdelFn) {
+  return setTimeout(() => {}, 0)
+}
+
+export function useIdleCallback(cb: IdelFn) {
+
+	let savedCallback = useRef<IdelFn>(cb)
+
+  let requestIdleCallback = useRef<any>(NoOp)
+  let cancelIdleCallback = useRef<any>((t: number) => {})
 
   useEffect(() => {
     requestIdleCallback.current = window.requestIdleCallback ||
-      function (cb) {
+      function (cb: IdelFn) {
         return setTimeout(function () {
           var start = Date.now()
           cb({ 
@@ -22,7 +36,7 @@ export function useIdleCallback(cb) {
       }
 
     cancelIdleCallback.current = window.cancelIdleCallback ||
-      function (id) {
+      function (id: number) {
         clearTimeout(id)
       }
   })

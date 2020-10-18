@@ -1,11 +1,11 @@
-import { useCallback } from 'react'
+import { useCallback, Ref } from 'react'
 
 /**
  * Combines many refs into one. Useful for combining many ref hooks
  */
-export function useCombinedRefs(...refs) {
+export function useCombinedRefs<T extends any>(...refs: Array<Ref<T>>): Ref<T> {
 
-  let refCallBack = (node) => {
+  let refCallBack = (node: T) => {
     refs.forEach(ref => {
       if (!ref) {
           return
@@ -15,7 +15,7 @@ export function useCombinedRefs(...refs) {
           return ref(node)
       }
 
-      ref.current = node
+      (ref as any).current = node
     })
   }
 

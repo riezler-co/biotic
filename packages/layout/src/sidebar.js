@@ -1,18 +1,46 @@
-import React, { useRef } from 'react'
+import React, { useRef, useMemo } from 'react'
 import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
 import { useScrollShadow, useMatchMedia } from '@biotic-ui/std'
 import { Drawer } from '@biotic-ui/drawer'
 import { Scrollbar } from '@biotic-ui/leptons'
 
-export let SidebarLayout = styled.div`
+export let StyledSidebarLayout = styled.div`
 	display: grid;
-	grid-template-columns: auto 1fr;
+	grid-template-columns: ${layoutColumns};
 	transition: grid-template-columns 500ms ease;
 	width: 100%;
 	height: 100%;
 	max-height: 100vh;
 `
+
+function layoutColumns({ direction }) {
+	if (direction === 'rigth') {
+		return '1fr auto'
+	}
+
+	return 'auto 1fr'
+}
+
+export function SidebarLayout({ children, right = false }) {
+	
+	let [aside, main] = useMemo(() => {
+		let _children = Children.toArray(children)
+		let aside = _children.find(node => node.type === Aside)
+		let main = _children.find(node => node.type === Main)
+		return [aside, main]
+	}, [children])
+
+	let direction = right ? 'right' : 'left'
+
+	return (
+		<StyledSidebarLayout direction={direction}>
+			{ !left && aside }
+			{ main }
+			{ left && aside }
+		</StyledSidebarLayout>
+	)
+}
 
 let StyledAside = styled.aside`
 	height: 100%;

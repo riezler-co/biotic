@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 
-export function useGetContainer(id) {
+type Container = Element | null
 
-	let [container, setContainer] = useState(null)
+export function useGetContainer(id: string): Container {
+
+	let [container, setContainer] = useState<Container>(null)
 
 	useEffect(() => {
 

@@ -5,11 +5,21 @@ let DefaultConfig = {
   delay: 300
 }
 
-export function useLongPress(onLongPress, config = {}) {
+type Config = {
+  shouldPreventDefault?: boolean;
+  delay?: number;
+}
+
+type OnLongPress = (e: Event) => void
+
+export function useLongPress(
+    onLongPress: OnLongPress
+  , config: Config = {}
+) {
   let { shouldPreventDefault, delay } = { ...DefaultConfig, ...config }
   let [longPressTriggered, setLongPressTriggered] = useState(false)
-  let timeout = useRef()
-  let target = useRef()
+  let timeout = useRef(0)
+  let target = useRef<HTMLElement | null>(null)
 
   let start = useCallback(
     event => {
@@ -19,7 +29,7 @@ export function useLongPress(onLongPress, config = {}) {
         })
         target.current = event.target
       }
-      timeout.current = setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         onLongPress(event)
         setLongPressTriggered(true)
       }, delay)
@@ -28,10 +38,11 @@ export function useLongPress(onLongPress, config = {}) {
   )
 
   let clear = useCallback(
-    (event, shouldTriggerClick = true) => {
-      timeout.current && clearTimeout(timeout.current)
+    (event) => {
+      timeout.current && window.clearTimeout(timeout.current)
       setLongPressTriggered(false)
-      if (shouldPreventDefault && target.current) {
+
+      if (shouldPreventDefault && target.current !== null) {
         target.current.removeEventListener("touchend", preventDefault)
       }
     },
@@ -39,16 +50,16 @@ export function useLongPress(onLongPress, config = {}) {
   )
 
   return {
-    onTouchStart: e => start(e),
-    onTouchEnd: e => clear(e)
+    onTouchStart: (e: TouchEvent) => start(e),
+    onTouchEnd: (e: TouchEvent) => clear(e)
   }
 }
 
-let isTouchEvent = event => {
+let isTouchEvent = (event: Event) => {
   return 'touches' in event
 }
 
-let preventDefault = event => {
+let preventDefault = (event: TouchEvent) => {
   if (!isTouchEvent(event)) return
 
   if (event.touches.length < 2 && event.preventDefault) {

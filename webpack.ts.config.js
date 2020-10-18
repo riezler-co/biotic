@@ -12,7 +12,7 @@ module.exports = function createConfig (webpackEnv) {
   
   return {
     entry: {
-      main: cwd + '/src/main.tsx'
+      main: cwd + '/src/main.ts'
     },
     externals: {
         'styled-components': {
@@ -72,7 +72,8 @@ module.exports = function createConfig (webpackEnv) {
       modules: [
         src,
         'node_modules'
-      ]
+      ],
+      extensions: ['.ts', '.tsx', '.js', '.json']
     }
   }
 }

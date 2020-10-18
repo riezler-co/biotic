@@ -1,5 +1,5 @@
 {
-  "name": "@biotic-ui/std",
+  "name": "@biotic-ui/tabs",
   "version": "0.2.4",
   "description": "React Utils",
   "main": "lib/main.js",

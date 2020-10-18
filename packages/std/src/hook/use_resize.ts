@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react'
 
-export function useResize(fn) {
-	let cb = useRef()
+export function useResize(fn: (e: Event) => void) {
+	let cb = useRef((e: Event) => {})
 	
 	useEffect(() => {
 		cb.current = fn
 	})
 
 	useEffect(() => {
-		function handleResize(event) {
+		function handleResize(event: Event) {
 			cb.current && cb.current(event)
 		}
 

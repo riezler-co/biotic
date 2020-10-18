@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 
-export function useMatchMedia(mediaQuery) {
+export function useMatchMedia(mediaQuery: string) {
 
 	let initalMatch = useMemo(() => {
 		let mql = window.matchMedia(mediaQuery)
@@ -12,7 +12,7 @@ export function useMatchMedia(mediaQuery) {
 	useEffect(() => {
 		let mql = window.matchMedia(mediaQuery)
 		setMatch(mql.matches)
-		let handleChange = e => setMatch(e.matches)
+		let handleChange = (e: MediaQueryListEvent) => setMatch(e.matches)
 		mql.addListener(handleChange)
 		return () => {
 			mql.removeListener(handleChange)

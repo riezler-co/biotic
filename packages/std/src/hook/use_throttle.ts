@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react'
 import _ from 'lodash'
 
-export function useThrottle(cb, timeout = 0, dep = [], options = {}) {
+type Dep = Array<any>
+
+export function useThrottle<T>(cb: () => T, timeout: number = 0, dep: Dep = [], options = {}) {
 	let fn = useRef(cb)
 
 	useEffect(() => {

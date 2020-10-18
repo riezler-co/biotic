@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-let NoOp = () => {}
+let NoOp = (e: KeyboardEvent) => {}
 export function useOnEscape(fn = NoOp) {
 	let callback = useRef(fn)
 
@@ -10,7 +10,7 @@ export function useOnEscape(fn = NoOp) {
 
 	useEffect(() => {
 
-		function onEsc (e) {
+		function onEsc (e: KeyboardEvent) {
 			if(e.key=='Escape' && callback.current){
 			  callback.current(e)
 			}

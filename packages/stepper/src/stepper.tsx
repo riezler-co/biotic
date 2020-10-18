@@ -9,7 +9,7 @@ import React,
 		 , Suspense
 		 } from 'react';
 
-interface State {
+export interface State {
 	steps: number;
 	step: number;
 	data: { [key:string]: any };
@@ -18,16 +18,16 @@ interface State {
 	defaultData: any;
 }
 
-export let initialState: State = {
-	steps: 0,
-	step: 0,
-	data: {},
-	infos: [],
-	names: [],
-	defaultData: {}
-}
+export let initialState: State =
+	{ steps: 0
+	, step: 0
+	, data: {}
+	, infos: []
+	, names: []
+	, defaultData: {}
+	}
 
-interface CtxState {
+export interface CtxState {
 	state: State;
 	dispatch: React.Dispatch<any>;
 };
@@ -37,7 +37,7 @@ export let StepperCtx = createContext<CtxState>({
 	dispatch: () => null
 })
 
-type Action =
+export type Action =
 	| { type: 'setSteps', steps: number, names: Array<string | number>, infos: Array<any> }
 	| { type: 'next' }
 	| { type: 'prev' }
@@ -80,10 +80,10 @@ export function reducer(state: State, action: Action): State {
 	}
 }
 
-interface StepperProps {
+export interface StepperProps {
 	children?: JSX.Element | Array<JSX.Element>;
 	defaultData?: any
-};
+}
 
 export function Stepper({ children, defaultData }: StepperProps) {
 	let [state, dispatch] = useReducer(reducer, initialState);
@@ -95,9 +95,10 @@ export function Stepper({ children, defaultData }: StepperProps) {
 	)
 }
 
-interface StepProps {
+export interface StepProps {
 	children?: JSX.Element | Array<JSX.Element>;
-};
+}
+
 export function Steps(props: StepProps) {
 	let { state, dispatch } = useContext(StepperCtx)
 	let children = useMemo(() => Children.toArray(props.children), [props.children]) as Array<JSX.Element>
@@ -132,9 +133,10 @@ export function usePrev() {
 	return allowPrev ? onPrev : null
 }
 
-interface ControlsProps {
+export interface ControlsProps {
 	children?: JSX.Element | Array<JSX.Element>;
-};
+}
+
 export function Controls({ children }: ControlsProps) {
 	let onPrev = usePrev()
 	let onNext = useNext()
@@ -156,9 +158,10 @@ export function useProgress() {
 	return { ...state, data }
 }
 
-interface ProgressProps {
+export interface ProgressProps {
 	children?: JSX.Element | Array<JSX.Element>;
-};
+}
+
 export function Progress({ children }: ProgressProps) {
 	let { state } = useContext(StepperCtx)
 
