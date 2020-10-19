@@ -5,10 +5,8 @@
   "main": "lib/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config ../../webpack.ts.config.js --mode production",
-    "prepublish": "npm run build && npm run types",
-    "types": "tsc --emitDeclarationOnly --declaration --declarationDir ./lib",
-    "dev": "tsc --noEmit --watch"
+    "build": "webpack --config ../../webpack.config.js --mode production",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -24,22 +22,37 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.161",
+    "@biotic-ui/bottom-sheet": "^0.2.4",
+    "@biotic-ui/layout": "^0.2.4",
+    "@biotic-ui/leptons": "^0.2.4",
+    "@biotic-ui/menu": "^0.2.4",
+    "@biotic-ui/std": "^0.2.4",
     "lodash": "^4.17.20",
-    "typescript": "^4.0.2",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "^5.1.1",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
+    "@biotic-ui/bottom-sheet": "^0.2.4",
+    "@biotic-ui/context-menu": "0.2.4",
+    "@biotic-ui/layout": "^0.2.4",
+    "@biotic-ui/leptons": "^0.2.4",
+    "@biotic-ui/menu": "^0.2.4",
+    "@biotic-ui/std": "^0.2.4",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "recoil": "0.0.13",
+    "scheduler": "^0.19.1",
+    "styled-components": "^5.1.1"
   },
   "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@types/styled-components": "^5.1.3"
+    "lodash": "^4.17.20"
   }
 }

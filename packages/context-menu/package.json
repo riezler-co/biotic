@@ -23,12 +23,14 @@
   },
   "devDependencies": {
     "@biotic-ui/std": "^0.2.4",
+    "@biotic-ui/bottom-sheet": "^0.2.4",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
-    "@biotic-ui/std": "^0.1.1",
+    "@biotic-ui/std": "^0.2.4",
+    "@biotic-ui/bottom-sheet": "^0.2.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-spring": "^8.0.27",

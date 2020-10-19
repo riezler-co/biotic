@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useRef, useMemo, Children } from 'react'
 import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
 import { useScrollShadow, useMatchMedia } from '@biotic-ui/std'
@@ -35,9 +35,9 @@ export function SidebarLayout({ children, right = false }) {
 
 	return (
 		<StyledSidebarLayout direction={direction}>
-			{ !left && aside }
+			{ !right && aside }
 			{ main }
-			{ left && aside }
+			{ right && aside }
 		</StyledSidebarLayout>
 	)
 }
