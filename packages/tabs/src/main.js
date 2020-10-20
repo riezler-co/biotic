@@ -5,10 +5,13 @@ export { Tabs
 			 , TabPanel
 			 } from './tabs'
 
-export { Tab
-			 } from './styled'
+export { Tab } from './tab'
 
 export { useTabs
 			 , useOpenTab
 			 , useDefaultTab
+			 , useTabState
+			 , useScrollState
+			 , useRestoreScroll
+			 , useOnTabClose
 			 } from './hook'

@@ -3,7 +3,7 @@ import _ from 'lodash'
 
 type Dep = Array<any>
 
-export function useDebounce<T>(cb: () => T, timeout = 0, dep: Dep = [], options = {}) {
+export function useDebounce<T>(cb: (...args: any[]) => T, timeout = 0, dep: Dep = [], options = {}) {
 
 	let fn = useRef(cb)
 
@@ -11,5 +11,11 @@ export function useDebounce<T>(cb: () => T, timeout = 0, dep: Dep = [], options 
 		fn.current = cb
 	})
 
-	return useCallback(_.debounce(() => fn.current(), timeout, options), dep)
+	return useCallback(_.debounce(
+					(...args) => fn.current(...args)
+				, timeout
+				, options
+				)
+		, dep
+	)
 }
