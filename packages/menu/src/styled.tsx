@@ -30,7 +30,13 @@ export let StyledMenuItem = styled.li`
 	}
 `
 
-export let MenuItemTitle = styled.button`
+type MenuItemTitleProps =
+	{ cursor?: string
+	; hasSubmenu?: boolean
+	; hasIcon?: boolean
+	}
+
+export let MenuItemTitle = styled.button<MenuItemTitleProps>`
 	width: 100%;
 	background: none;
 	border: none;

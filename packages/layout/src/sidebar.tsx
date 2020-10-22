@@ -1,11 +1,20 @@
-import React, { useRef, useMemo, Children } from 'react'
+import React, { useRef, useMemo, Children, ReactElement } from 'react'
 import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
 import { useScrollShadow, useMatchMedia } from '@biotic-ui/std'
 import { Drawer } from '@biotic-ui/drawer'
 import { Scrollbar } from '@biotic-ui/leptons'
 
-export let StyledSidebarLayout = styled.div`
+enum Direction
+	{ Left = 'left'
+	, Right = 'rigth'
+	}
+
+type LayoutColumns = 
+	{ direction: Direction
+	}
+
+export let StyledSidebarLayout = styled.div<LayoutColumns>`
 	display: grid;
 	grid-template-columns: ${layoutColumns};
 	transition: grid-template-columns 500ms ease;
@@ -14,7 +23,7 @@ export let StyledSidebarLayout = styled.div`
 	max-height: 100vh;
 `
 
-function layoutColumns({ direction }) {
+function layoutColumns({ direction }: LayoutColumns) {
 	if (direction === 'rigth') {
 		return '1fr auto'
 	}
@@ -22,16 +31,21 @@ function layoutColumns({ direction }) {
 	return 'auto 1fr'
 }
 
-export function SidebarLayout({ children, right = false }) {
+type Props =
+	{ children?: ReactElement | Array<ReactElement>
+	, right?: boolean
+	}
+
+export function SidebarLayout({ children, right = false }: Props) {
 	
 	let [aside, main] = useMemo(() => {
-		let _children = Children.toArray(children)
+		let _children = Children.toArray(children) as Array<ReactElement>
 		let aside = _children.find(node => node.type === Aside)
 		let main = _children.find(node => node.type === Main)
 		return [aside, main]
 	}, [children])
 
-	let direction = right ? 'right' : 'left'
+	let direction = right ? Direction.Right : Direction.Left
 
 	return (
 		<StyledSidebarLayout direction={direction}>
@@ -54,7 +68,7 @@ let StyledAside = styled.aside`
 	}
 `
 
-let ContentWrapper = styled.div`
+let ContentWrapper = styled.div<{ width: number}>`
 	width: ${p => p.width}px;
 	display: flex;
 	flex-direction: column;
@@ -68,7 +82,15 @@ let ContentWrapper = styled.div`
 	--menu-border: none;
 `
 
-export let Aside = (props) => {
+type AsideProps =
+	{ children?: JSX.Element | Array<JSX.Element>
+	; open: boolean
+	; width?: number
+	; drawer?: string
+	; onClose: () => void
+	}
+
+export let Aside = (props: AsideProps) => {
 	let { children
 		  , open
 		  , width = 250

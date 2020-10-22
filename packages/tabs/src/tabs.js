@@ -10,7 +10,9 @@ import { StyledTabs
 			 , StyledTabBar
 			 , StyledTabContent
 			 } from './styled'
+
 import { useRecoilState } from 'recoil'
+
 import { activeState
 			 , tabsState
 			 , useScrollState

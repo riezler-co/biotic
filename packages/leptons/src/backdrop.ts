@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 
-export let Backdrop = styled.div`
+type Props =
+	{ open: boolean;
+	}
+
+export let Backdrop = styled.div<Props>`
 	background: var(--backdrop, rgba(63, 63, 63, 0.1));
 	position: fixed;
 	width: 100%;

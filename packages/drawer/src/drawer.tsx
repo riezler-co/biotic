@@ -10,16 +10,21 @@ import { useGetContainer
 import { useSpring, animated } from 'react-spring'
 import { Backdrop } from '@biotic-ui/leptons'
 
-let StyledDrawer = styled.div`
+type StyledProps =
+	{ width?: string
+	; side?: 'left' | 'right'
+	}
+
+let StyledDrawer = styled.div<StyledProps>`
 	max-width: 100vw;
-	${p => p.width ? `width: ${p.width}`: ''};
 	height: 100vh;
 	position: fixed;
 	background: var(--drawer-background, #fff);
 	overflow-y: auto;
 	top: 0;
-	${p => p.side === 'left' ? 'left: 0' : 'right: 0'};
 	z-index: 11;
+	${p => p.width ? `width: ${p.width}`: ``};
+	${p => p.side === 'left' ? 'left: 0' : 'right: 0'};
 
 	--menu-box-shadow: none;
 	--menu-width: auto;
@@ -27,8 +32,22 @@ let StyledDrawer = styled.div`
 	--menu-border: none;
 `
 
+type CloseEvent =
+	{ backdrop: boolean
+	; escape: boolean
+	}
+
+type Props =
+	{ open: boolean
+	; children?: JSX.Element | Array<JSX.Element>
+	; maxWidth?: 'auto' | number
+	; onClose: (e: CloseEvent) => void
+	; left?: boolean
+	; scrollable?: boolean
+	}
+
 let NoOp = () => {}
-export function Drawer(props = {}) {
+export function Drawer(props: Props) {
 	let { open
 			, children
 			, maxWidth = 'auto'
@@ -64,8 +83,7 @@ export function Drawer(props = {}) {
 								  open={open}
 								  onClick={handleBackdrop} />
 			}
-			<StyledDrawer open={open}
-									  style={drawerAnimation}
+			<StyledDrawer style={drawerAnimation}
 									  width={translate}
 									  as={animated.div}
 									  side={left ? 'left' : 'right'}>

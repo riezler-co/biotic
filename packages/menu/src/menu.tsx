@@ -1,13 +1,17 @@
 
-import React,
-			 { Children
+import React from 'react'
+
+import { Children
 			 , useMemo
 			 , useState
 			 , useEffect
 			 , useLayoutEffect
 			 , useRef
 			 , useCallback
+			 , ReactElement
+			 , MouseEvent
 			 } from 'react'
+
 import styled, { css } from 'styled-components'
 import ArrowRight from './arrow_right'
 import { getSubmenuPosition } from './utils'
@@ -15,17 +19,27 @@ import ArrowBack from './arrow_back'
 import { useCombinedRefs, useResize } from '@biotic-ui/std'
 import { StyledMenu, StyledMenuItem, MenuItemTitle } from './styled'
 
-export let Menu = React.forwardRef((props, outerRef) => {
-	let [menuRef, setMenuRef] = useState(null)
-	let ref = useCombinedRefs(setMenuRef, outerRef)
+type Props =
+	{ children: JSX.Element | Array<JSX.Element>
+  ; icon?: boolean
+  ; submenu?: boolean
+  ; replace?: boolean
+  ; className?: string
+  ; style?: { [key:string]: any }
+  ; onClick?: (e: MouseEvent) => void
+  }
+
+export function Menu (props: Props) {
+	let [menuRef, setMenuRef] = useState<HTMLDivElement | HTMLUListElement | null>(null)
 	let [hover, setHover] = useState(true)
 
 	let shouldHover = useCallback(
 		() => {
-			if (!menuRef) return
+			if (menuRef === null) return
+
 			let { width } = menuRef.getBoundingClientRect()
 			let { innerWidth } = window
-			let { parentNode } = menuRef
+			let parentNode = menuRef.parentNode as HTMLElement
 
 			if (width === 0 && parentNode) {
 				width = parentNode.getBoundingClientRect().width
@@ -43,7 +57,7 @@ export let Menu = React.forwardRef((props, outerRef) => {
 	useLayoutEffect(shouldHover, [menuRef, setHover])
 	useResize(shouldHover)
 
-	let [submenu, setSubmenu] = useState(null) 
+	let [submenu, setSubmenu] = useState<ReactElement | null>(null) 
 	let { children
 		  , icon: hasIcon
 		  , submenu: hasSubmenu
@@ -52,7 +66,7 @@ export let Menu = React.forwardRef((props, outerRef) => {
 		  , style = {}
 		  } = props
 
-	function handleSetSubmenu(submenu) {
+	function handleSetSubmenu(submenu: ReactElement) {
 
 		let BackIcon = (
 			<IconWrapper>
@@ -60,7 +74,7 @@ export let Menu = React.forwardRef((props, outerRef) => {
 			</IconWrapper>
 		)
 
-		function handleBack(e) {
+		function handleBack(e: MouseEvent) {
 			e.stopPropagation()
 			setSubmenu(null)
 		}
@@ -76,7 +90,7 @@ export let Menu = React.forwardRef((props, outerRef) => {
 
 		let menu = React.cloneElement(submenu, {
 			children: appendItem(submenu.props.children, BackItem)
-		})
+		}) as ReactElement
 
 		setSubmenu(menu)
 	}
@@ -92,7 +106,7 @@ export let Menu = React.forwardRef((props, outerRef) => {
 
 	if (submenu) {
 		return (
-			<div ref={ref}
+			<div ref={setMenuRef}
 					 onContextMenu={e => e.preventDefault()}
 					 className={className}
 					 style={style}
@@ -103,7 +117,7 @@ export let Menu = React.forwardRef((props, outerRef) => {
 	}
 
 	return (
-		<StyledMenu ref={ref}
+		<StyledMenu ref={setMenuRef}
 							  onContextMenu={e => e.preventDefault()}
 							  className={className}
 							  style={style}
@@ -111,9 +125,19 @@ export let Menu = React.forwardRef((props, outerRef) => {
 			{ _children }
 		</StyledMenu>
 	)
-}) 
+}
 
-export let MenuItem = (props) => {
+type MenuItemProps =
+	{ children?: JSX.Element | Array<JSX.Element>
+	; onClick?: (e: MouseEvent) => void 
+	; hasSubmenu?: boolean
+	; hasIcon?: boolean
+	; icon?: JSX.Element
+	; replace?: boolean 
+	; setSubmenu?: (e: ReactElement) => void
+	}
+
+export let MenuItem = (props: MenuItemProps) => {
 	let { children
 			, onClick
 			, hasSubmenu
@@ -122,9 +146,12 @@ export let MenuItem = (props) => {
 			, replace
 			, setSubmenu
 			} = props
-	let _children = useMemo(() => Children.toArray(children), [children, hasSubmenu, hasIcon])
+	let _children = useMemo<Array<ReactElement>>(
+			() => Children.toArray(children) as Array<ReactElement>
+		, [children, hasSubmenu, hasIcon]
+	)
 	let title = useMemo(() => _children.find(node => node.type === MenuItemTitle), [children, hasSubmenu, hasIcon])
-	let submenuRef = useRef(null)
+	let submenuRef = useRef<HTMLElement | null>(null)
 	let itemRef = useRef(null)
 
 	function getSubmenu() {
@@ -152,24 +179,27 @@ export let MenuItem = (props) => {
 		hasSubmenu: hasSubmenu,
 		hasIcon: hasIcon,
 		cursor: (onClick || replace) ? 'pointer' : 'default',
-		onClick: (e) => {
+		onClick: (e: MouseEvent) => {
 			if (replace && submenu) {
-				setSubmenu(submenu)
+				setSubmenu && setSubmenu(submenu)
 			}
 
 			if (submenu) {
 				e.stopPropagation()
 			}
 
-			title.props.onClick && title.props.onClick(e)
+			if (title && title.props.onClick) {
+				title.props.onClick(e)
+			}
+
 		}
 	})
 
-	function handleMouseOver(e) {
+	function handleMouseOver(e: MouseEvent) {
 		if (replace) return
 		if (!submenuRef.current) return
 
-		let target = e.target
+		let target = e.target as HTMLElement
 		let node = submenuRef.current
 		let boundingClientRect = node.getBoundingClientRect()
 		let targetRect = target.getBoundingClientRect()
@@ -177,7 +207,7 @@ export let MenuItem = (props) => {
 		let { top, left } = getSubmenuPosition(boundingClientRect, targetRect)
 		node.style.top = top
 		node.style.left = left
-		node.style.opacity = 1
+		node.style.opacity = '1'
 	}
 	
 	return (
@@ -200,7 +230,7 @@ export let Divider = styled.hr`
 	height: 1px;
 `
 
-function pushArrow(children) {
+function pushArrow(children: JSX.Element) {
 	let _children = Children.toArray(children)
 	let arrow = (
 		<span className='arrow_right' key='arrow_right'>
@@ -211,7 +241,7 @@ function pushArrow(children) {
 	return _children
 }
 
-function appendItem(children, item) {
+function appendItem(children: JSX.Element, item: JSX.Element) {
 	let _children = Children.toArray(children)
 	return [item, ..._children]
 }

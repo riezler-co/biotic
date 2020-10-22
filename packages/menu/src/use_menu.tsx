@@ -1,24 +1,39 @@
-import React, { Children, useState } from 'react'
+import React, { Children, useState, ReactElement } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { useGetContainer, useOnEscape } from '@biotic-ui/std'
 import { createPortal } from 'react-dom'
 import { usePopper } from 'react-popper'
+import { Placement } from '@popperjs/core'
 import { Menu } from './menu'
 
-let DefaultConfig = {
-	placement: 'bottom-end'
+type Config =
+	{ placement: Placement
+	}
+
+let DefaultConfig: Config = {
+	placement: 'bottom-end' as Placement
 }
 
-export function useMenu(userConfig = {}) {
+type ContainerProps =
+	{ children: JSX.Element
+	}
+
+type UseMenu =
+	{ ref: (e: HTMLElement | null) => void 
+	;	onClick: (e: MouseEvent) => void
+	;	MenuContainer: React.FC<ContainerProps>
+	}
+
+export function useMenu(userConfig: Config = DefaultConfig): UseMenu {
 	let MENU_CONTAINER = useGetContainer('biotic-menu')
 	let [show, setShow] = useState(false)
-	let [referenceElement, setReferenceElement] = useState(null)
+	let [referenceElement, setReferenceElement] = useState<HTMLElement | null>(null)
 	let config = { ...DefaultConfig, ...userConfig }
 
 	useOnEscape(() => setShow(false))
 
-	let MenuContainer = ({ children: menu }) => {
-		let [popperElement, setPopperElement] = useState(null)
+	let MenuContainer = ({ children: menu }: ContainerProps) => {
+		let [popperElement, setPopperElement] = useState<HTMLElement | null>(null)
 		let { styles, attributes } = usePopper(referenceElement, popperElement, config)
 
 		if (!show) {

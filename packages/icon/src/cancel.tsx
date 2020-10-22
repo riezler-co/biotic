@@ -1,6 +1,10 @@
 import React from 'react'
 
-export function Cancel({ outline }) {
+type Props =
+	{ outline?: boolean
+	}
+
+export function Cancel({ outline }: Props) {
 
 	if (outline) {
 		return (
