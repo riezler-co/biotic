@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/button",
-  "version": "0.2.2",
+  "version": "0.2.6",
   "description": "biotic button",
   "main": "lib/main.js",
   "scripts": {
@@ -24,10 +24,10 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/icon": "^0.2.2",
+    "@biotic-ui/icon": "^0.2.6",
+    "typescript": "^4.0.2",
     "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "typescript": "^4.0.2"
+    "webpack-cli": "^3.3.12"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
