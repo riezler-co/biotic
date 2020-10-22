@@ -203,21 +203,22 @@ export function useDefaultTab({ index, type, id }: ActiveState) {
 	}, [])
 }
 
-function makeTabState<T extends SerializableParam>(id: string, defaultValue: T) {
-	return atomFamily<T, string>(
-		{ key: 'tab'
-		, default: defaultValue
-		}
-	)(id)
-}
+let makeTabState: (<T>(id: string) => RecoilState<T>) = atomFamily<any | null, string>(
+	{ key: 'tab'
+	, default: {}
+	}
+)
 
 type UseTabState<T> = 
-	[ T
+	[ T | null
 	, SetterOrUpdater<T>
 	]
 
-export function useTabState<T extends SerializableParam>(id: string, defaultState: T): UseTabState<T> {
-	let tabState = makeTabState<T>(id, defaultState)
+export function useTabState<T extends SerializableParam>(
+		id: string
+	, defaultState = null
+): UseTabState<T> {
+	let tabState = makeTabState<T>(id)
 	let [state, setState] = useRecoilState<T>(tabState)
 
 	return [

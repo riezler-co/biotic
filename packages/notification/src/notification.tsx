@@ -1,13 +1,14 @@
-import React,
-		 { createElement
-		 , useRef
-		 , useCallback
-		 , useEffect
-		 , cloneElement
-		 , useState
-		 , useLayoutEffect
-		 , forwardRef
-		 } from 'react'
+import React from 'react'
+import { createElement
+			 , useRef
+			 , useCallback
+			 , useEffect
+			 , cloneElement
+			 , useState
+			 , useLayoutEffect
+			 , forwardRef
+			 , MouseEvent
+			 } from 'react'
 import { createPortal } from 'react-dom'
 import create from 'zustand'
 import { useGetContainer } from '@biotic-ui/std'
@@ -15,7 +16,7 @@ import styled from 'styled-components'
 import { animated, useSpring } from 'react-spring'
 import OutsideClickHandler from 'react-outside-click-handler'
 
-let getId = (() => {
+let getId: (() => number) = (() => {
 	let currentId = 0
 	return () => {
 		let tmp = currentId
@@ -24,12 +25,28 @@ let getId = (() => {
 	}
 })()
 
-let useStore = create((set, get) => ({
+type NotificationElement = React.FC<{ onClose: (e: MouseEvent) => void }>
+
+type Notification$ =
+	{ id: number
+	; Component: NotificationElement
+	}
+
+type State =
+	{ notifications: Array<Notification$>
+	; hover: Promise<any>
+	; setHover: (p: Promise<any>) => void
+	; open: (n: Notification$) => void
+	; close: (id: number) => void
+	; closeImmediate: (id: number) => void
+	}
+
+let useStore = create<State>((set, get) => ({
   notifications: [],
   hover: Promise.resolve(),
   setHover: (hover) => set({ hover }), 
 
-  open: (notification) => set(state => {
+  open: (notification: Notification$) => set(state => {
 
   	let index = state.notifications.findIndex(n => n.id === notification.id)
   	if (index > -1) {
@@ -40,7 +57,7 @@ let useStore = create((set, get) => ({
   	return { notifications }
   }),
 
-  close: async (id) => {
+  close: async (id: number) => {
   	await get().hover
   	return set(state => {
 	  	let notifications = state.notifications.filter(x => x.id !== id)
@@ -48,7 +65,7 @@ let useStore = create((set, get) => ({
 	  })
   },
 
-  closeImmediate: (id) => set(state => {
+  closeImmediate: (id: number) => set(state => {
   	let notifications = state.notifications.filter(x => x.id !== id)
   	return { notifications }
   })
@@ -57,17 +74,17 @@ let useStore = create((set, get) => ({
 
 export let useNotificationStore = useStore
 
-function close(id) {
+function close(id: number) {
 	let state = useStore.getState()
 	state.close(id)
 }
 
-function closeImmediate(id) {
+function closeImmediate(id: number) {
 	let state = useStore.getState()
 	state.closeImmediate(id)
 }
 
-function open(Component) {
+function open(Component: NotificationElement) {
 	let id = getId()
 	let state = useStore.getState()
 	state.open({ id, Component })
@@ -80,10 +97,10 @@ export let notification = {
 	closeImmediate
 }
 
-export function useNotification(Component, props) {
-	let id = useRef(getId())
-	let component = useRef(null)
-	let { open, close, setComponent, closeImmediate } = useStore(state => state)
+export function useNotification(Component: NotificationElement) {
+	let id = useRef<number>(getId())
+	let component = useRef<NotificationElement>(Component)
+	let { open, close, closeImmediate } = useStore(state => state)
 
 	let _open = useCallback(() => {
 		open({ id: id.current , Component: component.current })
@@ -157,13 +174,20 @@ let StyledNotifications = styled.ul`
 	margin-bottom: 0;
 `
 
-let StyledNotification = styled.li`
+let StyledNotification = styled.li<{ index: number; open: boolean}>`
 	margin-top: var(--notification-spacing, calc(var(--baseline) * 0.38));
 	z-index: ${p => 3 - p.index};
 	user-select: ${p => p.open ? 'auto' : 'none'};
 `
 
-let ListItem = forwardRef(({ index, children, open , lastIndex }, ref) => {
+type ListItemProps =
+	{ index: number
+	; children: JSX.Element | Array<JSX.Element>
+	; open: boolean
+	; lastIndex: number
+	}
+
+let ListItem = forwardRef<HTMLDivElement, ListItemProps>(({ index, children, open , lastIndex }, ref) => {
 
 	let style = useSpring({
 		transform: open ? `scale(1) translateY(0px)` : `scale(${1 - index * 0.08}) translateY(${index * 42}px)` 
@@ -204,7 +228,11 @@ let Button = styled.button`
 	}
 `
 
-export function Close({ onClick }) {
+type CloseProps =
+	{ onClick?: (e: MouseEvent) => void
+	}
+
+export function Close({ onClick }: CloseProps) {
 	return (
 		<Button onClick={onClick}>
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
