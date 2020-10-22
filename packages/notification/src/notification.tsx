@@ -116,7 +116,7 @@ export function useNotification(Component: NotificationElement) {
 	return { open: _open, close: _close, closeImmediate: _closeImmediate }
 }
 
-export function Notifications() {
+export let Notifications: React.FC<{}> = () => {
 
 	let Container = useGetContainer('biotic-notifications')
 	let { notifications, ...state } = useStore(state => state)
