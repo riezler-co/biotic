@@ -8,7 +8,7 @@ export { Tabs
 export { Tab } from './tab'
 
 export { useTabs
-			 , useOpenTab
+			 , useTabHistory
 			 , useDefaultTab
 			 , useTabState
 			 , useScrollState

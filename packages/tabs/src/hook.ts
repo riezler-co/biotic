@@ -35,6 +35,7 @@ import type {
 			 , TabState
 			 , ScrollState
 			 , EventCallback
+			 , TabsHistory
 			 } from './utils'
 
 export let tabsState = atom<TabsState>(
@@ -54,9 +55,12 @@ const DEFAULT_ACTIVE: ActiveState =
 	, id: ''
 	}
 
-export let activeState = atom<ActiveState>(
-	{ key: 'active'
-	, default: DEFAULT_ACTIVE	
+export let tabsHistory = atom<TabsHistory>(
+	{ key: 'tabs_history'
+	, default:
+			{ items: []
+			, currentIndex: 0
+			}		
 	}
 )
 
@@ -65,9 +69,21 @@ export function useTabs(): TabsState {
 	return tabs
 }
 
-export function useOpenTab() {
+export function useActiveState(): ActiveState | null {
+	let history = useRecoilValue(tabsHistory)
+	let active = history.items[history.currentIndex]
+	return active ? active : null
+}
+
+export function useSetTabHistory() {
+	let setHistory = useSetRecoilState(tabsHistory)
+	return setHistory
+}
+
+export function useTabHistory() {
 	let [tabs, setTabs] = useRecoilState(tabsState)
-	let setActive = useSetRecoilState(activeState)
+	let [history, setHistory] = useRecoilState(tabsHistory)
+	let active = useActiveState()
 
 	let push = useCallback(config => {
 
@@ -77,44 +93,71 @@ export function useOpenTab() {
 			, isStatic: false
 			}
 
+		let historyCallback = (index: number, type: string, id: string) => (history: TabsHistory): TabsHistory => {
+			let entry = { index, type, id}
+			let isLast = history.currentIndex !== history.items.length - 1
+
+			let items = isLast
+				? [...history.items, entry]
+				: [ ...history.items.slice(0, history.currentIndex + 1)
+					, entry
+					]
+
+			let currentIndex = items.length - 1
+
+			return { currentIndex, items }
+		}
+
 		if (isOpen(tabs.ids, tab.id)) {
 
 			let index = getTabIndex(tabs, tab.id)
 			let staticTabs = getStaticTabs(tabs)
-			let item = tabs.items[index]
-
-			return setActive(
-				{ index: staticTabs + index
-				, type: item.type
-				, id: item.id
-				}
-			)
+			let { type, id } = tabs.items[index]
+			return setHistory(historyCallback(index + staticTabs, type, id))
 		}
 
 		let items = [...tabs.items, tab]
 		let length = tabs.length + 1
 		let ids = { ...tabs.ids, [tab.id]: true }
-
-		let active =
-			{ index: length - 1
-			, type: tab.type
-			, id: tab.id
-			}
 		
 		setTabs(tabs => ({ ...tabs, items , length, ids }))
-		setActive(active)
-	}, [tabs, setTabs, setActive])
+		
+		let index = length - 1
+		let { type, id } = tab
+		setHistory(historyCallback(index, type, id))
+	}, [tabs, setTabs, history, setHistory])
 
-	return { push }
+
+	let replace = useCallback((tab) => {
+		setHistory(history => {
+			let last = history.items.length - 1
+			let items =
+				[ ...history.items.slice(0, last)
+				, tab
+				]
+
+			return { ...history, items }
+		})
+	}, [setHistory])
+
+	let activate = useCallback((entry) => {
+		setHistory(history => {
+			let items = [...history.items, entry]
+			let currentIndex = items.length - 1
+			return { currentIndex, items }
+		})
+	}, [setHistory])
+
+	return { push, replace, active, activate }
 }
 
 export function useCloseTab() {
 	let [tabs, setTabs] = useRecoilState(tabsState)
-	let [active, setActive] = useRecoilState(activeState)
+	let { active, replace } = useTabHistory()
 
 	let close = useCallback((id) => {
 
-		if (!isOpen(tabs.ids, id)) {
+		if (!isOpen(tabs.ids, id) || active === null) {
 			return
 		}
 
@@ -147,18 +190,18 @@ export function useCloseTab() {
 			let activeTab = items[nextIndex - staticTabs]
 
 			if (activeTab === undefined && staticTabs === 0) {
-				setActive(DEFAULT_ACTIVE)
+				replace(DEFAULT_ACTIVE)
 			} else if (activeTab === undefined && staticTabs > 0) {
 				let tab = _.last(tabs.staticItems) ?? DEFAULT_ACTIVE
 
-				setActive(
+				replace(
 					{ id: tab.id
 					, index: staticTabs - 1
 					, type: tab.type
 					}
 				)
 			} else {
-				setActive(
+				replace(
 					{ id: activeTab.id
 					, index: nextIndex
 					, type: activeTab.type
@@ -169,13 +212,13 @@ export function useCloseTab() {
 		}
 
 		if (absoluteIndex < active.index) {
-			setActive(
+			replace(
 				{ ...active
 				, index: active.index - 1
 				}
 			)
 		}
-	}, [tabs, active])
+	}, [tabs, active, replace])
 
 	return { close }
 }
@@ -197,9 +240,14 @@ export function useOnTabClose(id: string, cb: EventCallback) {
 }
 
 export function useDefaultTab({ index, type, id }: ActiveState) {
-	let setActive = useSetRecoilState(activeState)
+	let setHistory = useSetTabHistory()
 	useEffect(() => {
-		setActive({ index, type, id })
+		setHistory(history => {
+			let entry = { index, type, id }
+			let items = [...history.items, entry]
+			let currentIndex = items.length - 1
+			return { currentIndex, items }
+		})
 	}, [])
 }
 
@@ -264,7 +312,6 @@ export function useScrollState(id: string): UseScrollState {
 
 	let getScroll = useRecoilCallback<any, ScrollState>(({ snapshot }) => (): ScrollState => {
 		let { state, contents } = snapshot.getLoadable(scrollState)
-		
 		if (state === 'hasValue') {
 			return (contents as ScrollState)
 		}

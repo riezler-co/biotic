@@ -10,7 +10,7 @@ import { Tabs
 			 , TabContent
 			 , Tab
 			 , useTabs
-			 , useOpenTab
+			 , useTabHistory
 			 , TabPanel
 			 , useTabState
 			 , useDefaultTab
@@ -38,7 +38,7 @@ export default {
 export let Default = () => {
 	let [open, setOpen] = React.useState(true)
 	let tabs = useTabs()
-	let openTab = useOpenTab()
+	let openTab = useTabHistory()
 	useDefaultTab(
 		{ index: 0
 		, type: 'dummy'
