@@ -140,7 +140,15 @@ export function useTabHistory() {
 		})
 	}, [setHistory])
 
-	return { push, replace, active }
+	let activate = useCallback((entry) => {
+		setHistory(history => {
+			let items = [...history.items, entry]
+			let currentIndex = items.length - 1
+			return { currentIndex, items }
+		})
+	}, [setHistory])
+
+	return { push, replace, active, activate }
 }
 
 export function useCloseTab() {
@@ -304,9 +312,7 @@ export function useScrollState(id: string): UseScrollState {
 
 	let getScroll = useRecoilCallback<any, ScrollState>(({ snapshot }) => (): ScrollState => {
 		let { state, contents } = snapshot.getLoadable(scrollState)
-		console.log({ state, contents, id })
 		if (state === 'hasValue') {
-			console.log('HAS_VALUE')
 			return (contents as ScrollState)
 		}
 

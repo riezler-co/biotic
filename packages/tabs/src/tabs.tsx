@@ -53,9 +53,11 @@ export function TabBar({ children }: TabBarProps) {
 
 	let _children = useMemo(() => {
 		return Children.map(children, (node, index) => {
+			let { isStatic = true } = node.props
+
 			return React.cloneElement(node,
 				{ onClick: () => {
-						history.push(
+						history.activate(
 							{ index
 							, type: node.props.type
 							, id: node.props.id
@@ -123,12 +125,11 @@ export function TabPanel({ children }: TabPanelProps) {
 	let _child = React.Children.only(children)
 
 	let id = active === null ? '' : active.id
-	console.log({ id })
 	let child = React.cloneElement(_child, { id })
 	let [, setState] = useTabState(id, null)
 	let [scrollContainer, setScrollContainer] = useState(null)
 	let tabId = `tab_panel:${id}`
-	let [, setScroll, cleanScroll] = useScrollState(id)
+	let [, setScroll, cleanScroll] = useScrollState(tabId)
 	let ref = useRestoreScroll(tabId)
 
 	useOnTabClose(id, () => {
