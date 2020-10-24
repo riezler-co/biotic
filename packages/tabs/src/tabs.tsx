@@ -14,13 +14,14 @@ import { StyledTabs
 
 import { useRecoilState } from 'recoil'
 
-import { activeState
-			 , tabsState
+import { tabsState
 			 , useScrollState
 			 , useRestoreScroll
 			 , useCloseTab
 			 , useOnTabClose
 			 , useTabState
+			 , useTabHistory
+			 , useActiveState
 			 } from './hook'
 
 import { toTabObject
@@ -47,14 +48,14 @@ type TabBarProps =
 
 export function TabBar({ children }: TabBarProps) {
 	let [, setTabs] = useRecoilState(tabsState)
-	let [active, setActive] = useRecoilState(activeState)
+	let { active, ...history } = useTabHistory()
 	let closeTab = useCloseTab()
 
 	let _children = useMemo(() => {
 		return Children.map(children, (node, index) => {
 			return React.cloneElement(node,
 				{ onClick: () => {
-						setActive(
+						history.push(
 							{ index
 							, type: node.props.type
 							, id: node.props.id
@@ -66,7 +67,7 @@ export function TabBar({ children }: TabBarProps) {
 						closeTab.close(node.props.id)
 					}
 
-				, isActive: active.id === node.props.id
+				, isActive: active && active.id === node.props.id
 			})
 		})
 	}, [children, active])
@@ -93,13 +94,13 @@ type TabContentProps =
 	} 
 
 export function TabContent({ children, fallback = null }: TabContentProps) {
-	let [active] = useRecoilState(activeState)
+	let active = useActiveState()
 
 	let panel = useMemo<JSX.Element | undefined>(() => {
 		let _children = Children.toArray(children) as Array<JSX.Element>
 
 		let getNode = (node: JSX.Element): boolean =>
-			node.props.type === active.type
+			active !== null && node.props.type === active.type
 
 		return _children.find(getNode)
 	}, [children, active])
@@ -109,7 +110,7 @@ export function TabContent({ children, fallback = null }: TabContentProps) {
 	}
 
 	return React.cloneElement(panel, {
-		key: active.id
+		key: active === null ? '' : active.id
 	})
 }
 
@@ -118,24 +119,25 @@ type TabPanelProps =
 	}
 
 export function TabPanel({ children }: TabPanelProps) {
-	let [active] = useRecoilState(activeState)
+	let active = useActiveState()
 	let _child = React.Children.only(children)
-	let child = React.cloneElement(_child, {
-		id: active.id
-	})
-	let [, setState] = useTabState(active.id, null)
-	let [scrollContainer, setScrollContainer] = useState(null)
-	let id = `tab_panel:${active.id}`
-	let [, setScroll, cleanScroll] = useScrollState(id)
-	let ref = useRestoreScroll(id)
 
-	useOnTabClose(active.id, () => {
+	let id = active === null ? '' : active.id
+	console.log({ id })
+	let child = React.cloneElement(_child, { id })
+	let [, setState] = useTabState(id, null)
+	let [scrollContainer, setScrollContainer] = useState(null)
+	let tabId = `tab_panel:${id}`
+	let [, setScroll, cleanScroll] = useScrollState(id)
+	let ref = useRestoreScroll(tabId)
+
+	useOnTabClose(id, () => {
 		cleanScroll()
 		setState(null)
 	})
 
 	return (
-		<StyledTabContent id={id} onScroll={setScroll} ref={ref}>
+		<StyledTabContent id={tabId} onScroll={setScroll} ref={ref}>
 			{ child }
 		</StyledTabContent>
 	)

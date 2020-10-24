@@ -21,6 +21,11 @@ export type ActiveState =
 	; id: string
 	}
 
+export type TabsHistory =
+	{ items: Array<ActiveState>
+	; currentIndex: number
+	}
+
 export type ScrollState =
 	{ top: number
 	; left: number
