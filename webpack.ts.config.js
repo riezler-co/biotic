@@ -36,6 +36,11 @@ module.exports = function createConfig (webpackEnv) {
           commonjs2: 'react-spring',
           amd: 'react-spring'
         },
+        'recoil': {
+          commonjs: 'recoil',
+          commonjs2: 'recoil',
+          amd: 'recoil'
+        },
      },
     output: {
       globalObject: 'this',
