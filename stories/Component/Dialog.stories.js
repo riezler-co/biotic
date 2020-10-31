@@ -1,5 +1,6 @@
 import React from 'react'
 import Dialog from '@package/dialog/main'
+import { Button } from '@package/button/main'
 
 export default {
 	title: 'Component/Dialog',
@@ -11,14 +12,14 @@ export let Default = () => {
 
 	return (
 		<React.Fragment>
-			<button onClick={() => setOpen(true)}>Open Dialog</button>
+			<Button onClick={() => setOpen(true)}>Open Dialog</Button>
 
 			<div style={{ height: '110vh', background: 'grey' }}></div>
 
-			<button onClick={() => setOpen(true)}>Open Dialog</button>
+			<Button onClick={() => setOpen(true)}>Open Dialog</Button>
 			<Dialog open={open} onClose={() => setOpen(false)} width={400}>
 				<h1>Biotic Dialog</h1>
-				<button onClick={() => setOpen(false)}>Close</button>
+				<Button onClick={() => setOpen(false)}>Close</Button>
 			</Dialog>
 		</React.Fragment>
 	)

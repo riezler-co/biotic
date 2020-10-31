@@ -105,7 +105,7 @@ export function useContextMenu(userOptions = {}) {
 		let Menu = (
 			<OutsideClickHandler onOutsideClick={() => setUseContextMenu(false)}>
 				<Nav onClose={() => setUseContextMenu(false)} position={position}>
-					{ children }
+					<div>{ children }</div>
 				</Nav>
 			</OutsideClickHandler>
 		)

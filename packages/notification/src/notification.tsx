@@ -13,8 +13,8 @@ import { createPortal } from 'react-dom'
 import create from 'zustand'
 import { useGetContainer } from '@biotic-ui/std'
 import styled from 'styled-components'
-import { animated, useSpring } from 'react-spring'
 import OutsideClickHandler from 'react-outside-click-handler'
+import { motion, AnimatePresence } from 'framer-motion'
 
 let getId: (() => number) = (() => {
 	let currentId = 0
@@ -66,6 +66,7 @@ let useStore = create<State>((set, get) => ({
   },
 
   closeImmediate: (id: number) => set(state => {
+  	console.log({ id })
   	let notifications = state.notifications.filter(x => x.id !== id)
   	return { notifications }
   })
@@ -143,18 +144,20 @@ export let Notifications: React.FC<{}> = () => {
 			<StyledNotifications onMouseEnter={onMouseEnter}
 													 onClick={onMouseEnter}
 											     onMouseLeave={onMouseLeave}>
-				{ 
-					notifications.map(({ id, Component }, index) => {
-						return (
-							<ListItem key={id} 
-											  index={index}
-											  open={hover}
-											  lastIndex={notifications.length - 1}>
-								{ createElement(Component, { onClose: () => state.closeImmediate(id) }) }
-							</ListItem>
-						)
-					}) 
-				}
+				<AnimatePresence initial={false}>
+					{ 
+						notifications.map(({ id, Component }, index) => {
+							return (
+								<ListItem key={id} 
+												  index={index}
+												  open={hover}
+												  lastIndex={notifications.length - 1}>
+									{ createElement(Component, { onClose: () => state.closeImmediate(id) }) }
+								</ListItem>
+							)
+						}) 
+					}
+				</AnimatePresence>
 			</StyledNotifications>
 		</OutsideClickHandler>
 	)
@@ -188,13 +191,17 @@ type ListItemProps =
 	}
 
 let ListItem = forwardRef<HTMLDivElement, ListItemProps>(({ index, children, open , lastIndex }, ref) => {
-
-	let style = useSpring({
-		transform: open ? `scale(1) translateY(0px)` : `scale(${1 - index * 0.08}) translateY(${index * 42}px)` 
-	})
-
 	return (
-		<StyledNotification as={animated.div} style={style} ref={ref} index={index} open={open}>
+		<StyledNotification
+				as={motion.div}
+				ref={ref}
+				index={index}
+				open={open}
+				initial={{ opacity: 0, transform: 'scale(0.62)' }}
+				animate={{ opacity: 1, transform: 'scale(1)' }}
+				exit={{ opacity: 0, transform: 'scale(0.62)' }}
+				positionTransition
+		>
 			{ children }
 		</StyledNotification>
 	)
@@ -204,7 +211,7 @@ export let Notification = styled.div`
 	--default-border: 1px solid #fff;
 	background: var(--notification-background, #222);
 	color: var(--notification-color, #fff);
-	padding: calc(var(--baseline) * 0.62) calc(var(--baseline) * 1.38);
+	padding: var(--baseline) calc(var(--baseline) * 1.62);
 	border: var(--notification-border, var(--default-border));
 	border-radius: calc(var(--baseline) * 0.3);
 	width: 300px;

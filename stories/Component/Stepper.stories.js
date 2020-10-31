@@ -9,6 +9,8 @@ import { Stepper
 			 , Controls
 			 } from '@package/stepper/main'
 
+import { Button } from '@package/button/main'
+
 export default {
 	title: 'Component/Stepper',
 	component: Stepper
@@ -35,9 +37,9 @@ let CurrentProgress = ({ step, steps }) => {
 let Buttons = ({ onPrev, onNext }) => {
 	return (
 		<div>
-			<button disabled={onPrev === null} onClick={() => onPrev()}>Prev</button>
-			{ onNext && <button onClick={() => onNext()}>Next</button> }
-			{ !onNext && <button>Done</button> }
+			<Button disabled={onPrev === null} onClick={() => onPrev()}>Prev</Button>
+			{ onNext && <Button onClick={() => onNext()}>Next</Button> }
+			{ !onNext && <Button>Done</Button> }
 		</div>
 	)
 }
@@ -106,7 +108,7 @@ let Data1 = () => {
 	return (
 		<div>
 			<p>Counter: { data.counter }</p>
-			<button onClick={() => setData({ counter: data.counter + 1 })}>Up</button>
+			<Button onClick={() => setData({ counter: data.counter + 1 })}>Up</Button>
 		</div>
 	)
 }

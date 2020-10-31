@@ -4,6 +4,7 @@ import { BottomSheet, SheetHeader, SheetTitle, SheetContent } from '@package/bot
 import { Menu, MenuItem, Divider, MenuItemTitle, useMenu } from '@package/menu/main'
 import EditIcon from '../assets/edit_icon'
 import DeleteIcon from '../assets/delete_icon'
+import { Button } from '@package/button/main'
 
 export default {
 	title: 'Component/Bottom Sheet',
@@ -15,10 +16,10 @@ export let Sheet = () => {
 
 	return (
 		<React.Fragment>
-			<button onClick={() => setOpen(true)}>Open Sheet</button>
+			<Button onClick={() => setOpen(true)}>Open Sheet</Button>
 			<BottomSheet open={open} height={0.3} onClose={() => setOpen(false)}>
 				<SheetHeader>
-					<button onClick={() => setOpen(false)}>Close</button>
+					<Button onClick={() => setOpen(false)}>Close</Button>
 					<SheetTitle>Bottom Sheet</SheetTitle>
 				</SheetHeader>
 				<SheetContent>
@@ -56,7 +57,6 @@ export let Dynamic = () => {
 
 	let [open, setOpen] = React.useState(false)
 
-
 	function addChild() {
 		setChildren([
 			...children,
@@ -81,12 +81,12 @@ export let Dynamic = () => {
 
 	return (
 		<React.Fragment>
-			<button onClick={addChild}>Add child</button>
-			<button onClick={add100}>Add 100</button>
-			<button onClick={() => setOpen(true)}>Open Sheet</button>
+			<Button onClick={addChild}>Add child</Button>
+			<Button onClick={add100}>Add 100</Button>
+			<Button onClick={() => setOpen(true)}>Open Sheet</Button>
 			<BottomSheet scrollable open={open} minHeight={0.8} onClose={() => setOpen(false)}>
 				<SheetHeader>
-					<button onClick={() => setOpen(false)}>Close</button>
+					<Button onClick={() => setOpen(false)}>Close</Button>
 					<SheetTitle>Bottom Sheet</SheetTitle>
 				</SheetHeader>
 				<SheetContent>

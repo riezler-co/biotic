@@ -38,7 +38,7 @@
     "@biotic-ui/std": "^0.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-spring": "^8.0.27",
+    "framer-motion": "^2.9.4",
     "styled-components": "^5.1.1"
   },
   "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",

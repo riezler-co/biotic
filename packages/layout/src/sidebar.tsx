@@ -1,11 +1,11 @@
 import React, { useRef, useMemo, Children, ReactElement } from 'react'
 import styled from 'styled-components'
-import { useSpring, animated } from 'react-spring'
 import { useScrollShadow, useMatchMedia } from '@biotic-ui/std'
 import { Drawer } from '@biotic-ui/drawer'
 import { Scrollbar } from '@biotic-ui/leptons'
+import { motion, AnimateSharedLayout } from 'framer-motion'
 
-enum Direction
+export enum Direction
 	{ Left = 'left'
 	, Right = 'rigth'
 	}
@@ -17,7 +17,6 @@ type LayoutColumns =
 export let StyledSidebarLayout = styled.div<LayoutColumns>`
 	display: grid;
 	grid-template-columns: ${layoutColumns};
-	transition: grid-template-columns 500ms ease;
 	width: 100%;
 	height: 100%;
 	max-height: 100vh;
@@ -48,11 +47,13 @@ export function SidebarLayout({ children, right = false }: Props) {
 	let direction = right ? Direction.Right : Direction.Left
 
 	return (
-		<StyledSidebarLayout direction={direction}>
-			{ !right && aside }
-			{ main }
-			{ right && aside }
-		</StyledSidebarLayout>
+		<AnimateSharedLayout>
+			<StyledSidebarLayout direction={direction}>
+				{ !right && aside }
+				{ main }
+				{ right && aside }
+			</StyledSidebarLayout>
+		</AnimateSharedLayout>
 	)
 }
 
@@ -68,7 +69,7 @@ let StyledAside = styled.aside`
 	}
 `
 
-let ContentWrapper = styled.div<{ width: number}>`
+let ContentWrapper = styled(motion.div)<{ width: number}>`
 	width: ${p => p.width}px;
 	display: flex;
 	flex-direction: column;
@@ -98,14 +99,6 @@ export let Aside = (props: AsideProps) => {
 		  , onClose = () => {}
 		  } = props
 	
-	let wrapperAnimation = useSpring({
-		width: open ? `${width}px` : '0px'
-	})
-
-	let contentAnimation = useSpring({
-		transform: open ? 'translateX(0px)' : `translateX(-${width}px)`
-	})
-
 	let useDrawer = useMatchMedia(drawer)
 
 	if (useDrawer) {
@@ -125,19 +118,54 @@ export let Aside = (props: AsideProps) => {
 		)
 	}
 
+
+	let variants =
+		{ hidden:
+				{ width: 0
+				}
+
+		, visible:
+				{ width: width
+				}
+		}
+
+	let contentVariants =
+		{ hidden:
+				{ transform: `translateX(-${width}px)`
+				}
+
+		, visible:
+				{ transform: 'translateX(0px)'
+				}
+		}
+
+	let transition =
+		{ type: 'tween'
+		, ease: 'easeOut'
+		, duration: 0.5
+		}
+
 	return (
-		<StyledAside as={animated.aside}
-		             style={wrapperAnimation}>
-		  <ContentWrapper as={animated.div}
-		  								style={contentAnimation}
-		  								width={width}>
+		<StyledAside layout
+								 as={motion.aside}
+								 variants={variants}
+								 initial={open ? 'visible' : 'hidden'}
+								 animate={open ? 'visible' : 'hidden'}
+								 transition={transition} 
+		>
+		  <ContentWrapper width={width}
+		  								variants={contentVariants}
+		  								initial={open ? 'visible' : 'hidden'}
+		  								animate={open ? 'visible' : 'hidden'}
+		  								transition={transition} 
+		  >
 				{ children }
 		  </ContentWrapper>
 		</StyledAside>
 	)
 }
 
-export let Main = styled.main`
+export let Main = styled(motion.main).attrs({ layout: true })`
 	overflow: auto;
 	height: 100%;
 	width: 100%;

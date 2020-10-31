@@ -14,6 +14,9 @@ import { Menu
 	   	 , useMenu
 	   	 } from '@package/menu/main'
 
+
+import { Button } from '@package/button/main'
+
 export default {
 	title: 'Layout/Sidebar'
 }
@@ -64,7 +67,7 @@ export let Default = () => {
 				</Menu>
 			</Aside>
 			<Main>
-				<button onClick={() => setOpen(!open)}>Toggle Aside</button>
+				<Button onClick={() => setOpen(!open)}>Toggle Aside</Button>
 				
 				<h1>Main</h1>
 
@@ -171,8 +174,8 @@ export let Nested = () => {
 						</Menu>
 					</Aside>
 					<Main>
-						<button onClick={() => setOpenOuter(!openOuter)}>Toggle Outer</button>
-						<button onClick={() => setOpenInner(!openInner)}>Toggle Inner</button>
+						<Button onClick={() => setOpenOuter(!openOuter)}>Toggle Outer</Button>
+						<Button onClick={() => setOpenInner(!openInner)}>Toggle Inner</Button>
 						
 						<h1>Main</h1>
 

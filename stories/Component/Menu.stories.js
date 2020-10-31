@@ -10,6 +10,8 @@ import { Menu
 	     , useMenu
 	     } from '@package/menu/main'
 
+import { Button } from '@package/button/main'
+
 export default {
   title: 'Component/Menu',
   component: Menu,
@@ -133,7 +135,7 @@ export const Popper = () =>	{
 	return  (
 		<Wrapper>
 
-			<button {...props}>Open</button>
+			<Button {...props}>Open</Button>
 			<MenuContainer>
 				<Menu>
 					<MenuItem onClick={() => {}}>
@@ -165,7 +167,7 @@ export const PopperWithSubmenu = () =>	{
 	return  (
 		<Wrapper>
 			
-			<button {...props}>Open</button>
+			<Button {...props}>Open</Button>
 
 			<MenuContainer>
 				<Menu icon submenu>
@@ -221,7 +223,7 @@ export const Replave = () =>	{
 	return  (
 		<Wrapper>
 			
-			<button {...props}>Open</button>
+			<Button {...props}>Open</Button>
 
 			<MenuContainer>
 				<Menu icon submenu replace>

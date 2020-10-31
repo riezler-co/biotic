@@ -19,6 +19,8 @@ import { Tabs
 			 , useOnTabClose
 			 } from '@package/tabs/main'
 
+import { Button } from '@package/button/main'
+
 import { RecoilRoot } from 'recoil'
 
 export default {
@@ -68,8 +70,8 @@ export let Default = () => {
 	return (
 		<SidebarLayout>
 			<Aside open={true} drawer='(max-width: 900px)' onClose={() => setOpen(false)}>
-				<button onClick={push}>Open Random</button>
-				<button onClick={openStatic('four')}>Open Four</button>
+				<Button onClick={push}>Open Random</Button>
+				<Button onClick={openStatic('four')}>Open Four</Button>
 			</Aside>
 			<Main>
 				<Tabs>
@@ -140,7 +142,7 @@ let Random = ({ id }) => {
 		<Content>
 			<h1>{ id }</h1>
 			<h2>{ state.count }</h2>
-			<button onClick={handleUp}>Up</button>
+			<Button onClick={handleUp}>Up</Button>
 
 			<Nested id={nestedId} onScroll={setScroll} ref={nested}>
 				<Box />
@@ -181,7 +183,7 @@ let StaticId = ({ id }) => {
 		<Content>
 			<h1>ID: { id }</h1>
 			<h2>{ state.count }</h2>
-			<button onClick={handleUp}>Up</button>
+			<Button onClick={handleUp}>Up</Button>
 
 			<Nested id={nestedId} onScroll={setScroll} ref={nested}>
 				<Box />

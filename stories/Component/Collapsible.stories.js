@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import styled from 'styled-components'
 import EditIcon from '../assets/edit_icon'
 import DeleteIcon from '../assets/delete_icon'
@@ -18,6 +18,8 @@ import { Menu
 			 , useMenu
 			 } from '@package/menu/main'
 
+import { Button } from '@package/button/main'
+
 export default {
 	title: 'Component/Collapsible',
 	component: Collapsible
@@ -28,7 +30,7 @@ export let Sheet = () => {
 
 	return (
 		<React.Fragment>
-			<button onClick={() => setOpen(!open)}>Toggle Collapsible</button>
+			<Button onClick={() => setOpen(!open)}>Toggle Collapsible</Button>
 			<Collapsible open={open}>
 				<div>
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum dolores, sit odio nesciunt enim earum quod iusto molestias, quos excepturi.
@@ -57,8 +59,8 @@ export let Dynamic = () => {
 
 	return (
 		<React.Fragment>
-			<button onClick={addChild}>Add child</button>
-			<button onClick={() => setOpen(!open)}>Toggle Collapsible</button>
+			<Button onClick={addChild}>Add child</Button>
+			<Button onClick={() => setOpen(!open)}>Toggle Collapsible</Button>
 			<Collapsible open={open}>
 				<ul>
 					{ children }
@@ -155,7 +157,7 @@ export let SheetMenu = () => {
 
 	return (
 		<React.Fragment>
-			<button onClick={() => setOpen(!open)}>Toggle Collapsible</button>
+			<Button onClick={() => setOpen(!open)}>Toggle Collapsible</Button>
 			<Collapsible open={open}>
 				<Menu icon submenu replace>
 					<MenuItem onClick={() => {}} icon={<EditIcon/>}>

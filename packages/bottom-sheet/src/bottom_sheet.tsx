@@ -14,8 +14,9 @@ import { useGetContainer
 			 , useWindowSize
 			 , useResizeObserver
 			 } from '@biotic-ui/std'
-import { useSpring, animated } from 'react-spring'
+
 import { Backdrop } from '@biotic-ui/leptons'
+import { motion, AnimatePresence, useMotionValue } from 'framer-motion'
 
 import { BottomDrawer } from './styled'
 
@@ -35,16 +36,17 @@ type Props =
 	; onClick?: (e: MouseEvent) => void
 	}
 
-export let BottomSheet = ({
-	children,
-	open = false,
-	onClose = () => {},
-	height = null,
-	minHeight = 0,
-	scrollable = false,
-	className,
-	onClick
-}: Props) => {
+export let BottomSheet = (
+	{ children
+	, open = false
+	, onClose = () => {}
+	, height = null
+	, minHeight = 0
+	, scrollable = false
+	, dragable = false
+	, className
+	, onClick
+	}: Props) => {
 
 	let SheetContainer = useGetContainer('biotic-bottom-drawer-container')
 
@@ -68,20 +70,6 @@ export let BottomSheet = ({
 		openUntil
 	})
 
-	let translateY = sheetHeight === 0
-		// trying to hide the bottom sheet until get a container
-		// without causing an animation
-		? '99999px'
-		: `${sheetHeight}px`
-
-	let props = useSpring({
-		transform: open ? 'translateY(0)' : `translateY(${translateY})`
-	})
-
-	let wrapperAnimation = useSpring({
-		opacity: open ? 1 : 0
-	})
-
 	useOnEscape(() => open && onClose({ backdrop: false, escape: true }))
 	usePreventScroll(open && !scrollable)
 
@@ -89,7 +77,7 @@ export let BottomSheet = ({
 		onClose && onClose({ backdrop: true, escape: false })
 	}
 
-	let sheetRef = useResizeObserver(entries => {
+	let contentRef = useResizeObserver(entries => {
 		let ids = entries.map(entry => {
 			if (!entry.contentRect) return
 			return requestAnimationFrame(() => {
@@ -107,29 +95,55 @@ export let BottomSheet = ({
 		}
 	})
 
+	let backdropVariants =
+		{ hidden:
+				{ opacity: 0 }
+
+		, visible:
+				{ opacity: 1 }
+		}
+		
+	let spring =
+		{ type: 'spring'
+		, damping: 21
+		, stiffness: 130
+		}
+
+	let transform = useMotionValue(0)
+
 	let Sheet = (
 		<React.Fragment>
 			
 			{
 				!scrollable &&
-				<Backdrop as={animated.div}
-								  style={wrapperAnimation}
-								  open={open}
-								  onClick={handleBackdrop} />
+				<Backdrop as={motion.div}
+									open={open}
+									initial='hidden'
+									animate={open ? 'visible' : 'hidden'}
+									variants={backdropVariants}
+									onClick={handleBackdrop}
+				/>
 			}
 
-			<BottomDrawer
-				onClick={onClick}
-				as={animated.div}
-				style={props}
-				className={className}
-				open={open}
-				height={sheetHeight}
-				>
-				<div ref={sheetRef}>
-					{ children }
-				</div>
-			</BottomDrawer>
+			<AnimatePresence>
+				{ open &&
+						<BottomDrawer
+							as={motion.div}
+							onClick={onClick}
+							className={className}
+							open={open}
+							initial={{ transform: 'translateY(100%)' }}
+							animate={{ transform: 'translateY(0%)' }}
+							exit={{ transform: 'translateY(100%)' }}
+							height={sheetHeight}
+							transition={spring}
+						>
+							<motion.div ref={contentRef}>
+								{ children }
+							</motion.div>
+						</BottomDrawer>
+				}
+			</AnimatePresence>
 			
 		</React.Fragment>
 	)

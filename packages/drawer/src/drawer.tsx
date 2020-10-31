@@ -7,8 +7,8 @@ import { useGetContainer
 			 , usePreventScroll
 			 } from '@biotic-ui/std'
 
-import { useSpring, animated } from 'react-spring'
 import { Backdrop } from '@biotic-ui/leptons'
+import { motion } from 'framer-motion'
 
 type StyledProps =
 	{ width?: string
@@ -57,17 +57,7 @@ export function Drawer(props: Props) {
 			} = props
 
 	let DrawerContainer = useGetContainer('biotic-drawer-container')
-	let translate = maxWidth === 'auto' ? '100vw' : `${maxWidth}px`
-
-	let transform = left
-		? open ? 'translateX(0px)' : `translateX(-${translate})`
-		: open ? 'translateX(0px)' : `translateX(${translate})`
-
-	let drawerAnimation = useSpring({ transform })
-	let wrapperAnimation = useSpring({
-		opacity: open ? 1 : 0
-	})
-
+	
 	useOnEscape(() => open && onClose({ backdrop: false, escape: true }))
 	usePreventScroll(open && !scrollable)
 
@@ -75,18 +65,51 @@ export function Drawer(props: Props) {
 		onClose && onClose({ backdrop: true, escape: false })
 	}
 
+	let backdropVariants =
+		{ hidden:
+				{ opacity: 0 }
+
+		, visible:
+				{ opacity: 1 }
+		}
+
+	let translate = maxWidth === 'auto' ? '100vw' : `${maxWidth}px`
+	let drawerVariants =
+		{ hidden:
+				{ transform: left ? `translateX(-${translate})` : `translateX(${translate})`
+				}
+
+		, visible:
+				{ transform: 'translateX(0px)'
+				}
+		}
+
+	let spring =
+		{ type: 'spring'
+		, damping: 21
+		, stiffness: 130
+		}
+
 	let Drawer = (
 		<React.Fragment>
 			{ !scrollable &&
-				<Backdrop as={animated.div}
-								  style={wrapperAnimation}
-								  open={open}
-								  onClick={handleBackdrop} />
+				<Backdrop as={motion.div}
+									open={open}
+									initial='hidden'
+									animate={open ? 'visible' : 'hidden'}
+									variants={backdropVariants}
+									onClick={handleBackdrop}
+				/>
+
 			}
-			<StyledDrawer style={drawerAnimation}
+			<StyledDrawer as={motion.div}
+										initial='hidden'
+										animate={open ? 'visible' : 'hidden'}
+										variants={drawerVariants}
+									  side={left ? 'left' : 'right'}
 									  width={translate}
-									  as={animated.div}
-									  side={left ? 'left' : 'right'}>
+									  transition={spring} 
+			>
 				{ children }
 			</StyledDrawer>
 		</React.Fragment>

@@ -11,6 +11,8 @@ import { Menu
 	   	 , useMenu
 	   	 } from '@package/menu/main'
 
+import { Button } from '@package/button/main'
+
 export default {
 	title: 'Component/Drawer',
 	component: Drawer
@@ -21,7 +23,7 @@ export let Left = () => {
 
 	return (
 		<React.Fragment>
-			<button onClick={() => setOpen(true)}>Open Drawer</button>
+			<Button onClick={() => setOpen(true)}>Open Drawer</Button>
 
 			<div style={{ height: '110vh', background: 'grey' }}></div>
 
@@ -43,7 +45,7 @@ export let Right = () => {
 
 	return (
 		<React.Fragment>
-			<button onClick={() => setOpen(true)}>Open Drawer</button>
+			<Button onClick={() => setOpen(true)}>Open Drawer</Button>
 			<Drawer open={open} maxWidth={400} onClose={() => setOpen(false)} left={false}>
 				<div>
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum dolores, sit odio nesciunt enim earum quod iusto molestias, quos excepturi.
@@ -62,9 +64,9 @@ export let Fullscreen = () => {
 
 	return (
 		<React.Fragment>
-			<button onClick={() => setOpen(true)}>Open Drawer</button>
+			<Button onClick={() => setOpen(true)}>Open Drawer</Button>
 			<Drawer open={open} onClose={() => setOpen(false)}>
-				<button onClick={() => setOpen(false)}>Close</button>
+				<Button onClick={() => setOpen(false)}>Close</Button>
 				<div>
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum dolores, sit odio nesciunt enim earum quod iusto molestias, quos excepturi.
 				</div>
@@ -82,7 +84,7 @@ export let MenuDrawer = () => {
 
 	return (
 		<React.Fragment>
-			<button onClick={() => setOpen(true)}>Open Drawer</button>
+			<Button onClick={() => setOpen(true)}>Open Drawer</Button>
 			<Drawer open={open} maxWidth={300} onClose={() => setOpen(false)}>
 				<Menu icon submenu replace>
 					<MenuItem onClick={() => {}} icon={<EditIcon/>}>

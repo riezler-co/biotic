@@ -10,25 +10,33 @@ type ButtonProps =
 
 export let Button = styled.button<ButtonProps>`
 	--defaut-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-	border: none;
+	--default-button-border: 1px solid #bab8b8;
+	--default-button-background: rgb(239 239 239);
+
 	text-decoration: none;
 	padding: var(--baseline) calc(var(--baseline) * 3);
 	display: inline-block;
 	width: ${p => p.fullwidth ? '100%' : 'auto'};
 	text-align: center;
 	border-radius: calc(var(--baseline) * 0.8);
-	font-weight: bold;
+	font-weight: 600;
 	letter-spacing: 1px;
 	cursor: ${p => p.disabled ? 'default' : 'pointer'};;
 	opacity: ${p => p.disabled ? '0.8' : '1'};
-	color: ${p => p.raised ? 'var(--button-raised-color, #fff)' : 'var(--button-color, #141923)'};
-	${props => !props.raised
-			? ``
-			: `
-				background: var(--button-raised-bg, #141923);
-				box-shadow: var(--button-shadow, var(--default-shadow));
-		`
-	}
+	
+	color: ${p => p.raised
+		? 'var(--button-raised-color, #fff)'
+		: 'var(--button-color, #141923)'};
+
+	background: ${p => p.raised
+		? 'var(--button-raised-bg, #141923)'
+		: 'var(--button-bg, var(--default-button-background))'};
+	
+	${p => p.raised && 'box-shadow: var(--button-shadow, var(--default-shadow))'};
+	
+	font-size: 12px; /* Firefox Andoird fallback */
+	font-size: max(0.75em, 12px);
+	border: var(--button-border, var(--default-button-border));
 `
 
 type IconButtonProps = 
@@ -79,8 +87,9 @@ export let Fab = styled.button`
 
 export let LinkButton = styled(Button)`
 	background: none;
+	border: none;
 `
 
 export let OutlineButton = styled(LinkButton)`
-	border: var(--button-border);
+	background: none;
 `

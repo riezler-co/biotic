@@ -1,5 +1,6 @@
 import React from 'react'
 import { Notifications, useNotification, notification, Notification, Close } from '@package/notification/main'
+import { Button } from '@package/button/main'
 
 export default {
 	title: 'Component/Notification',
@@ -47,11 +48,11 @@ export let Default = () => {
 
 	return (
 		<React.Fragment>
-			<button onClick={first.open}>Default Persistant</button>
-			<button onClick={openSecond}>Auto Close</button>
-			<button onClick={third.open}>One More</button>
+			<Button onClick={first.open}>Default Persistant</Button>
+			<Button onClick={openSecond}>Auto Close</Button>
+			<Button onClick={third.open}>One More</Button>
 
-			<button onClick={() => setCount(count + 1)}>Count: { count }</button>
+			<Button onClick={() => setCount(count + 1)}>Count: { count }</Button>
 			<Notifications />
 		</React.Fragment>
 	)

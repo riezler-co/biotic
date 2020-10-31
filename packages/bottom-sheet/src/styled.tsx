@@ -30,8 +30,7 @@ export let BottomDrawer = styled.div<BottomDrawerProps>`
 	max-height: 100vh;
 	overflow-y: auto;
 	z-index: var(--bottom-sheet-z-index, 9999);
-	
-	${p => p.height ? `height: ${p.height}px`: ''};
+	max-height: 100vh;
 	${p => p.open && 'box-shadow: var(--bottom-sheet-shadow, var(--bottom-default-sheet-shadow));'}
 
 	--menu-box-shadow: none;

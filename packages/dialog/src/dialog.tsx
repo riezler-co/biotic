@@ -7,8 +7,8 @@ import { useGetContainer
 			 , usePreventScroll
 			 } from '@biotic-ui/std'
 
-import { useSpring, animated } from 'react-spring'
 import { Backdrop } from '@biotic-ui/leptons'
+import { motion, AnimatePresence } from 'framer-motion'
 
 type OnClose =
 	{ backdrop: boolean
@@ -36,14 +36,6 @@ export let Dialog: React.FC<DialogProps> = (props) => {
 			, className = ''
 		  } = props
 
-	let dialogAnimation = useSpring({
-		transform: open ? 'scale(1)' : 'scale(0.95)'
-	})
-
-	let backdropAnimation = useSpring({
-		opacity: open ? 1 : 0
-	})
-
 	useOnEscape(() => open && onClose({ backdrop: false, escape: true }))
 	usePreventScroll(open)
 
@@ -51,25 +43,79 @@ export let Dialog: React.FC<DialogProps> = (props) => {
 		onClose && onClose({ backdrop: true, escape: false })
 	}
 
+	let backdropVariants =
+		{ hidden:
+				{ opacity: 0 }
+
+		, visible:
+				{ opacity: 1 }
+		}
+
+
+	let wrapperVariants =
+		{ hidden:
+				{ opacity: 0
+				, transition:
+						{ when: 'afterChildren'
+			    	}
+
+			  , transitionEnd:
+			  		{ display: 'none' }
+				}
+
+		, visible:
+				{ display: 'flex'
+				, opacity: 1
+				}
+		}
+
+	let spring =
+		{ type: 'spring'
+		, damping: 10
+		, stiffness: 100
+		}
+
 	let DialogPortal = (
-		<Wrapper open={open} className={className}>
-			{ backdrop && <Backdrop open={open} style={backdropAnimation} onClick={handleBackdrop} /> }
-			<DialogContent as={animated.div}
-										 style={dialogAnimation}
-										 width={width}
-										 height={height}
-										 aria-hidden={!open}
-										 role='dialog'>
-				{ children }
-			</DialogContent>
+		<Wrapper variants={wrapperVariants}
+						 initial='hidden'
+						 animate={open ? 'visible' : 'hidden'}
+						 className={className}
+		>
+
+			{ backdrop &&
+				<Backdrop as={motion.div}
+									open={open}
+									initial='hidden'
+									animate={open ? 'visible' : 'hidden'}
+									variants={backdropVariants}
+									onClick={handleBackdrop}
+				/>
+			}
+			<AnimatePresence>
+				{ open &&
+					<DialogContent as={motion.div}
+												 width={width}
+												 height={height}
+												 aria-hidden={!open}
+												 role='dialog'
+												 initial={{ transform: 'scale(0.95)' }}
+												 animate={{ transform: 'scale(1)' }}
+												 exit={{ transform: 'scale(0.95)' }}
+												 transition={spring} 
+					>
+						{ children }
+					</DialogContent>
+				}
+			</AnimatePresence>
+
 		</Wrapper>
 	)
 
 	return DialogContainer ? createPortal(DialogPortal, DialogContainer) : null
 }
 
-let Wrapper = styled.div<{ open: boolean }>`
-	display: ${p => p.open ? 'flex' : 'none'};
+let Wrapper = styled(motion.div)<{ open: boolean }>`
+	display: none;
 	position: fixed;
 	top: 0;
 	bottom: 0;
