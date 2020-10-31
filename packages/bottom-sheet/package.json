@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/bottom-sheet",
-  "version": "0.2.6",
+  "version": "0.3.0",
   "description": "React Bottom Sheet",
   "main": "lib/main.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/std": "^0.2.6",
+    "@biotic-ui/std": "^0.3.0",
     "@types/styled-components": "^5.1.4",
     "typescript": "^4.0.2",
     "webpack": "^4.44.1",
@@ -33,13 +33,13 @@
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
     "@biotic-ui/std": "^0.1.1",
+    "framer-motion": "^2.9.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "framer-motion": "^2.9.4",
     "styled-components": "^5.1.1"
   },
   "dependencies": {
-    "@biotic-ui/leptons": "^0.2.6"
+    "@biotic-ui/leptons": "^0.3.0"
   },
   "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
   "publishConfig": {
