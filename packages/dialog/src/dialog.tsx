@@ -1,6 +1,6 @@
 import React from 'react'
 import { createPortal } from 'react-dom'
-import styled from 'styled-components'
+import styled, { StyledComponent } from 'styled-components'
 
 import { useGetContainer
 			 , useOnEscape
@@ -8,7 +8,7 @@ import { useGetContainer
 			 } from '@biotic-ui/std'
 
 import { Backdrop } from '@biotic-ui/leptons'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, MotionProps } from 'framer-motion'
 
 type OnClose =
 	{ backdrop: boolean
@@ -19,8 +19,6 @@ type DialogProps =
 	{ open?: boolean
 	; backdrop?: boolean
 	; onClose?: (e: OnClose) => void
-	; width?: string | number
-	; height?: string | number
 	; className?: string
 	}
 
@@ -31,8 +29,6 @@ export let Dialog: React.FC<DialogProps> = (props) => {
 			, children
 			, backdrop = true
 			, onClose = () => {}
-			, width = 'auto'
-			, height = 'auto'
 			, className = ''
 		  } = props
 
@@ -94,8 +90,6 @@ export let Dialog: React.FC<DialogProps> = (props) => {
 			<AnimatePresence>
 				{ open &&
 					<DialogContent as={motion.div}
-												 width={width}
-												 height={height}
 												 aria-hidden={!open}
 												 role='dialog'
 												 initial={{ transform: 'scale(0.95)' }}
@@ -114,7 +108,7 @@ export let Dialog: React.FC<DialogProps> = (props) => {
 	return DialogContainer ? createPortal(DialogPortal, DialogContainer) : null
 }
 
-let Wrapper = styled(motion.div)<{ open: boolean }>`
+let Wrapper = styled(motion.div)`
 	display: none;
 	position: fixed;
 	top: 0;
@@ -127,7 +121,7 @@ let Wrapper = styled(motion.div)<{ open: boolean }>`
 	width: 100vw;
 `
 
-export let DialogContent = styled.div<{ width: string | number; height: string | number }>`
+export let DialogContent = styled.div`
 	--dialog-default-shadow: 0px 8px 21px -5px rgba(0, 0, 0, 0.2);
 	box-shadow: var(--dialog-shadow, var(--dialog-default-shadow));
 	position: absolute;
@@ -138,6 +132,4 @@ export let DialogContent = styled.div<{ width: string | number; height: string |
 	max-width: 100vw;
 	max-height: 100vh;
 	overflow: auto;
-	width: ${p => typeof p.width === 'number' ? `${p.width}px` : p.width};
-	height: ${p => typeof p.height === 'number' ? `${p.height}px` : p.height};
 `

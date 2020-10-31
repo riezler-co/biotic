@@ -177,10 +177,8 @@ let StyledNotifications = styled.ul`
 	margin-bottom: 0;
 `
 
-let StyledNotification = styled.li<{ index: number; open: boolean}>`
+let StyledNotification = styled(motion.li)<{ positionTransition: boolean }>`
 	margin-top: var(--notification-spacing, calc(var(--baseline) * 0.38));
-	z-index: ${p => 3 - p.index};
-	user-select: ${p => p.open ? 'auto' : 'none'};
 `
 
 type ListItemProps =
@@ -190,13 +188,9 @@ type ListItemProps =
 	; lastIndex: number
 	}
 
-let ListItem = forwardRef<HTMLDivElement, ListItemProps>(({ index, children, open , lastIndex }, ref) => {
+let ListItem: React.FC<ListItemProps> = ({ index, children, open , lastIndex }) => {
 	return (
 		<StyledNotification
-				as={motion.div}
-				ref={ref}
-				index={index}
-				open={open}
 				initial={{ opacity: 0, transform: 'scale(0.62)' }}
 				animate={{ opacity: 1, transform: 'scale(1)' }}
 				exit={{ opacity: 0, transform: 'scale(0.62)' }}
@@ -205,7 +199,7 @@ let ListItem = forwardRef<HTMLDivElement, ListItemProps>(({ index, children, ope
 			{ children }
 		</StyledNotification>
 	)
-})
+}
 
 export let Notification = styled.div`
 	--default-border: 1px solid #fff;

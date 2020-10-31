@@ -43,7 +43,6 @@ export let BottomSheet = (
 	, height = null
 	, minHeight = 0
 	, scrollable = false
-	, dragable = false
 	, className
 	, onClick
 	}: Props) => {

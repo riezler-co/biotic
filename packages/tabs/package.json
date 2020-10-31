@@ -30,6 +30,7 @@
     "@biotic-ui/leptons": "^0.2.6",
     "@biotic-ui/menu": "^0.2.6",
     "@biotic-ui/std": "^0.2.6",
+    "@types/styled-components": "^5.1.4",
     "lodash": "^4.17.20",
     "react-router-dom": "^5.2.0",
     "styled-components": "^5.1.1",
