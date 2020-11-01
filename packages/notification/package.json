@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/notification",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "React Notification",
   "main": "lib/main.js",
   "scripts": {
