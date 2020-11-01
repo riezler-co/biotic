@@ -31,11 +31,6 @@ module.exports = function createConfig (webpackEnv) {
           commonjs2: 'react-dom',
           amd: 'react-dom'
         },
-        'react-spring': {
-          commonjs: 'react-spring',
-          commonjs2: 'react-spring',
-          amd: 'react-spring'
-        },
         'framer-motion': {
           commonjs: 'framer-motion',
           commonjs2: 'framer-motion',
