@@ -5,8 +5,6 @@ import { useEffect
 			 , SyntheticEvent
 			 } from 'react'
 
-import _ from 'lodash'
-
 import { atom
 			 , atomFamily
 			 , useSetRecoilState
@@ -38,7 +36,10 @@ import type {
 			 , TabsHistory
 			 } from './utils'
 
-export let tabsState = atom<TabsState>(
+
+export const DEFAULT_GROUP = 'default'
+
+export let makeTabsState = atomFamily<TabsState, string>(
 	{ key: 'tabs'
 	, default:
 			{ items: []
@@ -55,7 +56,7 @@ const DEFAULT_ACTIVE: ActiveState =
 	, id: ''
 	}
 
-export let tabsHistory = atom<TabsHistory>(
+export let makeTabsHistory = atomFamily<TabsHistory, string>(
 	{ key: 'tabs_history'
 	, default:
 			{ items: []
@@ -64,26 +65,31 @@ export let tabsHistory = atom<TabsHistory>(
 	}
 )
 
-export function useTabs(): TabsState {
+export function useTabs(group = DEFAULT_GROUP): TabsState {
+	let tabsState = makeTabsState(group)
 	let tabs = useRecoilValue(tabsState)
 	return tabs
 }
 
-export function useActiveState(): ActiveState | null {
+export function useActiveState(group = DEFAULT_GROUP): ActiveState | null {
+	let tabsHistory = makeTabsHistory(group)
 	let history = useRecoilValue(tabsHistory)
 	let active = history.items[history.currentIndex]
 	return active ? active : null
 }
 
-export function useSetTabHistory() {
+export function useSetTabHistory(group = DEFAULT_GROUP) {
+	let tabsHistory = makeTabsHistory(group)
 	let setHistory = useSetRecoilState(tabsHistory)
 	return setHistory
 }
 
-export function useTabHistory() {
+export function useTabHistory(group = DEFAULT_GROUP) {
+	let tabsState = makeTabsState(group)
 	let [tabs, setTabs] = useRecoilState(tabsState)
+	let tabsHistory = makeTabsHistory(group)
 	let [history, setHistory] = useRecoilState(tabsHistory)
-	let active = useActiveState()
+	let active = useActiveState(group)
 
 	let push = useCallback(config => {
 
@@ -151,9 +157,10 @@ export function useTabHistory() {
 	return { push, replace, active, activate }
 }
 
-export function useCloseTab() {
+export function useCloseTab(group = DEFAULT_GROUP) {
+	let tabsState = makeTabsState(group)
 	let [tabs, setTabs] = useRecoilState(tabsState)
-	let { active, replace } = useTabHistory()
+	let { active, replace } = useTabHistory(group)
 
 	let close = useCallback((id) => {
 
@@ -192,7 +199,7 @@ export function useCloseTab() {
 			if (activeTab === undefined && staticTabs === 0) {
 				replace(DEFAULT_ACTIVE)
 			} else if (activeTab === undefined && staticTabs > 0) {
-				let tab = _.last(tabs.staticItems) ?? DEFAULT_ACTIVE
+				let tab = last<TabItem>(tabs.staticItems) ?? DEFAULT_ACTIVE
 
 				replace(
 					{ id: tab.id
@@ -239,9 +246,14 @@ export function useOnTabClose(id: string, cb: EventCallback) {
 	}, [id])
 }
 
-export function useDefaultTab({ index, type, id }: ActiveState) {
-	let setHistory = useSetTabHistory()
+export function useDefaultTab({ index, type, id }: ActiveState, group = DEFAULT_GROUP) {
+	let setHistory = useSetTabHistory(group)
+	let active = useActiveState(group)
 	useEffect(() => {
+		if (active !== null) {
+			return
+		}
+
 		setHistory(history => {
 			let entry = { index, type, id }
 			let items = [...history.items, entry]
@@ -253,7 +265,7 @@ export function useDefaultTab({ index, type, id }: ActiveState) {
 
 let makeTabState: (<T>(id: string) => RecoilState<T>) = atomFamily<any | null, string>(
 	{ key: 'tab'
-	, default: {}
+	, default: null
 	}
 )
 
@@ -348,4 +360,9 @@ export function useRestoreScroll(currentId: string) {
 			node.scrollLeft = left
 		}
 	}
+}
+
+
+function last<T>(array: Array<T>): T | undefined {
+	return array[array.length - 1]
 }

@@ -5,6 +5,8 @@ import { Children
 		   , useRef
 		   , useState
 		   , ReactElement
+		   , createContext
+		   , useContext
 		 	 } from 'react'
 
 import { StyledTabs
@@ -14,7 +16,7 @@ import { StyledTabs
 
 import { useRecoilState } from 'recoil'
 
-import { tabsState
+import { makeTabsState
 			 , useScrollState
 			 , useRestoreScroll
 			 , useCloseTab
@@ -31,12 +33,22 @@ import { toTabObject
 
 type TabProps =
  	{ children: JSX.Element | Array<JSX.Element>
+ 	; group?: string
  	} 
 
-export function Tabs({ children }: TabProps) {
+
+export let TabsCtx = createContext('default')
+
+export function useGroup() {
+	return useContext(TabsCtx)
+}
+
+export function Tabs({ children, group = 'default' }: TabProps) {
 	return (
 		<StyledTabs>
-			{ children }
+			<TabsCtx.Provider value={group}>
+				{ children }
+			</TabsCtx.Provider>
 		</StyledTabs>
 	)
 }
@@ -47,9 +59,11 @@ type TabBarProps =
 	} 
 
 export function TabBar({ children }: TabBarProps) {
+	let group = useContext(TabsCtx)
+	let tabsState = makeTabsState(group)
 	let [, setTabs] = useRecoilState(tabsState)
-	let { active, ...history } = useTabHistory()
-	let closeTab = useCloseTab()
+	let { active, ...history } = useTabHistory(group)
+	let closeTab = useCloseTab(group)
 
 	let _children = useMemo(() => {
 		return Children.map(children, (node, index) => {
@@ -95,8 +109,9 @@ type TabContentProps =
 	; fallback: ReactElement | null
 	} 
 
-export function TabContent({ children, fallback = null }: TabContentProps) {
-	let active = useActiveState()
+export function TabContent({ children, fallback = null}: TabContentProps) {
+	let group = useContext(TabsCtx)
+	let active = useActiveState(group)
 
 	let panel = useMemo<JSX.Element | undefined>(() => {
 		let _children = Children.toArray(children) as Array<JSX.Element>
@@ -117,17 +132,30 @@ export function TabContent({ children, fallback = null }: TabContentProps) {
 }
 
 type TabPanelProps =
-	{ children: JSX.Element 
+	{ children: JSX.Element
+	; scrollGroup?: string
 	}
 
-export function TabPanel({ children }: TabPanelProps) {
-	let active = useActiveState()
+
+export function TabPanel({ children, scrollGroup }: TabPanelProps) {
+	let group = useContext(TabsCtx)
+	let active = useActiveState(group)
 	let _child = React.Children.only(children)
 
-	let id = active === null ? '' : active.id
+	let id = useMemo(() => {
+		if(active === null) {
+			return ''
+		}
+
+		if (scrollGroup) {
+			return `${scrollGroup}::${active.id}`	
+		}
+		
+		return active.id
+	}, [active, scrollGroup])
+
 	let child = React.cloneElement(_child, { id })
 	let [, setState] = useTabState(id, null)
-	let [scrollContainer, setScrollContainer] = useState(null)
 	let tabId = `tab_panel:${id}`
 	let [, setScroll, cleanScroll] = useScrollState(tabId)
 	let ref = useRestoreScroll(tabId)
