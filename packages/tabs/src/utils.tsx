@@ -1,3 +1,13 @@
+import { FunctionComponent
+		   , ComponentClass
+		 	 } from 'react'
+
+export type As = {
+	as:   string
+			| FunctionComponent<any>
+			| ComponentClass<any, any>
+			| undefined
+}
 
 export type TabItem =
 	{ closable: boolean
@@ -126,3 +136,7 @@ export let Event = (): $Event => {
 }
 
 export let OnCloseTab: $Event = Event()
+
+export function last<T>(array: Array<T>): T | undefined {
+	return array[array.length - 1]
+}

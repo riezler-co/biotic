@@ -24,6 +24,7 @@ import { isOpen
 			 , getTabIndex
 			 , getNextIndex
 			 , OnCloseTab
+			 , last
 			 } from './utils'
 
 import type {
@@ -71,12 +72,14 @@ export function useTabs(group = DEFAULT_GROUP): TabsState {
 	return tabs
 }
 
+
 export function useActiveState(group = DEFAULT_GROUP): ActiveState | null {
 	let tabsHistory = makeTabsHistory(group)
 	let history = useRecoilValue(tabsHistory)
 	let active = history.items[history.currentIndex]
 	return active ? active : null
 }
+
 
 export function useSetTabHistory(group = DEFAULT_GROUP) {
 	let tabsHistory = makeTabsHistory(group)
@@ -156,6 +159,7 @@ export function useTabHistory(group = DEFAULT_GROUP) {
 
 	return { push, replace, active, activate }
 }
+
 
 export function useCloseTab(group = DEFAULT_GROUP) {
 	let tabsState = makeTabsState(group)
@@ -246,6 +250,7 @@ export function useOnTabClose(id: string, cb: EventCallback) {
 	}, [id])
 }
 
+
 export function useDefaultTab({ index, type, id }: ActiveState, group = DEFAULT_GROUP) {
 	let setHistory = useSetTabHistory(group)
 	let active = useActiveState(group)
@@ -262,6 +267,7 @@ export function useDefaultTab({ index, type, id }: ActiveState, group = DEFAULT_
 		})
 	}, [])
 }
+
 
 let makeTabState: (<T>(id: string) => RecoilState<T>) = atomFamily<any | null, string>(
 	{ key: 'tab'
@@ -286,6 +292,7 @@ export function useTabState<T extends SerializableParam>(
 		, setState
 	]
 }
+
 
 let makeScrollState = atomFamily<ScrollState, string>(
 	{ key: 'tab_scroll'
@@ -319,7 +326,7 @@ export function useScrollState(id: string): UseScrollState {
 		}
 		
 		let { scrollTop, scrollLeft } = target
-		handleSetScroll({scrollTop, scrollLeft})
+		handleSetScroll({ scrollTop, scrollLeft })
 	}
 
 	let getScroll = useRecoilCallback<any, ScrollState>(({ snapshot }) => (): ScrollState => {
@@ -360,9 +367,4 @@ export function useRestoreScroll(currentId: string) {
 			node.scrollLeft = left
 		}
 	}
-}
-
-
-function last<T>(array: Array<T>): T | undefined {
-	return array[array.length - 1]
 }

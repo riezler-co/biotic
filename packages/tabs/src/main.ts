@@ -7,7 +7,12 @@ export { Tabs
 			 , useGroup
 			 } from './tabs'
 
-export { Tab } from './tab'
+
+export { Tab
+			 , TabWrapper
+			 , CloseButton
+			 } from './tab'
+
 
 export { useTabs
 			 , useTabHistory
@@ -17,3 +22,10 @@ export { useTabs
 			 , useRestoreScroll
 			 , useOnTabClose
 			 } from './hook'
+
+
+export { StyledTabBar
+			 , StyledTabContent
+			 , StyledTab
+			 , StyledTabs
+			 } from './styled'

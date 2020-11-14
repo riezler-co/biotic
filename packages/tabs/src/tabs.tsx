@@ -29,12 +29,9 @@ import { makeTabsState
 import { toTabObject
 			 , isStatic
 			 , OnCloseTab
+			 , As
 			 } from './utils'
 
-type TabProps =
- 	{ children: JSX.Element | Array<JSX.Element>
- 	; group?: string
- 	} 
 
 
 export let TabsCtx = createContext('default')
@@ -43,9 +40,17 @@ export function useGroup() {
 	return useContext(TabsCtx)
 }
 
-export function Tabs({ children, group = 'default' }: TabProps) {
+
+type TabProps
+	= React.HTMLAttributes<HTMLElement>
+	& As
+	& { children: JSX.Element | Array<JSX.Element>
+ 		; group?: string
+ 		} 
+
+export function Tabs({ children, group = 'default', as = 'div', ...props }: TabProps) {
 	return (
-		<StyledTabs>
+		<StyledTabs as={as} {...props}>
 			<TabsCtx.Provider value={group}>
 				{ children }
 			</TabsCtx.Provider>
@@ -54,11 +59,13 @@ export function Tabs({ children, group = 'default' }: TabProps) {
 }
 
 
-type TabBarProps =
-	{ children: JSX.Element | Array<JSX.Element>
-	} 
+type TabBarProps
+	= React.HTMLAttributes<HTMLElement>
+	& As
+	& { children: Array<JSX.Element>
+		} 
 
-export function TabBar({ children }: TabBarProps) {
+export function TabBar({ children, as = 'ul', ...props }: TabBarProps) {
 	let group = useContext(TabsCtx)
 	let tabsState = makeTabsState(group)
 	let [, setTabs] = useRecoilState(tabsState)
@@ -98,7 +105,7 @@ export function TabBar({ children }: TabBarProps) {
 	}, [length])
 
 	return (
-		<StyledTabBar as='ul'>
+		<StyledTabBar as={as} {...props}>
 			{ _children }
 		</StyledTabBar>
 	)
@@ -109,7 +116,7 @@ type TabContentProps =
 	; fallback: ReactElement | null
 	} 
 
-export function TabContent({ children, fallback = null}: TabContentProps) {
+export function TabContent({ children, fallback = null }: TabContentProps) {
 	let group = useContext(TabsCtx)
 	let active = useActiveState(group)
 
@@ -131,13 +138,15 @@ export function TabContent({ children, fallback = null}: TabContentProps) {
 	})
 }
 
-type TabPanelProps =
-	{ children: JSX.Element
-	; scrollGroup?: string
-	}
+type TabPanelProps
+	= React.HTMLAttributes<HTMLElement>
+	& As
+	& { children: JSX.Element
+		; scrollGroup?: string
+		}
 
 
-export function TabPanel({ children, scrollGroup }: TabPanelProps) {
+export function TabPanel({ children, scrollGroup, as = 'div', ...props }: TabPanelProps) {
 	let group = useContext(TabsCtx)
 	let active = useActiveState(group)
 	let _child = React.Children.only(children)
@@ -166,7 +175,7 @@ export function TabPanel({ children, scrollGroup }: TabPanelProps) {
 	})
 
 	return (
-		<StyledTabContent id={tabId} onScroll={setScroll} ref={ref}>
+		<StyledTabContent as={as} id={tabId} onScroll={setScroll} ref={ref} {...props}>
 			{ child }
 		</StyledTabContent>
 	)
