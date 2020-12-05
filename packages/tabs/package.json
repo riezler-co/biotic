@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/tabs",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "React Utils",
   "main": "lib/main.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/leptons": "^0.3.1",
+    "@biotic-ui/leptons": "^0.3.2",
     "@biotic-ui/std": "^0.3.0",
     "@types/styled-components": "^5.1.4",
     "lodash": "^4.17.20",
