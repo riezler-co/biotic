@@ -1,21 +1,30 @@
-import React from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 import { Close as CloseIcon } from '@biotic-ui/icon'
+import { Pulse } from '@biotic-ui/leptons'
 
 type ButtonProps = 
 	{ disabled?: boolean
 	; raised?: boolean
 	; fullwidth?: boolean
+	; loading?: boolean
 	}
 
-export let Button = styled.button<ButtonProps>`
-	--defaut-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-	--default-button-border: 1px solid #bab8b8;
-	--default-button-background: rgb(239 239 239);
+let StyledPulse = styled(Pulse)`
+	position: absolute;
+	left: var(--baseline);
+`
 
+let StyledButton = styled.button<ButtonProps>`
+	--defaut-shadow: var(--shadow-2);
+	--default-button-background: rgb(239 239 239);
+	--default-button-border: 1px solid rgb(215 215 215);
+
+	position: relative;
 	text-decoration: none;
 	padding: var(--baseline) calc(var(--baseline) * 3);
-	display: inline-block;
+	display: inline-flex;
+	align-items: baseline;
 	width: ${p => p.fullwidth ? '100%' : 'auto'};
 	text-align: center;
 	border-radius: calc(var(--baseline) * 0.8);
@@ -38,6 +47,15 @@ export let Button = styled.button<ButtonProps>`
 	font-size: max(0.75em, 12px);
 	border: var(--button-border, var(--default-button-border));
 `
+
+export let Button: FC<ButtonProps> = ({ children, loading = false, disabled = false, ...props }) => {
+	return (
+		<StyledButton {...props} disabled={loading ? true : disabled}>
+			{ loading && <StyledPulse size='1em' color='currentColor' /> }
+			{ children }
+		</StyledButton>
+	)
+}
 
 type IconButtonProps = 
 	{ disabled?: boolean
@@ -85,11 +103,29 @@ export let Fab = styled.button`
 
 `
 
-export let LinkButton = styled(Button)`
+let StyledLinkButton = styled(StyledButton)`
 	background: none;
 	border: none;
 `
 
-export let OutlineButton = styled(LinkButton)`
+export let LinkButton: FC<ButtonProps> = ({ children, loading = false, disabled = false, ...props }) => {
+	return (
+		<StyledLinkButton {...props} disabled={loading ? true : disabled}>
+			{ loading && <StyledPulse size='1em' color='currentColor' /> }
+			{ children }
+		</StyledLinkButton>
+	)
+}
+
+let StyledOutlineButton = styled(StyledButton)`
 	background: none;
+	border: 1px solid currentColor;
 `
+export let OutlineButton: FC<ButtonProps> = ({ children, loading = false, disabled = false, ...props }) => {
+	return (
+		<StyledOutlineButton {...props} disabled={loading ? true : disabled}>
+			{ loading && <StyledPulse size='1em' color='currentColor' /> }
+			{ children }
+		</StyledOutlineButton>
+	)
+}

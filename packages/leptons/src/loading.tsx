@@ -16,7 +16,7 @@ function getSize(size: string | number) {
 
 let Config = css<LoadingProps>`
 	--default-pulse-size: var(--loading-size, var(--baseline-5));
-	--default-pulse-color: var(--loading-color, #333);
+	--default-pulse-color: var(--loading-color, currentColor);
 
 	--size: ${p => p.size ? getSize(p.size) : 'var(--default-pulse-size)'};
 	--color: ${p => p.color ? p.color : 'var(--default-pulse-color)'};
