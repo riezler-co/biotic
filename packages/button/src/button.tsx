@@ -12,7 +12,7 @@ type ButtonProps =
 
 let StyledPulse = styled(Pulse)`
 	position: absolute;
-	left: var(--baseline);
+	left: calc(var(--baseline-2) * -1);
 `
 
 let StyledButton = styled.button<ButtonProps>`
@@ -24,10 +24,8 @@ let StyledButton = styled.button<ButtonProps>`
 	text-decoration: none;
 	padding: var(--baseline) calc(var(--baseline) * 3);
 	display: inline-flex;
-	align-items: baseline;
-	width: ${p => p.fullwidth ? '100%' : 'auto'};
-	text-align: center;
-	border-radius: calc(var(--baseline) * 0.8);
+	justify-content: center;
+	border-radius: calc(var(--baseline-half));
 	font-weight: 600;
 	letter-spacing: 1px;
 	cursor: ${p => p.disabled ? 'default' : 'pointer'};;
@@ -46,13 +44,21 @@ let StyledButton = styled.button<ButtonProps>`
 	font-size: 12px; /* Firefox Andoird fallback */
 	font-size: max(0.75em, 12px);
 	border: var(--button-border, var(--default-button-border));
+
+	span {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
 `
 
 export let Button: FC<ButtonProps> = ({ children, loading = false, disabled = false, ...props }) => {
 	return (
 		<StyledButton {...props} disabled={loading ? true : disabled}>
-			{ loading && <StyledPulse size='1em' color='currentColor' /> }
-			{ children }
+			<span>
+				{ loading && <StyledPulse size='1em' color='currentColor' /> }
+				{ children }
+			</span>
 		</StyledButton>
 	)
 }
