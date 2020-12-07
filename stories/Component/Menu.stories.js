@@ -130,12 +130,12 @@ WithSubmenu.story = {
 
 
 export const Popper = () =>	{
-	let { MenuContainer, ...props } = useMenu()
+	let { MenuContainer, ref, ...props } = useMenu()
 
 	return  (
 		<Wrapper>
 
-			<Button {...props}>Open</Button>
+			<Button ref={ref} {...props}>Open</Button>
 			<MenuContainer>
 				<Menu>
 					<MenuItem onClick={() => {}}>

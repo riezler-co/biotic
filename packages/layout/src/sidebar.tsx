@@ -80,7 +80,8 @@ let ContentWrapper = styled(motion.div)<{ width: number}>`
 	--menu-box-shadow: none;
 	--menu-width: auto;
 	--menu-padding: 0;
-	--menu-border: none;
+	--border: none;
+
 `
 
 type AsideProps =

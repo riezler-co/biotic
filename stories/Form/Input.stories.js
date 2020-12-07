@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input } from '@package/input/main'
+import { Input, Password } from '@package/input/main'
 
 export default {
 	title: 'Form/Input',
@@ -18,3 +18,16 @@ export let Default = () => {
 }
 
 Default.storyName = 'Default'
+
+export let AsPassword = () => {
+	let [text, setText] = React.useState()
+
+	return (
+		<Password
+			value={text}
+			onChange={e => setText(e.target.value)}
+		/>
+	)
+}
+
+AsPassword.storyName = 'Password'

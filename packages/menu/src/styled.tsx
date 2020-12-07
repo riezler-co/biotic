@@ -1,17 +1,15 @@
 import styled from 'styled-components'
 
 export let StyledMenu = styled.ul`
-	--default-box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-	--border-color: var(--menu-border-color, #e9e9e9);
-	--default-padding: 4px 0;
+	--default-padding: calc(var(--baseline) / 2) 0;
 
-	width: var(--menu-width, 300px);
+	width: var(--menu-width, calc(var(--baseline) * 34));
 	max-width: var(--menu-max-width, calc(100vw - 1em));
 	background: var(--menu-bg, #fff);
 	color: var(--menu-color, #444);
 	border-color: var(--border-color);
-	border: var(--menu-border, 1px solid var(--border-color));
-	box-shadow: var(--menu-box-shadow, var(--default-box-shadow)) ;
+	border: var(--border);
+	box-shadow: var(--menu-box-shadow, var(--shadow-1)) ;
 	list-style-type: none;
 	padding: var(--menu-padding, --default-padding);
 	margin: 0;
@@ -42,9 +40,9 @@ export let MenuItemTitle = styled.button<MenuItemTitleProps>`
 	border: none;
 	text-align: left;
 	font-size: var(--menu-font-size, 1em);
-	padding: 0.38em var(--menu-padding, 8px);
-	padding-right: ${p => p.hasSubmenu ? '1.62em' : '8px'};
-	padding-left: ${p => p.hasIcon ? '2em' : '8px'};
+	padding: 0.4375em 0.5em;
+	padding-right: ${p => p.hasSubmenu ? '1.5em' : 'var(--baseline)'};
+	padding-left: ${p => p.hasIcon ? '2em' : 'var(--baseline)'};
 	display: flex;
 	align-items: center;
 	position: relative;
@@ -62,6 +60,7 @@ export let MenuItemTitle = styled.button<MenuItemTitleProps>`
 	span.arrow_right svg {
 		width: 1.62em;
 		height: 1.62em;
+		margin-top: 0.2em;
 	}
 
 	&:hover {;

@@ -1,16 +1,17 @@
 import styled, { createGlobalStyle } from 'styled-components'
 
 export let SheetHeader = styled.header`
-	border-bottom: 1px solid var(--mui-bottom-sheet-background, rgba(0,0,0, 0.25));
-	padding: 1.38em;
+	border-bottom: var(--border);
+	padding: var(--baseline-2);
+	display: flex;
 `
 
-export let SheetTitle = styled.h3`
+export let SheetTitle = styled.h4`
 	margin: 0;
 `
 
 export let SheetContent = styled.div`
-	padding: 0 1.38em;
+	padding: var(--baseline-2);
 `
 
 type BottomDrawerProps =

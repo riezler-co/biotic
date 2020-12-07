@@ -13,12 +13,14 @@ import { motion } from 'framer-motion'
 type StyledProps =
 	{ width?: string
 	; side?: 'left' | 'right'
+	, isOpen: boolean
 	}
 
 let StyledDrawer = styled.div<StyledProps>`
 	max-width: 100vw;
 	height: 100vh;
 	position: fixed;
+	box-shadow: ${p => p.isOpen ? 'var(--shadow-3)' : 'none'};
 	background: var(--drawer-background, #fff);
 	overflow-y: auto;
 	top: 0;
@@ -102,13 +104,15 @@ export function Drawer(props: Props) {
 				/>
 
 			}
-			<StyledDrawer as={motion.div}
-										initial='hidden'
-										animate={open ? 'visible' : 'hidden'}
-										variants={drawerVariants}
-									  side={left ? 'left' : 'right'}
-									  width={translate}
-									  transition={spring} 
+			<StyledDrawer
+						as={motion.div}
+						initial='hidden'
+						animate={open ? 'visible' : 'hidden'}
+						variants={drawerVariants}
+						side={left ? 'left' : 'right'}
+						width={translate}
+						transition={spring} 
+						isOpen={open}
 			>
 				{ children }
 			</StyledDrawer>

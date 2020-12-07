@@ -10,6 +10,7 @@ export let InputBase = css`
 	text-align: left;
 	line-height: 1.21428571em;
 	padding: .38em 0.62em;
+	height: var(--baseline-4);
 	background: var(--input-bg, none);
 	border: var(--input-border, var(--default-border));
 	color: var(--input-color, rgba(0,0,0,.87));

@@ -7,11 +7,11 @@ import { Placement } from '@popperjs/core'
 import { Menu } from './menu'
 
 type Config =
-	{ placement: Placement
+	{ placement?: Placement
 	}
 
 let DefaultConfig: Config = {
-	placement: 'bottom-end' as Placement
+	placement: 'bottom' as Placement,
 }
 
 type ContainerProps =
@@ -34,7 +34,17 @@ export function useMenu(userConfig: Config = DefaultConfig): UseMenu {
 
 	let MenuContainer = ({ children: menu }: ContainerProps) => {
 		let [popperElement, setPopperElement] = useState<HTMLElement | null>(null)
-		let { styles, attributes } = usePopper(referenceElement, popperElement, config)
+		let { styles, attributes } = usePopper(referenceElement, popperElement, {
+			...config,
+			modifiers: [
+				{
+				  name: 'offset',
+				  options: {
+				    offset: [0, 8],
+				  },
+				},
+			],
+		})
 
 		if (!show) {
 			return null

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, forwardRef } from 'react'
 import styled from 'styled-components'
 import { Close as CloseIcon } from '@biotic-ui/icon'
 import { Pulse } from '@biotic-ui/leptons'
@@ -52,16 +52,16 @@ let StyledButton = styled.button<ButtonProps>`
 	}
 `
 
-export let Button: FC<ButtonProps> = ({ children, loading = false, disabled = false, ...props }) => {
+export let Button = forwardRef<HTMLButtonElement, ButtonProps>(({ children, loading = false, disabled = false, ...props }, outerRef) => {
 	return (
-		<StyledButton {...props} disabled={loading ? true : disabled}>
+		<StyledButton ref={outerRef} {...props} disabled={loading ? true : disabled}>
 			<span>
 				{ loading && <StyledPulse size='1em' color='currentColor' /> }
 				{ children }
 			</span>
 		</StyledButton>
 	)
-}
+})
 
 type IconButtonProps = 
 	{ disabled?: boolean
@@ -79,13 +79,13 @@ export let IconButton = styled.button<IconButtonProps>`
 	padding: 0;
 `
 
-export let CloseButton: React.FC<IconButtonProps> = ({ ...props }) => {
+export let CloseButton = forwardRef<HTMLButtonElement, IconButtonProps>((props, outerRef) => {
 	return (
-		<IconButton aria-label="Close" {...props}>
+		<IconButton aria-label="Close" ref={outerRef} {...props}>
 			<CloseIcon />
 		</IconButton>
 	)
-}
+})
 
 export let Fab = styled.button`
 	--size: calc(var(--baseline) * 5);
@@ -114,24 +114,28 @@ let StyledLinkButton = styled(StyledButton)`
 	border: none;
 `
 
-export let LinkButton: FC<ButtonProps> = ({ children, loading = false, disabled = false, ...props }) => {
+export let LinkButton= forwardRef<HTMLButtonElement, ButtonProps>(({ children, loading = false, disabled = false, ...props }, outerRef) => {
 	return (
-		<StyledLinkButton {...props} disabled={loading ? true : disabled}>
-			{ loading && <StyledPulse size='1em' color='currentColor' /> }
-			{ children }
+		<StyledLinkButton ref={outerRef} {...props} disabled={loading ? true : disabled}>
+			<span>
+				{ loading && <StyledPulse size='1em' color='currentColor' /> }
+				{ children }
+			</span>
 		</StyledLinkButton>
 	)
-}
+})
 
 let StyledOutlineButton = styled(StyledButton)`
 	background: none;
 	border: 1px solid currentColor;
 `
-export let OutlineButton: FC<ButtonProps> = ({ children, loading = false, disabled = false, ...props }) => {
+export let OutlineButton = forwardRef<HTMLButtonElement, ButtonProps>(({ children, loading = false, disabled = false, ...props }, outerRef) => {
 	return (
-		<StyledOutlineButton {...props} disabled={loading ? true : disabled}>
-			{ loading && <StyledPulse size='1em' color='currentColor' /> }
-			{ children }
+		<StyledOutlineButton ref={outerRef} {...props} disabled={loading ? true : disabled}>
+			<span>
+				{ loading && <StyledPulse size='1em' color='currentColor' /> }
+				{ children }
+			</span>
 		</StyledOutlineButton>
 	)
-}
+})

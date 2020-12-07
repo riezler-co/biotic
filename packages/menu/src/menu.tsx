@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { Ref } from 'react'
 
 import { Children
 			 , useMemo
@@ -29,17 +29,25 @@ type Props =
   ; onClick?: (e: MouseEvent) => void
   }
 
-export function Menu (props: Props) {
-	let [menuRef, setMenuRef] = useState<HTMLDivElement | HTMLUListElement | null>(null)
+
+// TODO: figure out how to type this...
+type MenuRef = any
+
+export let Menu = React.forwardRef<MenuRef, Props>((props, outerRef) => {
+	let menuRef = useRef<MenuRef>(null)
 	let [hover, setHover] = useState(true)
+
+	let ref = useCombinedRefs(outerRef, menuRef)
 
 	let shouldHover = useCallback(
 		() => {
-			if (menuRef === null) return
+			if (menuRef.current === null) return
+			
+			let { current } = menuRef
 
-			let { width } = menuRef.getBoundingClientRect()
+			let { width } = current.getBoundingClientRect()
 			let { innerWidth } = window
-			let parentNode = menuRef.parentNode as HTMLElement
+			let parentNode = current.parentNode as HTMLElement
 
 			if (width === 0 && parentNode) {
 				width = parentNode.getBoundingClientRect().width
@@ -81,7 +89,7 @@ export function Menu (props: Props) {
 
 		let BackItem = (
 			<React.Fragment>
-				<MenuItem onClick={handleBack} hasIcon icon={BackIcon}>
+				<MenuItem onClick={handleBack} hasIcon={hasIcon} icon={BackIcon}>
 					<MenuItemTitle>Back</MenuItemTitle>
 				</MenuItem>
 				<Divider />
@@ -96,7 +104,8 @@ export function Menu (props: Props) {
 	}
 
 	let _children = useMemo(() => Children.map(children, node => {
-		return React.cloneElement(node, {
+		let menu = (node as JSX.Element)
+		return React.cloneElement(menu, {
 			hasSubmenu: hasSubmenu,
 			hasIcon: hasIcon,
 			replace: replace || !hover,
@@ -106,7 +115,7 @@ export function Menu (props: Props) {
 
 	if (submenu) {
 		return (
-			<div ref={setMenuRef}
+			<div ref={ref}
 					 onContextMenu={e => e.preventDefault()}
 					 className={className}
 					 style={style}
@@ -117,7 +126,7 @@ export function Menu (props: Props) {
 	}
 
 	return (
-		<StyledMenu ref={setMenuRef}
+		<StyledMenu ref={ref}
 							  onContextMenu={e => e.preventDefault()}
 							  className={className}
 							  style={style}
@@ -125,7 +134,7 @@ export function Menu (props: Props) {
 			{ _children }
 		</StyledMenu>
 	)
-}
+})
 
 type MenuItemProps =
 	{ children?: JSX.Element | Array<JSX.Element>
@@ -224,7 +233,8 @@ export let MenuItem = (props: MenuItemProps) => {
 }
 
 export let Divider = styled.hr`
-	margin: 4px 0;
+	margin-top: 0.1875em;
+	margin-top: 0.25em;
 	background: var(--menu-border-color, #e9e9e9);
 	border: none;
 	height: 1px;
@@ -258,7 +268,7 @@ let IconWrapper = styled.span`
 	height: 100%;
 
 	svg {
-		width: 1.1em;
-		height: 1.1em;
+		width: 1em;
+		height: 1em;
 	}
 `

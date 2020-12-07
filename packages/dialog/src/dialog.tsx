@@ -122,13 +122,12 @@ let Wrapper = styled(motion.div)`
 `
 
 export let DialogContent = styled.div`
-	--dialog-default-shadow: 0px 8px 21px -5px rgba(0, 0, 0, 0.2);
-	box-shadow: var(--dialog-shadow, var(--dialog-default-shadow));
+	box-shadow: var(--dialog-shadow, var(--shadow-3));
 	position: absolute;
 	background: var(--dialog-background, #fff);
 	z-index: 11;
-	padding: var(--dialog-padding, var(--baseline));
-	border-radius: var(--border-radius, calc(var(--baseline) * 0.5));
+	padding: var(--dialog-padding, var(--baseline-2));
+	border-radius: var(--border-radius, var(--baseline));
 	max-width: 100vw;
 	max-height: 100vh;
 	overflow: auto;

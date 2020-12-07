@@ -1,3 +1,4 @@
 
 export { Textarea } from './textarea'
-export { Input } from './input'
+export { Input, Password } from './input'
+export { Section } from './styled'

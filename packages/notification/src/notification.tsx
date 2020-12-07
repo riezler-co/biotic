@@ -207,11 +207,11 @@ export let Notification = styled.div`
 	color: var(--notification-color, #fff);
 	padding: var(--baseline) calc(var(--baseline) * 1.62);
 	border: var(--notification-border, var(--default-border));
-	border-radius: calc(var(--baseline) * 0.3);
+	border-radius: var(--baseline);
 	width: 300px;
 	display: flex;
 	justify-content: space-between;
-	padding-right: calc(var(--baseline) * 0.62);
+	padding-right: var(--baseline-half);
 	max-width: 95vw;
 `
 
