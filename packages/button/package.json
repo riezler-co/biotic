@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/button",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "biotic button",
   "main": "lib/main.js",
   "scripts": {
@@ -38,7 +38,7 @@
     "styled-components": "^5.1.1"
   },
   "dependencies": {
-    "@biotic-ui/leptons": "^0.3.3"
+    "@biotic-ui/leptons": "^0.3.4"
   },
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/bottom-sheet",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "React Bottom Sheet",
   "main": "lib/main.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "styled-components": "^5.1.1"
   },
   "dependencies": {
-    "@biotic-ui/leptons": "^0.3.3"
+    "@biotic-ui/leptons": "^0.3.4"
   },
   "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
   "publishConfig": {
