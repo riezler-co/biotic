@@ -3,19 +3,21 @@ import styled from 'styled-components'
 import { Close as CloseIcon } from '@biotic-ui/icon'
 import { Pulse } from '@biotic-ui/leptons'
 
-type ButtonProps = 
-	{ disabled?: boolean
-	; raised?: boolean
-	; fullwidth?: boolean
-	; loading?: boolean
-	}
+type Props = {
+	disabled?: boolean;
+	raised?: boolean;
+	fullwidth?: boolean;
+	loading?: boolean
+}
+
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & Props
 
 let StyledPulse = styled(Pulse)`
 	position: absolute;
 	left: calc(var(--baseline-2) * -1);
 `
 
-let StyledButton = styled.button<ButtonProps>`
+let StyledButton = styled.button<Props>`
 	--defaut-shadow: var(--shadow-2);
 	--default-button-background: rgb(239 239 239);
 	--default-button-border: 1px solid rgb(215 215 215);
