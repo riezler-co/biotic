@@ -98,6 +98,8 @@ export let notification = {
 	closeImmediate
 }
 
+type Resolve = () => void
+
 export function useNotification(Component: NotificationElement) {
 	let id = useRef<number>(getId())
 	let component = useRef<NotificationElement>(Component)
@@ -123,12 +125,12 @@ export let Notifications: React.FC<{}> = () => {
 	let { notifications, ...state } = useStore(state => state)
 	let [hover, setHover] = useState(false)
 	let [nodes, setNodex] = useState([])
-	let resolver = useRef(() => {})
+	let resolver = useRef<Resolve>(() => {})
 
 	function onMouseEnter() {
 		setHover(true)
 		let promise = new Promise((resolve) => {
-			resolver.current = resolve
+			resolver.current = (resolve as Resolve)
 		})
 
 		state.setHover(promise)

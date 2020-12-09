@@ -89,6 +89,13 @@ export let SimpleAcc = () => {
 					<AccordionTitle>First Item</AccordionTitle>
 					<AccordionConent>
 						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, eligendi.
+						<ul>
+							<li>dknwkdnkwndkw</li>
+							<li>dknwkdnkwndkw</li>
+							<li>dknwkdnkwndkw</li>
+							<li>dknwkdnkwndkw</li>
+							<li>dknwkdnkwndkw</li>
+						</ul>
 					</AccordionConent>
 				</AccordionItem>
 

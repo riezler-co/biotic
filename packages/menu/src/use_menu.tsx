@@ -1,4 +1,4 @@
-import React, { Children, useState, ReactElement } from 'react'
+import React, { Children, useState, ReactElement, SyntheticEvent } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { useGetContainer, useOnEscape } from '@biotic-ui/std'
 import { createPortal } from 'react-dom'
@@ -53,7 +53,7 @@ export function useMenu(userConfig: Config = DefaultConfig): UseMenu {
 		let Menu = React.cloneElement(menu, {
 			children: Children.map(menu.props.children, node => {
 				return React.cloneElement(node, {
-					onClick: async e => {
+					onClick: async (e: SyntheticEvent) => {
 						let userChoice = node.props.onClick
 							? node.props.onClick(e)
 							: true
