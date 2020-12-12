@@ -38,6 +38,11 @@
 
   	/* Misc */
 	--backdrop: rgba(63, 63, 63, 0.1);
+
+	/* Panel */
+
+	--basement-color: rgba(0,0,0, 0.2);
+	--basement: inset 0 0 calc(var(--baseline) * 16) var(--baseline-5) var(--basement-color);
 }
 
 html {
