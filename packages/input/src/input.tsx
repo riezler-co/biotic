@@ -2,13 +2,13 @@ import React, { useState, FC } from 'react'
 import styled from 'styled-components'
 import { InputBase } from '@biotic-ui/leptons'
 
-let StyledInput = styled.input`
+let StyledInput = styled.input<any>`
   ${InputBase}
 `
 
 export let Input = StyledInput
 
-export let Password: FC<{}> = (props) => {
+export let Password: FC<HTMLInputElement> = ({ children , ...props }) => {
 	let [type, setType] = useState<'password' | 'text'>('password')
 
 	function handleShow() {
