@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/drawer",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "React Drawer",
   "main": "lib/main.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "styled-components": "^5.2.1"
   },
   "dependencies": {
-    "@biotic-ui/leptons": "^0.3.6"
+    "@biotic-ui/leptons": "^0.3.7"
   },
   "gitHead": "4d47ca609b3d59878dd7f9280cf9e74228490790",
   "publishConfig": {
