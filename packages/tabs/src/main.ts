@@ -23,7 +23,8 @@ export {
 	useTabState,
 	useScrollState,
 	useRestoreScroll,
-	useOnTabClose
+	useOnTabClose,
+	useActiveState
 } from './hook'
 
 

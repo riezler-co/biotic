@@ -6,8 +6,7 @@ export let StyledTabBar = styled.header`
 	height: calc(var(--baseline) * 4);
 	padding: 0;
 	width: 100%;
-	padding-top: 2px;
-	background: grey;
+	background: var(--tab-bar-background, grey);
 	overflow: auto;
 	-ms-overflow-style: none;  /* IE and Edge */
 	scrollbar-width: none;  /* Firefox */
@@ -23,13 +22,18 @@ export let StyledTabContent = styled.div`
 
 export let StyledTab = styled.button`
 	border: none;
-	min-width: 100px;
+	min-width: calc(var(--baseline) * 10);
+	max-width: calc(var(--baseline) * 38);
 	background: none;
 	cursor: pointer;
 	height: 100%;
 
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+
 	:focus {
-	  outline: none;
+	  outline: var(--tab-focus, none);
 	}
 `
 
