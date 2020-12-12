@@ -7,22 +7,24 @@ type TabProps
 	= React.HTMLAttributes<HTMLElement>
 	& As
 	& {
-		isActive: boolean;
-		onClick: (e: MouseEvent) => void;
-		onClose: (e: MouseEvent) => void;
 		type: string
+		id: string;
+		isActive?: boolean;
 		closable?: boolean;
 		icon?: JSX.Element;
+		onClick?: (e: MouseEvent) => void;
+		onClose?: (e: MouseEvent) => void;
 	}
+
 
 export let Tab: React.FC<TabProps> = ({
 	children,
-	isActive,
-	onClick,
-	onClose,
+	isActive = false,
 	closable = false,
 	as = 'li',
 	icon = <Close />,
+	onClick,
+	onClose,
 	...props
 }) => {
 	return (

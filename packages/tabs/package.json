@@ -48,9 +48,5 @@
   "gitHead": "4d47ca609b3d59878dd7f9280cf9e74228490790",
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "@types/lodash": "^4.14.165",
-    "lodash": "^4.17.20"
   }
 }

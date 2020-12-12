@@ -1,31 +1,35 @@
 
-export { Tabs
-			 , TabBar
-			 , TabContent
-			 , TabPanel
-			 , TabsCtx
-			 , useGroup
-			 } from './tabs'
+export {
+	Tabs,
+	TabBar,
+	TabContent,
+	TabPanel,
+	TabsCtx,
+	useGroup
+} from './tabs'
 
 
-export { Tab
-			 , TabWrapper
-			 , CloseButton
-			 } from './tab'
+export {
+	Tab,
+	TabWrapper,
+	CloseButton
+} from './tab'
 
 
-export { useTabs
-			 , useTabHistory
-			 , useDefaultTab
-			 , useTabState
-			 , useScrollState
-			 , useRestoreScroll
-			 , useOnTabClose
-			 } from './hook'
+export {
+	useTabs,
+	useTabHistory,
+	useDefaultTab,
+	useTabState,
+	useScrollState,
+	useRestoreScroll,
+	useOnTabClose
+} from './hook'
 
 
-export { StyledTabBar
-			 , StyledTabContent
-			 , StyledTab
-			 , StyledTabs
-			 } from './styled'
+export {
+	StyledTabBar,
+	StyledTabContent,
+	StyledTab,
+	StyledTabs
+} from './styled'
