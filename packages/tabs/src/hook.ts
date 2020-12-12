@@ -1,70 +1,70 @@
-import { useEffect
-			 , useCallback
-			 , useState
-			 , useRef
-			 , SyntheticEvent
-			 } from 'react'
+import {
+	useEffect,
+	useCallback,
+	useState,
+	useRef,
+	SyntheticEvent
+} from 'react'
 
-import { atom
-			 , atomFamily
-			 , useSetRecoilState
-			 , useRecoilState
-			 , useRecoilValue
-			 , useRecoilCallback
-			 , RecoilState
-			 , SerializableParam
-			 , SetterOrUpdater
-			 , Loadable
-			 } from 'recoil'
+import {
+	atom,
+	atomFamily,
+	useSetRecoilState,
+	useRecoilState,
+	useRecoilValue,
+	useRecoilCallback,
+	RecoilState,
+	SerializableParam,
+	SetterOrUpdater,
+	Loadable
+} from 'recoil'
 
 import { useDebounce } from '@biotic-ui/std'
 
-import { isOpen
-			 , getStaticTabs
-			 , getTabIndex
-			 , getNextIndex
-			 , OnCloseTab
-			 , last
-			 } from './utils'
+import {
+	isOpen,
+	getStaticTabs,
+	getTabIndex,
+	getNextIndex,
+	OnCloseTab,
+	last
+} from './utils'
 
 import type {
-				 TabsState
-			 , TabItem
-			 , ActiveState
-			 , TabState
-			 , ScrollState
-			 , EventCallback
-			 , TabsHistory
-			 } from './utils'
-
+	TabsState,
+	TabItem,
+	ActiveState,
+	TabState,
+	ScrollState,
+	EventCallback,
+	TabsHistory
+} from './utils'
 
 export const DEFAULT_GROUP = 'default'
 
-export let makeTabsState = atomFamily<TabsState, string>(
-	{ key: 'tabs'
-	, default:
-			{ items: []
-			, length: 0
-			, ids: {}
-			, staticItems: []
-			}
+export let makeTabsState = atomFamily<TabsState, string>({
+	key: 'tabs',
+	default: {
+		items: [],
+		length: 0,
+		ids: {},
+		staticItems: []
 	}
-)
+})
 
-const DEFAULT_ACTIVE: ActiveState = 
-	{ index: 0
-	, type: ''
-	, id: ''
-	}
+const DEFAULT_ACTIVE: ActiveState = {
+	index: 0,
+	type: '',
+	id: ''
+}
 
-export let makeTabsHistory = atomFamily<TabsHistory, string>(
-	{ key: 'tabs_history'
-	, default:
-			{ items: []
-			, currentIndex: 0
-			}		
-	}
-)
+export let makeTabsHistory = atomFamily<TabsHistory, string>({
+	key: 'tabs_history',
+	default: {
+		items: [],
+		currentIndex: 0
+	}		
+})
 
 export function useTabs(group = DEFAULT_GROUP): TabsState {
 	let tabsState = makeTabsState(group)
@@ -96,11 +96,11 @@ export function useTabHistory(group = DEFAULT_GROUP) {
 
 	let push = useCallback(config => {
 
-		let tab =
-			{ ...config
-			, closable: true
-			, isStatic: false
-			}
+		let tab = {
+			...config,
+			closable: true,
+			isStatic: false,
+		}
 
 		let historyCallback = (index: number, type: string, id: string) => (history: TabsHistory): TabsHistory => {
 			let entry = { index, type, id}

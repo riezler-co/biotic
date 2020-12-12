@@ -6,25 +6,25 @@ import { As } from './utils'
 type TabProps
 	= React.HTMLAttributes<HTMLElement>
 	& As
-	& { children: JSX.Element | Array<JSX.Element>
-		; isActive: boolean
-		; onClick: (e: MouseEvent) => void
-		; onClose: (e: MouseEvent) => void
-		; closable?: boolean
-		; icon?: JSX.Element
-		}
+	& {
+		isActive: boolean;
+		onClick: (e: MouseEvent) => void;
+		onClose: (e: MouseEvent) => void;
+		type: string
+		closable?: boolean;
+		icon?: JSX.Element;
+	}
 
-export function Tab(
-	{ children
-	, isActive
-	, onClick
-	, onClose
-	, closable = false
-	, as = 'li'
-	, icon = <Close />
-	, ...props
-	}: TabProps
-) {
+export let Tab: React.FC<TabProps> = ({
+	children,
+	isActive,
+	onClick,
+	onClose,
+	closable = false,
+	as = 'li',
+	icon = <Close />,
+	...props
+}) => {
 	return (
 		<TabWrapper isActive={isActive} as={as} {...props}>
 			<StyledTab onClick={onClick}>

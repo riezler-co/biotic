@@ -1,4 +1,5 @@
 import React from 'react'
+import { Ref } from 'react'
 import { createPortal } from 'react-dom'
 import styled, { StyledComponent } from 'styled-components'
 
@@ -10,8 +11,8 @@ import { useGetContainer
 import { Backdrop } from '@biotic-ui/leptons'
 import { motion, AnimatePresence, MotionProps } from 'framer-motion'
 
-type OnClose =
-	{ backdrop: boolean
+type OnClose = {
+	backdrop: boolean
 	; escape: boolean
 	}
 
@@ -20,17 +21,18 @@ type DialogProps =
 	; backdrop?: boolean
 	; onClose?: (e: OnClose) => void
 	; className?: string
+	; parent?: Ref<HTMLElement>
 	}
 
-export let Dialog: React.FC<DialogProps> = (props) => {
+export let Dialog: React.FC<DialogProps> = ({
+	open = false,
+	children,
+	backdrop = true,
+	onClose = () => {},
+	parent = null,
+	...props
+}) => {
 	let DialogContainer = useGetContainer('biotic-dialog')
-
-	let { open = false
-			, children
-			, backdrop = true
-			, onClose = () => {}
-			, className = ''
-		  } = props
 
 	useOnEscape(() => open && onClose({ backdrop: false, escape: true }))
 	usePreventScroll(open)
@@ -39,63 +41,58 @@ export let Dialog: React.FC<DialogProps> = (props) => {
 		onClose && onClose({ backdrop: true, escape: false })
 	}
 
-	let backdropVariants =
-		{ hidden:
-				{ opacity: 0 }
+	let backdropVariants = {
+		hidden: { opacity: 0 },
+		visible: { opacity: 1 },
+	}
 
-		, visible:
-				{ opacity: 1 }
+	let wrapperVariants = {
+		hidden: {
+			opacity: 0,
+			transition: { when: 'afterChildren' },
+			transitionEnd: { display: 'none' } 
+		},
+
+		visible: {
+			display: 'flex',
+			opacity: 1
 		}
+	}
 
-
-	let wrapperVariants =
-		{ hidden:
-				{ opacity: 0
-				, transition:
-						{ when: 'afterChildren'
-			    	}
-
-			  , transitionEnd:
-			  		{ display: 'none' }
-				}
-
-		, visible:
-				{ display: 'flex'
-				, opacity: 1
-				}
-		}
-
-	let spring =
-		{ type: 'spring'
-		, damping: 10
-		, stiffness: 100
-		}
+	let spring = {
+		type: 'spring',
+		damping: 10,
+		stiffness: 100,
+	}
 
 	let DialogPortal = (
-		<Wrapper variants={wrapperVariants}
-						 initial='hidden'
-						 animate={open ? 'visible' : 'hidden'}
-						 className={className}
+		<Wrapper
+				variants={wrapperVariants}
+				initial='hidden'
+				animate={open ? 'visible' : 'hidden'}
+				{...props}
 		>
 
 			{ backdrop &&
-				<Backdrop as={motion.div}
-									open={open}
-									initial='hidden'
-									animate={open ? 'visible' : 'hidden'}
-									variants={backdropVariants}
-									onClick={handleBackdrop}
+				<Backdrop
+						as={motion.div}
+						open={open}
+						initial='hidden'
+						animate={open ? 'visible' : 'hidden'}
+						variants={backdropVariants}
+						onClick={handleBackdrop}
 				/>
 			}
 			<AnimatePresence>
 				{ open &&
-					<DialogContent as={motion.div}
-												 aria-hidden={!open}
-												 role='dialog'
-												 initial={{ transform: 'scale(0.95)' }}
-												 animate={{ transform: 'scale(1)' }}
-												 exit={{ transform: 'scale(0.95)' }}
-												 transition={spring} 
+					<DialogContent
+								as={motion.div}
+								aria-hidden={!open}
+								role='dialog'
+								initial={{ transform: 'scale(0.95)' }}
+								animate={{ transform: 'scale(1)' }}
+								exit={{ transform: 'scale(0.95)' }}
+								transition={spring} 
 					>
 						{ children }
 					</DialogContent>

@@ -3,10 +3,10 @@ import { FunctionComponent
 		 	 } from 'react'
 
 export type As = {
-	as:   string
-			| FunctionComponent<any>
-			| ComponentClass<any, any>
-			| undefined
+	as?:  string
+		| FunctionComponent<any>
+		| ComponentClass<any, any>
+		| undefined
 }
 
 export type TabItem =

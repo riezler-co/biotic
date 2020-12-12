@@ -1,38 +1,40 @@
 import React from 'react'
-import { Children
-		   , useMemo
-		   , useEffect
-		   , useRef
-		   , useState
-		   , ReactElement
-		   , createContext
-		   , useContext
-		 	 } from 'react'
+import {
+	Children,
+	useMemo,
+	useEffect,
+	useRef,
+	useState,
+	ReactElement,
+	createContext,
+	useContext,
+} from 'react'
 
-import { StyledTabs
-			 , StyledTabBar
-			 , StyledTabContent
-			 } from './styled'
+import {
+	StyledTabs,
+	StyledTabBar,
+	StyledTabContent
+} from './styled'
 
 import { useRecoilState } from 'recoil'
 
-import { makeTabsState
-			 , useScrollState
-			 , useRestoreScroll
-			 , useCloseTab
-			 , useOnTabClose
-			 , useTabState
-			 , useTabHistory
-			 , useActiveState
-			 } from './hook'
+import {
+	makeTabsState,
+	useScrollState,
+	useRestoreScroll,
+	useCloseTab,
+	useOnTabClose,
+	useTabState,
+	useTabHistory,
+	useActiveState
+} from './hook'
 
-import { toTabObject
-			 , isStatic
-			 , OnCloseTab
-			 , As
-			 } from './utils'
-
-
+import {
+	toTabObject,
+	isStatic,
+	OnCloseTab,
+	As
+} from './utils'
 
 export let TabsCtx = createContext('default')
 
@@ -62,8 +64,7 @@ export function Tabs({ children, group = 'default', as = 'div', ...props }: TabP
 type TabBarProps
 	= React.HTMLAttributes<HTMLElement>
 	& As
-	& { children: Array<JSX.Element>
-		} 
+	& { children: Array<JSX.Element> } 
 
 export function TabBar({ children, as = 'ul', ...props }: TabBarProps) {
 	let group = useContext(TabsCtx)
@@ -111,10 +112,10 @@ export function TabBar({ children, as = 'ul', ...props }: TabBarProps) {
 	)
 }
 
-type TabContentProps =
-	{ children: JSX.Element | Array<JSX.Element>
-	; fallback: ReactElement | null
-	} 
+type TabContentProps = {
+	children: JSX.Element | Array<JSX.Element>;
+	fallback: ReactElement | null;
+} 
 
 export function TabContent({ children, fallback = null }: TabContentProps) {
 	let group = useContext(TabsCtx)
@@ -141,9 +142,10 @@ export function TabContent({ children, fallback = null }: TabContentProps) {
 type TabPanelProps
 	= React.HTMLAttributes<HTMLElement>
 	& As
-	& { children: JSX.Element
-		; scrollGroup?: string
-		}
+	& {
+		children: JSX.Element;
+		scrollGroup?: string;
+	}
 
 
 export function TabPanel({ children, scrollGroup, as = 'div', ...props }: TabPanelProps) {
