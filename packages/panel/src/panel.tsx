@@ -1,4 +1,5 @@
-import React, { Children, useState } from 'react'
+import React from 'react'
+import { Children, useState, ReactElement } from 'react'
 
 import styled, { css } from 'styled-components'
 
@@ -6,6 +7,7 @@ type PanelProps = {
 	side?: 'left' | 'right';
 	width?: string | number;
 	stacked?: boolean;
+	id?: string;
 }
 
 export let Panel = styled.div<PanelProps>`
@@ -106,7 +108,7 @@ export let StackedPanels: React.FC<StackedPanelProps> = ({ children, onActivate,
 	let [closed, setClosed] = useState(true)
 
 	let _children = Children.map(children, (node, index) => {
-		let elm = (node as  React.ReactElement<PanelProps>)
+		let elm = (node as ReactElement<PanelProps & React.HTMLAttributes<HTMLElement>>)
 		return React.cloneElement(elm, {
 			width: `calc(100% - var(--baseline) * ${index})`,
 			style: {
@@ -121,14 +123,16 @@ export let StackedPanels: React.FC<StackedPanelProps> = ({ children, onActivate,
 					return
 				}
 
-				let _children = Children.toArray(children)
-				let items = children
-					.filter(node => node.props.id !== elm.props.id)
-					.map(node => node.props.id)
+				let _children = Children.toArray(children) as Array<ReactElement<PanelProps>>
+				let items = _children
+					.filter(node => node.props?.id !== elm.props.id)
+					.map(node => node.props?.id)
 
-				let ids = items.concat([elm.props.id])
+				let ids = items
+					.concat([elm.props.id])
+					.filter(Boolean)
 
-				onActivate && onActivate(ids)
+				onActivate && onActivate((ids as Array<string>))
 				setClosed(true)
 			}
 		})
@@ -140,9 +144,9 @@ export let StackedPanels: React.FC<StackedPanelProps> = ({ children, onActivate,
 			<Handler
 				onClick={() => setClosed(!closed)}
 				style={{
-					width: `calc(var(--baseline) * ${children.length})`,
-					zIndex: children.length + 1
-				}} />
+					width: `calc(var(--baseline) * ${_children?.length})`,
+					zIndex: _children ? _children.length + 1 : 1
+ 				}} />
 		</Stack>
 	)
 }

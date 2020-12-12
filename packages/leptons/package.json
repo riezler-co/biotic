@@ -38,7 +38,7 @@
   "dependencies": {
     "@riezler/react-utils": "^0.1.1"
   },
-  "gitHead": "aa286c278d255c6e014a6714da74e77c0ef15013",
+  "gitHead": "4d47ca609b3d59878dd7f9280cf9e74228490790",
   "publishConfig": {
     "access": "public"
   }

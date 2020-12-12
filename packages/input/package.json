@@ -38,7 +38,7 @@
     "react": "^17.0.1",
     "styled-components": "^5.2.1"
   },
-  "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
+  "gitHead": "4d47ca609b3d59878dd7f9280cf9e74228490790",
   "publishConfig": {
     "access": "public"
   }

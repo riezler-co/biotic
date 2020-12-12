@@ -94,30 +94,30 @@ h1, h2, h3, h4, h5 {
 }
 
 h1 {
-  font-size: 1.802em;
+  font-size: 1.802rem;
   margin-bottom: 0.75em;
 }
 
 h2 {
-	font-size: 1.602em;
+	font-size: 1.602rem;
 }
 
 h3 {
-	font-size: 1.424em;
+	font-size: 1.424rem;
 	line-height: 1.8;
 	margin-bottom: 0.1875em;
 }
 
 h4 {
-	font-size: 1.266em;
+	font-size: 1.266rem;
 }
 
 h5,
 h6 {
-	font-size: 1em;
+	font-size: 1rem;
 }
 
 small,
 .text_small {
-	font-size: 0.75em;
+	font-size: 0.75rem;
 }
