@@ -294,7 +294,7 @@ export function useTabState<T extends SerializableParam>(
 
 
 let makeScrollState = atomFamily<ScrollState, string>(
-	{ key: 'tab_scroll'
+	{ key: 'scroll'
 	, default: { top: 0, left: 0 }
 	}
 )
@@ -337,15 +337,15 @@ export function useScrollState(id: string): UseScrollState {
 		return { top: 0, left: 0 }
 	}, [id, scrollState])
 
-	let cleanUp = useCallback(() => {
+	let reset = useCallback(() => {
 		setScroll({ top: 0, left: 0 })
 	}, [id])
 
 	return [
-			getScroll
-		, handelScroll
-		, cleanUp
-		]
+		getScroll,
+		handelScroll,
+		reset
+	]
 }
 
 export function useRestoreScroll(currentId: string) {
@@ -366,4 +366,10 @@ export function useRestoreScroll(currentId: string) {
 			node.scrollLeft = left
 		}
 	}
+}
+
+export function useScroll(id: string) {
+	let ref = useRestoreScroll(id)
+	let [, onScroll] = useScrollState(id)
+	return [onScroll, ref]
 }

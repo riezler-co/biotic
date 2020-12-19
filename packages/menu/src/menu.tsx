@@ -233,8 +233,7 @@ export let MenuItem = (props: MenuItemProps) => {
 }
 
 export let Divider = styled.hr`
-	margin-top: 0.1875em;
-	margin-top: 0.25em;
+	margin-block-start: 0.25em;
 	background: var(--menu-border-color, #e9e9e9);
 	border: none;
 	height: 1px;
@@ -258,17 +257,16 @@ function appendItem(children: JSX.Element, item: JSX.Element) {
 
 let IconWrapper = styled.span`
 	position: absolute;
-	left: 0;
-	width: 2em;
-	height: 1.62em;
+	inset-inline-start: 0;
+	inline-size: 2em;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	z-index: 2;
-	height: 100%;
+	block-size: 100%;
 
 	svg {
-		width: 1em;
-		height: 1em;
+		inline-size: 1em;
+		block-size: 1em;
 	}
 `

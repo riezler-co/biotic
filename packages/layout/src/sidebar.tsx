@@ -19,7 +19,7 @@ export let StyledSidebarLayout = styled.div<LayoutColumns>`
 	grid-template-columns: ${layoutColumns};
 	width: 100%;
 	height: 100%;
-	max-height: 100vh;
+	max-block-size: 100vh;
 `
 
 function layoutColumns({ direction }: LayoutColumns) {

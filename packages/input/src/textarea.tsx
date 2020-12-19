@@ -80,14 +80,14 @@ export let Textarea = forwardRef<Ref, TextareaProps>((props, userRef) => {
 let StyledText = styled.textarea<{ maxHeight: number | string | null }>`
 	${InputBase}
 	
-	max-height: ${p => p.maxHeight === null
+	max-block-size: ${p => p.maxHeight === null
 		? 'auto' 
 		: typeof p.maxHeight === 'number'
 				? `${p.maxHeight}px`
 				: p.maxHeight  };
 
-  scrollbar-width: ${p => p.maxHeight === null ? 'none' : 'thin'};
-  scrollbar-color: var(--scrollbar, #cdcdcd);
+  	scrollbar-width: ${p => p.maxHeight === null ? 'none' : 'thin'};
+  	scrollbar-color: var(--scrollbar, #cdcdcd);
 
 	&::-webkit-scrollbar-track {
 	    background-color: var(--scrollbar-bg, #f0f0f0);

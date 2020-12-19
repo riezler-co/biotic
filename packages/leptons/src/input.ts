@@ -3,14 +3,16 @@ import { css } from 'styled-components'
 export let InputBase = css`
 	--default-border: 1px solid rgba(34,36,38,.15);
 	margin: 0;
-	max-width: 100%;
+	max-inline-size: 100%;
+	inline-size: 100%;
 	flex: 1 0 auto;
 	outline: none;
 	-webkit-tap-highlight-color: var(--tap-highlight-color, rgba(255,255,255,0));
 	text-align: left;
 	line-height: 1.21428571em;
-	padding: .38em 0.62em;
-	height: var(--baseline-4);
+	padding-inline: 0.62em; 
+	padding-block: .38em;
+	block-size: var(--baseline-4);
 	background: var(--input-bg, none);
 	border: var(--input-border, var(--default-border));
 	color: var(--input-color, rgba(0,0,0,.87));
@@ -18,7 +20,6 @@ export let InputBase = css`
 	-webkit-transition: box-shadow .1s ease,border-color .1s ease;
 	transition: box-shadow .1s ease, border-color .1s ease;
 	box-shadow: none;
-	width: 100%;
 	font-size: inherit;
 	box-sizing: border-box;
 

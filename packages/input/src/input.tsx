@@ -1,4 +1,4 @@
-import React, { useState, FC, InputHTMLAttributes } from 'react'
+import React, { useState, FC, InputHTMLAttributes, forwardRef } from 'react'
 import styled from 'styled-components'
 import { InputBase } from '@biotic-ui/leptons'
 
@@ -8,7 +8,7 @@ let StyledInput = styled.input`
 
 export let Input = StyledInput
 
-export let Password: FC<InputHTMLAttributes<{}>> = ({ children , ...props }) => {
+export let Password = forwardRef<HTMLInputElement, InputHTMLAttributes<{}>>(({ children , ...props }, ref) => {
 	let [type, setType] = useState<'password' | 'text'>('password')
 
 	function handleShow() {
@@ -21,19 +21,19 @@ export let Password: FC<InputHTMLAttributes<{}>> = ({ children , ...props }) => 
 
 	return (
 		<PasswordWrapper>
-			<StyledInput {...props} type={type} />
+			<StyledInput {...props} type={type} ref={ref} />
 			<Button type="button" onMouseDown={handleShow} onMouseUp={handleHide}>
-				{ type === 'password' &&
+				{ type === 'text' &&
 					<Eye />				
 				}
 
-				{ type === 'text' &&
+				{ type === 'password' &&
 					<EyeClosed />				
 				}
 			</Button>
 		</PasswordWrapper>
 	)
-}
+})
 
 let PasswordWrapper = styled.div`
 	position: relative;
@@ -46,7 +46,7 @@ let Button = styled.button`
 	border: none;
 	outline: none;
 	position: absolute;
-	right: var(--baseline);
+	inset-inline-end: var(--baseline);
 	z-index: 5;
 	background: var(--input-bg, none);
 `
@@ -67,3 +67,8 @@ let EyeClosed = () => {
 		</svg>
 	)
 }
+
+export let Label = styled.label`
+	margin-block-end: 0.25em;
+	display: inline-block;
+`

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Input, Section, Password } from '@package/input/main'
+import { Input, Section, Password, Label } from '@package/input/main'
 import { Button } from '@package/button/main'
 
 let Wrapper = styled.div`
@@ -48,11 +48,11 @@ export let Form = () => {
 		<Wrapper>
 			<form>
 				<Section>
-					<label>Email: </label>
+					<Label>Email: </Label>
 					<Input />
 				</Section>
 				<Section>
-					<label>Password: </label>
+					<Label>Password: </Label>
 					<Password />
 				</Section>
 				<Button>Login</Button>

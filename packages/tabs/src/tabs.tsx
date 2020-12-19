@@ -46,9 +46,10 @@ export function useGroup() {
 type TabProps
 	= React.HTMLAttributes<HTMLElement>
 	& As
-	& { children: JSX.Element | Array<JSX.Element>
- 		; group?: string
- 		} 
+	& {
+		children: JSX.Element | Array<JSX.Element>;
+		group?: string
+ 	} 
 
 export function Tabs({ children, group = 'default', as = 'div', ...props }: TabProps) {
 	return (

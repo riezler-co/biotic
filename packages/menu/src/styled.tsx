@@ -3,8 +3,8 @@ import styled from 'styled-components'
 export let StyledMenu = styled.ul`
 	--default-padding: calc(var(--baseline) / 2) 0;
 
-	width: var(--menu-width, calc(var(--baseline) * 34));
-	max-width: var(--menu-max-width, calc(100vw - 1em));
+	inline-size: var(--menu-width, calc(var(--baseline) * 34));
+	max-inline-size: var(--menu-max-width, calc(100vw - 1em));
 	background: var(--menu-bg, #fff);
 	color: var(--menu-color, #444);
 	border-color: var(--border-color);
@@ -35,14 +35,15 @@ type MenuItemTitleProps =
 	}
 
 export let MenuItemTitle = styled.button<MenuItemTitleProps>`
-	width: 100%;
+	inline-size: 100%;
 	background: none;
 	border: none;
 	text-align: left;
 	font-size: var(--menu-font-size, 1em);
-	padding: 0.4375em 0.5em;
-	padding-right: ${p => p.hasSubmenu ? '1.5em' : 'var(--baseline)'};
-	padding-left: ${p => p.hasIcon ? '2em' : 'var(--baseline)'};
+	padding-inline: 0.5em;
+	padding-block: 0.4375em;
+	padding-inline-end: ${p => p.hasSubmenu ? '1.5em' : 'var(--baseline)'};
+	padding-inline-start: ${p => p.hasIcon ? '2em' : 'var(--baseline)'};
 	display: flex;
 	align-items: center;
 	position: relative;
@@ -54,13 +55,13 @@ export let MenuItemTitle = styled.button<MenuItemTitleProps>`
 	span.arrow_right {
 		position: absolute;
 		right: 0;
-		height: 100%;
+		block-size: 100%;
 	}
 
 	span.arrow_right svg {
-		width: 1.62em;
-		height: 1.62em;
-		margin-top: 0.2em;
+		inline-size: 1.62em;
+		block-size: 1.62em;
+		margin-block-start: 0.2em;
 	}
 
 	&:hover {;

@@ -14,7 +14,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & Props
 
 let StyledPulse = styled(Pulse)`
 	position: absolute;
-	left: calc(var(--baseline-2) * -1);
+	inset-inline-start: calc(var(--baseline-2) * -1);
 `
 
 let StyledButton = styled.button<Props>`
@@ -24,11 +24,12 @@ let StyledButton = styled.button<Props>`
 
 	position: relative;
 	text-decoration: none;
-	padding: var(--baseline) calc(var(--baseline) * 3);
+	padding-inline: calc(var(--baseline) * 3);
+	padding-block: var(--baseline);
 	display: inline-flex;
 	justify-content: center;
 	border-radius: calc(var(--baseline-half));
-	font-weight: 600;
+	font-weight: 500;
 	letter-spacing: 1px;
 	cursor: ${p => p.disabled ? 'default' : 'pointer'};;
 	opacity: ${p => p.disabled ? '0.8' : '1'};
@@ -95,8 +96,8 @@ export let Fab = styled.button`
 	height: var(--size);
 	border-radius: 50%;
 	position: fixed;
-	bottom: calc(var(--baseline) * 2);
-	right: calc(var(--baseline) * 2);
+	inset-block-end: calc(var(--baseline) * 2);
+	inset-inline-end: calc(var(--baseline) * 2);
 	z-index: 2;
 	border: none;
 	display: flex;

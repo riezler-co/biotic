@@ -7,10 +7,9 @@ export let ErrorMessage = styled.p`
 
 export let Small = styled.small`
 	display: block;
-	font-size: 0.8em;
+	font-size: 0.75em;
 `
 
-export let Info = styled.span`
-  font-size: 0.8em;
-  color: var(--color-info);
+export let Muted = styled.span`
+	color: var(--muted);
 `
