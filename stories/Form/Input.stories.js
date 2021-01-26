@@ -7,7 +7,7 @@ export default {
 }
 
 export let Default = () => {
-	let [text, setText] = React.useState()
+	let [text, setText] = React.useState('')
 
 	return (
 		<Input
@@ -17,10 +17,22 @@ export let Default = () => {
 	)
 }
 
-Default.storyName = 'Default'
+export let Disabled = () => {
+	let [text, setText] = React.useState('Bla Bla Bla')
+
+	return (
+		<Input
+			value={text}
+			onChange={e => setText(e.target.value)}
+			disabled
+		/>
+	)
+}
+
+Disabled.storyName = 'Disabled'
 
 export let AsPassword = () => {
-	let [text, setText] = React.useState()
+	let [text, setText] = React.useState('')
 
 	return (
 		<Password

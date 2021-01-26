@@ -35,4 +35,9 @@ export let InputBase = css`
 	::-ms-input-placeholder { /* Microsoft Edge */
 	  color: var(--input-color-placeholder);
 	}
+
+	:disabled {
+		opacity: var(--input-disabled-opacity, 0.8);
+		background: var(--input-disabled-background, rgba(100,100,100, 0.1));
+	}
 `
