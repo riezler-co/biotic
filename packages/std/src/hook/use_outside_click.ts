@@ -1,8 +1,8 @@
-import { useEffect, useRef, Ref } from 'react'
+import { useEffect, useRef, RefObject } from 'react'
 
-type Callback = () => void
+type Callback = (e: MouseEvent) => void
 
-export function useOutsideClick<T extends HTMLElement>(cb: Callback): Ref<T> {
+export function useOutsideClick<T extends HTMLElement = HTMLElement>(cb: Callback): RefObject<T> {
 	let container = useRef<T | null>(null)
 	let callback = useRef(cb)
 
@@ -27,7 +27,7 @@ export function useOutsideClick<T extends HTMLElement>(cb: Callback): Ref<T> {
 				.includes(container.current)
 
 			if (!inTarget) {
-				callback.current()
+				callback.current(event)
 			}
 		}
 

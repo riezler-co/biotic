@@ -11,9 +11,8 @@ import { createElement
 			 } from 'react'
 import { createPortal } from 'react-dom'
 import create from 'zustand'
-import { useGetContainer } from '@biotic-ui/std'
+import { useGetContainer, useOutsideClick } from '@biotic-ui/std'
 import styled from 'styled-components'
-import OutsideClickHandler from 'react-outside-click-handler'
 import { motion, AnimatePresence } from 'framer-motion'
 
 let getId: (() => number) = (() => {
@@ -27,19 +26,19 @@ let getId: (() => number) = (() => {
 
 type NotificationElement = React.FC<{ onClose: (e: MouseEvent) => void }>
 
-type Notification$ =
-	{ id: number
-	; Component: NotificationElement
-	}
+type Notification$ = {
+	id: number;
+	Component: NotificationElement;
+}
 
-type State =
-	{ notifications: Array<Notification$>
-	; hover: Promise<any>
-	; setHover: (p: Promise<any>) => void
-	; open: (n: Notification$) => void
-	; close: (id: number) => void
-	; closeImmediate: (id: number) => void
-	}
+type State = {
+	notifications: Array<Notification$>;
+	hover: Promise<any>;
+	setHover: (p: Promise<any>) => void;
+	open: (n: Notification$) => void;
+	close: (id: number) => void;
+	closeImmediate: (id: number) => void;
+}
 
 let useStore = create<State>((set, get) => ({
   notifications: [],
@@ -141,27 +140,29 @@ export let Notifications: React.FC<{}> = () => {
 		resolver.current()
 	}
 
+	let ref = useOutsideClick<HTMLUListElement>(onMouseLeave)
+
 	let NotificationContainer = (
-		<OutsideClickHandler onOutsideClick={onMouseLeave}>
-			<StyledNotifications onMouseEnter={onMouseEnter}
-													 onClick={onMouseEnter}
-											     onMouseLeave={onMouseLeave}>
-				<AnimatePresence initial={false}>
-					{ 
-						notifications.map(({ id, Component }, index) => {
-							return (
-								<ListItem key={id} 
-												  index={index}
-												  open={hover}
-												  lastIndex={notifications.length - 1}>
-									{ createElement(Component, { onClose: () => state.closeImmediate(id) }) }
-								</ListItem>
-							)
-						}) 
-					}
-				</AnimatePresence>
-			</StyledNotifications>
-		</OutsideClickHandler>
+		<StyledNotifications
+						ref={ref}
+						onMouseEnter={onMouseEnter}
+						onClick={onMouseEnter}
+						onMouseLeave={onMouseLeave}>
+			<AnimatePresence initial={false}>
+				{ 
+					notifications.map(({ id, Component }, index) => {
+						return (
+							<ListItem key={id} 
+											  index={index}
+											  open={hover}
+											  lastIndex={notifications.length - 1}>
+								{ createElement(Component, { onClose: () => state.closeImmediate(id) }) }
+							</ListItem>
+						)
+					}) 
+				}
+			</AnimatePresence>
+		</StyledNotifications>
 	)
 
 	return Container ? createPortal(NotificationContainer, Container) : null

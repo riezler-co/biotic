@@ -1,26 +1,37 @@
 import React from 'react'
-import { useState
-			 , useEffect
-			 , useLayoutEffect
-			 , ReactElement
-			 , MouseEvent
-			 } from 'react'
+import {
+	useState,
+	useEffect,
+	useLayoutEffect,
+	ReactElement,
+	MouseEvent,
+	forwardRef,
+	FC,
+} from 'react'
 import { createPortal } from 'react-dom'
 import { getContextMenuPostion } from './utils'
 import type { Position } from './utils'
-import { useGetContainer, useLongPress, useOnEscape } from '@biotic-ui/std'
+import {
+	useGetContainer,
+	useLongPress,
+	useOnEscape,
+	useOutsideClick,
+	useCombinedRefs,
+} from '@biotic-ui/std'
 import styled from 'styled-components'
-import OutsideClickHandler from 'react-outside-click-handler'
 import { BottomSheet } from '@biotic-ui/bottom-sheet'
 
-type NavProps =
-	{ position: Position
-	; onClose: () => void
-	}
+type NavProps = {
+	position: Position;
+	onClose: () => void;
+	children: JSX.Element;
+}
 
-let Nav: React.FC<NavProps> = ({ position, onClose, children }) => {
+let Nav = forwardRef<HTMLElement, NavProps>(({ position, onClose, children }, outerRef) => {
 	
 	let [ref, setRef] = useState<HTMLElement | null>(null)
+	let mainRef = useCombinedRefs(setRef, outerRef)
+
 	useEffect(() => {
 		let handleScroll = (e: WheelEvent) => {
 			let path = e.composedPath()
@@ -51,10 +62,10 @@ let Nav: React.FC<NavProps> = ({ position, onClose, children }) => {
 	let child = React.Children.only(children) as ReactElement
 	return React.cloneElement(child, {
 		style: { position: 'absolute', zIndex: 9999 },
-		ref: setRef,
+		ref: mainRef,
 		onClick: onClose
 	})
-}
+})
 
 let DefaultOptions = {
 	delay: 1000
@@ -83,31 +94,32 @@ export function useContextMenu(userOptions = {}) {
 	)
 
 	let ContextMenu = ({ children }: ContextMenuProps) => {
+		let ref = useOutsideClick<HTMLDivElement>(() => {
+			setUseContextMenu(false)
+		})
 
-	  if (!useConextMenu && !useBottomSheet) {
-	  	return null
-	  }
+		if (!useConextMenu && !useBottomSheet) {
+			return null
+		}
 
-	  if (useBottomSheet) {
-	  	let menu = React.cloneElement(children, {
-	  		replace: true
-	  	})
+		if (useBottomSheet) {
+			let menu = React.cloneElement(children, {
+				replace: true
+			})
 
-	  	return (
-	  		<BottomSheet open
-	  			      		 onClose={() => setUseBottomSheet(false)}
-	  			      		 onClick={() => setUseBottomSheet(false)}>
-	  			{ menu }
-	  		</BottomSheet>
-	  	)
-	  }
+			return (
+				<BottomSheet open
+					onClose={() => setUseBottomSheet(false)}
+					onClick={() => setUseBottomSheet(false)}>
+				{ menu }
+				</BottomSheet>
+			)
+		}
 
 		let Menu = (
-			<OutsideClickHandler onOutsideClick={() => setUseContextMenu(false)}>
-				<Nav onClose={() => setUseContextMenu(false)} position={position}>
-					<div>{ children }</div>
-				</Nav>
-			</OutsideClickHandler>
+			<Nav ref={ref} onClose={() => setUseContextMenu(false)} position={position}>
+				<div>{ children }</div>
+			</Nav>
 		)
 
 		return Container ? createPortal(Menu, Container) : null

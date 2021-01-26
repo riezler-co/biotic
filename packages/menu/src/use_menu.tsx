@@ -1,36 +1,33 @@
 import React, { Children, useState, ReactElement, SyntheticEvent } from 'react'
-import OutsideClickHandler from 'react-outside-click-handler'
-import { useGetContainer, useOnEscape } from '@biotic-ui/std'
 import { createPortal } from 'react-dom'
+import { useGetContainer, useOnEscape, useOutsideClick, useCombinedRefs } from '@biotic-ui/std'
 import { usePopper } from 'react-popper'
 import { Placement } from '@popperjs/core'
 import { Menu } from './menu'
 
-type Config =
-	{ placement?: Placement
-	}
+type Config = {
+	placement?: Placement
+}
 
 let DefaultConfig: Config = {
 	placement: 'bottom' as Placement,
 }
 
-type ContainerProps =
-	{ children: JSX.Element
-	}
+type ContainerProps = {
+	children: JSX.Element
+}
 
-type UseMenu =
-	{ ref: (e: HTMLElement | null) => void 
-	;	onClick: (e: MouseEvent) => void
-	;	MenuContainer: React.FC<ContainerProps>
-	}
+type UseMenu = {
+	ref: (e: HTMLElement | null) => void ;
+	onClick: (e: MouseEvent) => void;
+	MenuContainer: React.FC<ContainerProps>;
+}
 
 export function useMenu(userConfig: Config = DefaultConfig): UseMenu {
 	let MENU_CONTAINER = useGetContainer('biotic-menu')
 	let [show, setShow] = useState(false)
 	let [referenceElement, setReferenceElement] = useState<HTMLElement | null>(null)
 	let config = { ...DefaultConfig, ...userConfig }
-
-	useOnEscape(() => setShow(false))
 
 	let MenuContainer = ({ children: menu }: ContainerProps) => {
 		let [popperElement, setPopperElement] = useState<HTMLElement | null>(null)
@@ -45,6 +42,11 @@ export function useMenu(userConfig: Config = DefaultConfig): UseMenu {
 				},
 			],
 		})
+
+		let close = () => setShow(false)
+		let outsideRef = useOutsideClick<HTMLElement>(close)
+		let mainRef = useCombinedRefs<HTMLElement | null>(outsideRef, setPopperElement)
+		useOnEscape(close)
 
 		if (!show) {
 			return null
@@ -64,24 +66,26 @@ export function useMenu(userConfig: Config = DefaultConfig): UseMenu {
 							return
 						}
 
-						setShow(false)
+						close()
 					}
 				})
 			}) 
 		})
 
 		let PopperMenu = (
-			<OutsideClickHandler onOutsideClick={() => setShow(false)}>
-				<div ref={setPopperElement} style={{ ...styles.popper, zIndex: 9999 }} {...attributes.popper}>
-					{ Menu }
-				</div>
-			</OutsideClickHandler>
+			<div ref={mainRef} style={{ ...styles.popper, zIndex: 9999 }} {...attributes.popper}>					
+				{ Menu }
+			</div>
 		)
 
 		return MENU_CONTAINER ? createPortal(PopperMenu, MENU_CONTAINER) : null
 	}
 
-	let onClick = () => {
+	let onClick = (e: MouseEvent) => {
+		// we stop propagation here otherwise
+		// useOutsideClick will regiser a click
+		// event and immediately close the menu.
+		e.stopPropagation()
 		setShow(true)
 	}
 
