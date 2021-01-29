@@ -17,14 +17,14 @@ function scrollLeft(elm: HTMLElement | null) {
   return elm.scrollLeft
 }
 
-type ScrollState =
-  { y: number
-  ; x: number
-  ; delta:
-      { y: number
-      ; x: number
-      }
+type ScrollState = {
+  y: number;
+  x: number;
+  delta: {
+    y: number;
+    x: number
   }
+}
 
 export function useScroll(fn: (s: ScrollState) => void, container: RefObject<HTMLElement> = { current: null }) {
   let elm = container.current

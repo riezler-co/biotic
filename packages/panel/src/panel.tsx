@@ -1,7 +1,7 @@
 import React from 'react'
 import { Children, useState, ReactElement } from 'react'
-
-import styled, { css } from 'styled-components'
+import { motion, AnimateSharedLayout, MotionProps } from 'framer-motion'
+import styled, { css, StyledProps } from 'styled-components'
 
 type PanelProps = {
 	side?: 'left' | 'right';
@@ -108,15 +108,37 @@ export let StackedPanels: React.FC<StackedPanelProps> = ({ children, onActivate,
 	let [closed, setClosed] = useState(true)
 
 	let _children = Children.map(children, (node, index) => {
-		let elm = (node as ReactElement<PanelProps & React.HTMLAttributes<HTMLElement>>)
-		return React.cloneElement(elm, {
-			width: `calc(100% - var(--baseline) * ${index})`,
-			style: {
+		let elm = (node as ReactElement<PanelProps & StyledProps<HTMLElement> & any>)
+
+		let variants = {
+			closed: {
+				transform: `translateX(0px)`,
 				zIndex: index,
 				top: 0,
 				position: 'absolute',
-				right: closed ? 0 : `calc(var(--baseline-5) * ${index * 4} * -1)`
 			},
+
+			open: {
+				transform: `translateX(${40 * index * 4}px)`,
+				zIndex: index,
+				top: 0,
+				position: 'absolute',
+			}
+		}
+
+		let spring = {
+			type: 'spring',
+			damping: 21,
+			stiffness: 130,
+		}
+
+		return React.cloneElement(elm, {
+			as: motion.div,
+			width: `calc(100% - var(--baseline) * ${index})`,
+			initial: 'closed',
+			animate: closed ? 'closed' : 'open',
+			variants: variants,
+			transition: spring,
 			stacked: true,
 			onClick: () => {
 				if (closed) {
@@ -146,7 +168,7 @@ export let StackedPanels: React.FC<StackedPanelProps> = ({ children, onActivate,
 				style={{
 					width: `calc(var(--baseline) * ${_children?.length})`,
 					zIndex: _children ? _children.length + 1 : 1
- 				}} />
+				}} />
 		</Stack>
 	)
 }

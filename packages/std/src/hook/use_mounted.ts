@@ -1,6 +1,6 @@
-import { useRef, useEffect, Ref } from 'react'
+import { useRef, useEffect, RefObject } from 'react'
 
-export function useMounted(): Ref<boolean> {
+export function useMounted(): RefObject<boolean> {
 	let mounted = useRef(true)
 
 	useEffect(() => {

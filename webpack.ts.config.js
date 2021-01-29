@@ -41,6 +41,11 @@ module.exports = function createConfig (webpackEnv) {
           commonjs2: 'recoil',
           amd: 'recoil'
         },
+        'rxjs': {
+          commonjs: 'rxjs',
+          commonjs2: 'rxjs',
+          amd: 'rxjs'
+        },
      },
     output: {
       globalObject: 'this',

@@ -8,8 +8,12 @@ type Handlers = {
 }
 
 type Timeout = ReturnType<typeof setTimeout>
+type Callback = (e: MouseEvent) => void;
 
-export function useClickHandler({ onClick, onDblClick }: Handlers, delay: number = 250) {
+export function useClickHandler(
+	{ onClick, onDblClick }: Handlers,
+	delay: number = 250
+): Callback {
     let timeoutID = useRef<null | Timeout>(null)
 
     let callback = useCallback(function (event: MouseEvent) {

@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 
-export function useMatchMedia(mediaQuery: string) {
+export function useMatchMedia(mediaQuery: string): boolean {
 
 	let initalMatch = useMemo(() => {
 		let mql = window.matchMedia(mediaQuery)
