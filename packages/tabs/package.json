@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/tabs",
-  "version": "0.3.14",
+  "version": "0.3.15",
   "description": "React Utils",
   "main": "lib/main.js",
   "scripts": {
@@ -24,13 +24,13 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
+    "@biotic-ui/boson": "^0.3.10",
     "@biotic-ui/leptons": "^0.3.9",
-    "@biotic-ui/std": "^0.3.3",
-    "@biotic-ui/boson": "^0.3.9",
-    "rxjs": "^6.6.3",
+    "@biotic-ui/std": "^0.3.4",
     "@types/styled-components": "^5.1.4",
     "lodash": "^4.17.20",
     "react-router-dom": "^5.2.0",
+    "rxjs": "^6.6.3",
     "styled-components": "^5.2.1",
     "typescript": "^4.1.2",
     "webpack": "^4.44.1",
@@ -38,13 +38,13 @@
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
+    "@biotic-ui/boson": "^0.3.9",
     "@biotic-ui/leptons": "^0.3.4",
     "@biotic-ui/std": "^0.3.0",
-    "@biotic-ui/boson": "^0.3.9",
-    "rxjs": "^6.6.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
+    "rxjs": "^6.6.3",
     "scheduler": "^0.20.1",
     "styled-components": "^5.2.1"
   },

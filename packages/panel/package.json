@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/panel",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "React Panel",
   "main": "lib/main.js",
   "scripts": {
@@ -25,20 +25,20 @@
   },
   "devDependencies": {
     "@biotic-ui/leptons": "^0.3.9",
-    "@biotic-ui/std": "^0.3.3",
+    "@biotic-ui/std": "^0.3.4",
     "@types/styled-components": "^5.1.4",
+    "framer-motion": "^3.2.2-rc.1",
     "typescript": "^4.1.2",
     "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-     "framer-motion": "^3.2.2-rc.1"
+    "webpack-cli": "^3.3.12"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
     "@biotic-ui/leptons": "^0.3.4",
     "@biotic-ui/std": "^0.3.0",
+    "framer-motion": "^3.2.2-rc.1",
     "react": "^17.0.1",
-    "styled-components": "^5.2.1",
-     "framer-motion": "^3.2.2-rc.1"
+    "styled-components": "^5.2.1"
   },
   "publishConfig": {
     "access": "public"

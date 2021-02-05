@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/dialog",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "React Dialog",
   "main": "lib/main.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/std": "^0.3.3",
+    "@biotic-ui/std": "^0.3.4",
     "@types/styled-components": "^5.1.4",
     "typescript": "^4.1.2",
     "webpack": "^4.44.1",
