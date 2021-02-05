@@ -25,6 +25,7 @@ export {
 	useRestoreScroll,
 	useOnTabClose,
 	useActiveState,
+	Scroll as ScrollState,
 } from './hook'
 
 

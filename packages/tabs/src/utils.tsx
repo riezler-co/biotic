@@ -1,6 +1,7 @@
-import { FunctionComponent
-		   , ComponentClass
-		 	 } from 'react'
+import {
+	FunctionComponent,
+	ComponentClass
+} from 'react'
 
 export type As = {
 	as?:  string
@@ -9,50 +10,50 @@ export type As = {
 		| undefined
 }
 
-export type TabItem =
-	{ closable: boolean
-	; id: string
-	; isStatic: boolean
-	; title?: string
-	; type: string
-	}
+export type TabItem = {
+	closable: boolean;
+	id: string;
+	isStatic: boolean;
+	title?: string;
+	type: string;
+}
 
-export type TabsState =
-	{ items: Array<TabItem>
-	; length: number
-	; ids: { [key:string]: string }
-	; staticItems: Array<TabItem>
-	}
+export type TabsState = {
+	items: Array<TabItem>;
+	length: number;
+	ids: { [key:string]: string };
+	staticItems: Array<TabItem>;
+}
 
 
-export type ActiveState =
-	{ index: number
-	; type: string
-	; id: string
-	}
+export type ActiveState = {
+	index: number;
+	type: string;
+	id: string;
+}
 
-export type TabsHistory =
-	{ items: Array<ActiveState>
-	; currentIndex: number
-	}
+export type TabsHistory = {
+	items: Array<ActiveState>;
+	currentIndex: number;
+}
 
-export type ScrollState =
-	{ top: number
-	; left: number
-	}
+export type ScrollState = {
+	top: number;
+	left: number;
+}
 
 export type TabState<T> = T
 
 export type TabItems = Array<TabItem>
 
 export function toTabObject(node: JSX.Element): TabItem {
-	let props =
-		{ closable: node.props.closable || false
-		, id: node.props.id
-		, isStatic: node.props.isStatic || true
-		, title: node.props.title
-		, type: node.props.type
-		}
+	let props = {
+		closable: node.props.closable || false,
+		id: node.props.id,
+		isStatic: node.props.isStatic || true,
+		title: node.props.title,
+		type: node.props.type,
+	}
 
 	return props
 }
@@ -78,9 +79,9 @@ export function isStatic(node: JSX.Element): boolean {
 }
 
 export function getNextIndex(
-		items: TabItems
-	, staticTabs: number
-	, active: ActiveState
+	items: TabItems,
+	staticTabs: number,
+	active: ActiveState
 ): number {
 
 	let itemIndex = active.index - staticTabs
@@ -104,38 +105,7 @@ let makeId = (): (() => number) => {
 	}
 }
 
-export type EventCallback = (id: string) => void; 
-
-type $Event =
-	{ subscribe: (fn: EventCallback) => () => void
-	; push: (id: string) => void
-	}
-
-export let Event = (): $Event => {
-	let getId = makeId()
-	let subscribers: Array<{ fn: EventCallback; id: number }> = []
-
-	let subscribe = (fn: EventCallback) => {
-		let id = getId()
-		subscribers.push({ fn, id })
-		return () => {
-			subscribers = subscribers.filter(s => s.id !== id)
-		}
-	}
-
-	let push = (payload: string) => {
-		subscribers.forEach(sub => {
-			sub.fn(payload)
-		})
-	}
-
-	return {
-			subscribe
-		, push
-	}
-}
-
-export let OnCloseTab: $Event = Event()
+export type EventCallback = (id?: string) => void; 
 
 export function last<T>(array: Array<T>): T | undefined {
 	return array[array.length - 1]

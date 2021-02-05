@@ -10,8 +10,8 @@ import {
 
 import { take } from 'rxjs/operators'
 
-type ChangeCallback<S> = (newState: S, prevState: S) => void
-type ChangeObservable<S> = (bs: BehaviorSubject<S>) => Observable<unknown>
+export type ChangeCallback<S> = (newState: S, prevState: S) => void
+export type ChangeObservable<S> = (bs: BehaviorSubject<S>) => Observable<unknown>
 
 function isChangeCallback<S>(
 	fn: ChangeCallback<S> | ChangeObservable<S>
@@ -25,11 +25,11 @@ function isChangeObservable<S>(
 	return fn.length === 1
 }
 
-type OnChange<S> =
+export type OnChange<S> =
 	| ChangeCallback<S>
 	| ChangeObservable<S>
 
-type BosonConfig<S> = {
+export type BosonConfig<S> = {
 	key: string;
 	persitent?: boolean;
 	onChange?: Array<OnChange<S>>;
@@ -37,7 +37,7 @@ type BosonConfig<S> = {
 	bufferSize?: number;
 }
 
-type Boson<T> = BosonConfig<T> & {
+export type Boson<T> = BosonConfig<T> & {
 	state: BehaviorSubject<T>,
 	history: ReplaySubject<T>,
 	unsubscribe: () => void,
@@ -87,19 +87,19 @@ export function boson<S>(config: BosonConfig<S>): Boson<S> {
 }
 
 
-interface CreateBoson<T, S> {
-	(...args: Array<T>): Boson<S>;
+export interface CreateBoson<T extends Array<any>, S> {
+	(...args: T): Boson<S>;
 	cache: Map<string, Boson<S>>
 }
 
-export function bosonFamily<T, S>(
-	createBoson: (...args: Array<T>) => BosonConfig<S>,
-	getKey: (...args: Array<T>) => string = (...args) => args.join(':'),
+export function bosonFamily<T extends Array<any>, S>(
+	createBoson: (...args: T) => BosonConfig<S>,
+	getKey: (...args: T) => string = (...args) => args.join(':'),
 ): CreateBoson<T, S> {
 
 	let cache = new Map<string, Boson<S>>()
 
-	let fn = (...args: Array<T>) => {
+	let fn = (...args: T) => {
 		let key = getKey(...args)
 
 		if (cache.has(key)) {

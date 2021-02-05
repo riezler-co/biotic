@@ -16,7 +16,7 @@ import {
 	StyledTabContent
 } from './styled'
 
-import { useRecoilState } from 'recoil'
+import { useSetBoson } from '@biotic-ui/boson'
 
 import {
 	makeTabsState,
@@ -32,7 +32,6 @@ import {
 import {
 	toTabObject,
 	isStatic,
-	OnCloseTab,
 	As
 } from './utils'
 
@@ -48,7 +47,7 @@ type TabProps
 	& As
 	& {
 		children: JSX.Element | Array<JSX.Element>;
-		group?: string
+		group?: string;
  	} 
 
 export function Tabs({ children, group = 'default', as = 'div', ...props }: TabProps) {
@@ -70,29 +69,27 @@ type TabBarProps
 export function TabBar({ children, as = 'ul', ...props }: TabBarProps) {
 	let group = useContext(TabsCtx)
 	let tabsState = makeTabsState(group)
-	let [, setTabs] = useRecoilState(tabsState)
+	let setTabs = useSetBoson(tabsState)
 	let { active, ...history } = useTabHistory(group)
 	let closeTab = useCloseTab(group)
 
 	let _children = useMemo(() => {
 		return Children.map(children, (node, index) => {
 			let { isStatic = true } = node.props
+			return React.cloneElement(node, {
+				onClick: () => {
+					history.activate({
+						index,
+						type: node.props.type,
+						id: node.props.id
+					})
+				},
 
-			return React.cloneElement(node,
-				{ onClick: () => {
-						history.activate(
-							{ index
-							, type: node.props.type
-							, id: node.props.id
-							}
-						)
-					}
-				
-				, onClose: () => {
-						closeTab.close(node.props.id)
-					}
+				onClose: () => {
+					closeTab.close(node.props.id)
+				},
 
-				, isActive: active && active.id === node.props.id
+				isActive: active && active.id === node.props.id
 			})
 		})
 	}, [children, active])
@@ -167,15 +164,9 @@ export function TabPanel({ children, scrollGroup, as = 'div', ...props }: TabPan
 	}, [active, scrollGroup])
 
 	let child = React.cloneElement(_child, { id })
-	let [, setState] = useTabState(id, null)
 	let tabId = `tab_panel:${id}`
-	let [, setScroll, cleanScroll] = useScrollState(tabId)
+	let [, setScroll] = useScrollState(tabId)
 	let ref = useRestoreScroll(tabId)
-
-	useOnTabClose(id, () => {
-		cleanScroll()
-		setState(null)
-	})
 
 	return (
 		<StyledTabContent as={as} id={tabId} onScroll={setScroll} ref={ref} {...props}>

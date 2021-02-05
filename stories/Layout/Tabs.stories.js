@@ -1,73 +1,64 @@
 import React from 'react'
 import styled from 'styled-components'
-import { SidebarLayout
-			 , Aside
-			 , Main
-			 } from '@package/layout/main'
+import {
+	SidebarLayout,
+	Aside,
+	Main,
+} from '@package/layout/main'
 
 import { useForm } from '@package/std/main'
 
-import { Tabs
-			 , TabBar
-			 , TabContent
-			 , Tab
-			 , useTabs
-			 , useTabHistory
-			 , TabPanel
-			 , useTabState
-			 , useDefaultTab
-			 , useScrollState
-			 , useRestoreScroll
-			 , useOnTabClose
-			 , useGroup
-			 } from '@package/tabs/main'
+import {
+	Tabs,
+	TabBar,
+	TabContent,
+	Tab,
+	useTabs,
+	useTabHistory,
+	TabPanel,
+	useTabState,
+	useDefaultTab,
+	useScrollState,
+	useRestoreScroll,
+	useOnTabClose,
+	useGroup,
+	ScrollState,
+} from '@package/tabs/main'
 
 import { Button } from '@package/button/main'
 
-import { RecoilRoot } from 'recoil'
 
 export default {
 	title: 'Layout/Tabs',
 	component: Tabs,
-	decorators: 
-		[ (Story) => {
-				return (
-					<RecoilRoot>
-						<Story />
-					</RecoilRoot>
-				)
-			}
-		],
 }
 
 export let Default = () => {
 	let [open, setOpen] = React.useState(true)
 	let tabs = useTabs()
 	let openTab = useTabHistory()
-	useDefaultTab(
-		{ index: 0
-		, type: 'dummy'
-		, id: 'one'
-		}
-	)
+	
+	useDefaultTab({
+		index: 0,
+		type: 'dummy',
+		id: 'one',
+	})
 
 	let push = () => {
 		let fuu = Math.random()
-		openTab.push(
-			{ id: fuu
-			, title: fuu
-			, type: 'random'
-			}
-		)
+		openTab.push({
+			id: fuu,
+			title: fuu,
+			type: 'random',
+		})
 	}
 
 	let openStatic = (id) => () => {
-		openTab.push(
-			{ id
-			, title: Math.random()
-			, type: 'static'
-			}
-		)
+		openTab.push({
+			id,
+			title: Math.random(),
+			type: 'static',
+		})
 	}
 
 	return (
@@ -137,9 +128,7 @@ let Random = ({ id }) => {
 		setState({ count: state.count + 1 })
 	}
 
-	useOnTabClose(id, () => {
-		cleanNested()
-	})
+	useOnTabClose(id, cleanNested)
 
 	return (
 		<Content>
@@ -181,9 +170,7 @@ let StaticId = ({ id }) => {
 		setState({ count: state.count + 1 })
 	}
 
-	useOnTabClose(_id, () => {
-		cleanNested()
-	})
+	useOnTabClose(id, cleanNested)
 
 	return (
 		<Content>
@@ -207,39 +194,33 @@ let Content = styled.div`
 	margin: 0 auto;
 `
 
-
-
 export let NestedTabs = () => {
 	let [open, setOpen] = React.useState(true)
 	let group = 'outer'
 	let tabs = useTabs(group)
 	let openTab = useTabHistory(group)
 	
-	useDefaultTab(
-		{ index: 0
-		, type: 'overview'
-		, id: 'one'
-		}
-		, group
-	)
+	useDefaultTab({
+		index: 0,
+		type: 'overview',
+		id: 'one'
+	}, group)
 
 	let push = () => {
 		let fuu = Math.random()
-		openTab.push(
-			{ id: fuu
-			, title: fuu
-			, type: 'random'
-			}
-		)
+		openTab.push({
+			id: fuu,
+			title: fuu,
+			type: 'random'
+		})
 	}
 
 	let openStatic = (id) => () => {
-		openTab.push(
-			{ id
-			, title: Math.random()
-			, type: 'static'
-			}
-		)
+		openTab.push({
+			id,
+			title: Math.random(),
+			type: 'static'
+		})
 	}
 
 	return (
@@ -308,31 +289,27 @@ function NestedContent({ id }) {
 	let tabs = useTabs(group)
 	let openTab = useTabHistory(group)
 	
-	useDefaultTab(
-		{ index: 0
-		, type: 'dummy'
-		, id: 'one'
-		}
-		, group
-	)
+	useDefaultTab({
+		index: 0,
+		type: 'dummy',
+		id: 'one'
+	}, group)
 
 	let push = () => {
 		let fuu = Math.random()
-		openTab.push(
-			{ id: fuu
-			, title: fuu
-			, type: 'random'
-			}
-		)
+		openTab.push({
+			id: fuu,
+			title: fuu,
+			type: 'random'
+		})
 	}
 
 	let openStatic = (id) => () => {
-		openTab.push(
-			{ id
-			, title: Math.random()
-			, type: 'static'
-			}
-		)
+		openTab.push({
+			id,
+			title: Math.random(),
+			type: 'static'
+		})
 	}
 
 	return (
