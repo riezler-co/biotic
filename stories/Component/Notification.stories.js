@@ -1,5 +1,12 @@
 import React from 'react'
-import { Notifications, useNotification, notification, Notification, Close } from '@package/notification/main'
+import {
+	Notifications,
+	useNotification,
+	useNotificationStore,
+	Notification,
+	Close,
+	open,
+} from '@package/notification/main'
 import { Button } from '@package/button/main'
 
 export default {
@@ -8,7 +15,6 @@ export default {
 }
 
 export let Default = () => {
-
 	let [count, setCount] = React.useState(0)
 
 	let first = useNotification(({ onClose }) => {
@@ -27,17 +33,6 @@ export let Default = () => {
 	let third = useNotification(({ onClose }) => {
 		return <Notification>fuuu barrr baz bla bla bla <Close onClick={onClose}/></Notification>
 	})
-
-	React.useEffect(() => {
-		setTimeout(() => {
-
-			let id = notification.open(({ onClose }) => {
-				return <Notification>Open programmatically <Close onClick={onClose}/></Notification>
-			})
-
-		}, 2000)
-	}, [])
-
 
 	function openSecond() {
 		second.open()

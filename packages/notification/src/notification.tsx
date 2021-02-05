@@ -1,19 +1,20 @@
 import React from 'react'
-import { createElement
-			 , useRef
-			 , useCallback
-			 , useEffect
-			 , cloneElement
-			 , useState
-			 , useLayoutEffect
-			 , forwardRef
-			 , MouseEvent
-			 } from 'react'
+import {
+	createElement,
+	useRef,
+	useCallback,
+	useEffect,
+	cloneElement,
+	useState,
+	useLayoutEffect,
+	forwardRef,
+	MouseEvent,
+} from 'react'
 import { createPortal } from 'react-dom'
-import create from 'zustand'
 import { useGetContainer, useOutsideClick } from '@biotic-ui/std'
 import styled from 'styled-components'
 import { motion, AnimatePresence } from 'framer-motion'
+import { boson, useBoson, useSetBoson, SetterOrUpdater } from '@biotic-ui/boson'
 
 let getId: (() => number) = (() => {
 	let currentId = 0
@@ -31,70 +32,46 @@ type Notification$ = {
 	Component: NotificationElement;
 }
 
-type State = {
+type Store = {
 	notifications: Array<Notification$>;
 	hover: Promise<any>;
-	setHover: (p: Promise<any>) => void;
-	open: (n: Notification$) => void;
-	close: (id: number) => void;
-	closeImmediate: (id: number) => void;
 }
 
-let useStore = create<State>((set, get) => ({
-  notifications: [],
-  hover: Promise.resolve(),
-  setHover: (hover) => set({ hover }), 
+let store = boson<Store>({
+	key: 'notifications',
+	defaultValue: {
+		notifications: [],
+		hover: Promise.resolve(),
+	}
+})
 
-  open: (notification: Notification$) => set(state => {
+export let open = (notification: Notification$) => (store: Store): Store => {
+	let index = store.notifications.findIndex(n => n.id === notification.id)
+	if (index > -1) {
+		return store
+	}
 
-  	let index = state.notifications.findIndex(n => n.id === notification.id)
-  	if (index > -1) {
-  		return state
-  	}
-
-  	let notifications = [notification, ...state.notifications].slice(0, 3)
-  	return { notifications }
-  }),
-
-  close: async (id: number) => {
-  	await get().hover
-  	return set(state => {
-	  	let notifications = state.notifications.filter(x => x.id !== id)
-	  	return { notifications }
-	  })
-  },
-
-  closeImmediate: (id: number) => set(state => {
-  	console.log({ id })
-  	let notifications = state.notifications.filter(x => x.id !== id)
-  	return { notifications }
-  })
-
-}))
-
-export let useNotificationStore = useStore
-
-function close(id: number) {
-	let state = useStore.getState()
-	state.close(id)
+	let notifications = [notification, ...store.notifications].slice(0, 3)
+	return { ...store, notifications }
 }
 
-function closeImmediate(id: number) {
-	let state = useStore.getState()
-	state.closeImmediate(id)
+export let close = (id: number) => async (store: Store): Promise<Store> => {
+	await store.hover
+	let notifications = store.notifications.filter(x => x.id !== id)
+	return { ...store, notifications }
 }
 
-function open(Component: NotificationElement) {
-	let id = getId()
-	let state = useStore.getState()
-	state.open({ id, Component })
-	return id
+export let closeImmediate = (id: number) => (store: Store): Store => {
+	let notifications = store.notifications.filter(x => x.id !== id)
+	return { ...store, notifications }
 }
 
-export let notification = {
-	open,
-	close,
-	closeImmediate
+let setStoreHover = (hover: Promise<any>) => (store: Store): Store => {
+	return { ...store, hover }
+}
+
+export function useNotificationStore(): [Store, ((nextState: SetterOrUpdater<Store>) => void)] {
+	return useBoson(store)
 }
 
 type Resolve = () => void
@@ -102,14 +79,15 @@ type Resolve = () => void
 export function useNotification(Component: NotificationElement) {
 	let id = useRef<number>(getId())
 	let component = useRef<NotificationElement>(Component)
-	let { open, close, closeImmediate } = useStore(state => state)
+	let setState = useSetBoson(store)
 
 	let _open = useCallback(() => {
-		open({ id: id.current , Component: component.current })
-	}, [])
+		let notification = { id: id.current , Component: component.current } 
+		setState(open(notification))
+	}, [setState])
 
-	let _close = useCallback(() => close(id.current), [])
-	let _closeImmediate = useCallback(() => closeImmediate(id.current), [])
+	let _close = useCallback(() => setState(close(id.current)), [setState])
+	let _closeImmediate = useCallback(() => setState(closeImmediate(id.current)), [setState])
 
 	useEffect(() => {
 		component.current = Component
@@ -121,7 +99,7 @@ export function useNotification(Component: NotificationElement) {
 export let Notifications: React.FC<{}> = () => {
 
 	let Container = useGetContainer('biotic-notifications')
-	let { notifications, ...state } = useStore(state => state)
+	let [state, setStore] = useBoson(store)
 	let [hover, setHover] = useState(false)
 	let [nodes, setNodex] = useState([])
 	let resolver = useRef<Resolve>(() => {})
@@ -132,7 +110,7 @@ export let Notifications: React.FC<{}> = () => {
 			resolver.current = (resolve as Resolve)
 		})
 
-		state.setHover(promise)
+		setStore(setStoreHover(promise))
 	}
 
 	function onMouseLeave() {
@@ -150,13 +128,13 @@ export let Notifications: React.FC<{}> = () => {
 						onMouseLeave={onMouseLeave}>
 			<AnimatePresence initial={false}>
 				{ 
-					notifications.map(({ id, Component }, index) => {
+					state.notifications.map(({ id, Component }, index) => {
 						return (
 							<ListItem key={id} 
 											  index={index}
 											  open={hover}
-											  lastIndex={notifications.length - 1}>
-								{ createElement(Component, { onClose: () => state.closeImmediate(id) }) }
+											  lastIndex={state.notifications.length - 1}>
+								{ createElement(Component, { onClose: () => setStore(closeImmediate(id)) }) }
 							</ListItem>
 						)
 					}) 
@@ -184,12 +162,12 @@ let StyledNotification = styled(motion.li)<{ positionTransition: boolean }>`
 	margin-top: var(--notification-spacing, calc(var(--baseline) * 0.38));
 `
 
-type ListItemProps =
-	{ index: number
-	; children: JSX.Element | Array<JSX.Element>
-	; open: boolean
-	; lastIndex: number
-	}
+type ListItemProps = {
+	index: number;
+	children: JSX.Element | Array<JSX.Element>;
+	open: boolean;
+	lastIndex: number
+}
 
 let ListItem: React.FC<ListItemProps> = ({ index, children, open , lastIndex }) => {
 	return (
@@ -232,9 +210,9 @@ let Button = styled.button`
 	}
 `
 
-type CloseProps =
-	{ onClick?: (e: MouseEvent) => void
-	}
+type CloseProps = {
+	onClick?: (e: MouseEvent) => void;
+}
 
 export function Close({ onClick }: CloseProps) {
 	return (
