@@ -1,5 +1,5 @@
 
-
+/* hooks */
 export { useCombinedRefs } from './hook/use_combined_refs'
 export { useLongPress } from './hook/use_long_press'
 export { useOnEscape } from './hook/use_on_escape'
@@ -20,3 +20,7 @@ export { useQueryParams } from './hook/use_query_params'
 export { useMounted } from './hook/use_mounted'
 export { useOutsideClick } from './hook/use_outside_click'
 export { useClickHandler } from './hook/use_click_handler'
+
+
+/* is */
+export { isPromise } from './is/is_promise'

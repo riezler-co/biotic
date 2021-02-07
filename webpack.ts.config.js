@@ -46,6 +46,11 @@ module.exports = function createConfig (webpackEnv) {
           commonjs2: 'rxjs',
           amd: 'rxjs'
         },
+        '@biotic-ui/boson': {
+          commonjs: '@biotic-ui/boson',
+          commonjs2: '@biotic-ui/boson',
+          amd: '@biotic-ui/boson'
+        },
      },
     output: {
       globalObject: 'this',
