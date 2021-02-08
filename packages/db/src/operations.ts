@@ -1,5 +1,5 @@
 
-interface Item {
+export interface Item {
 	id: string;
 }
 
@@ -27,7 +27,7 @@ export function getItem<T>(
 	db: IDBDatabase,
 	tableName: string,
 	key: string
-): Promise<T> {
+): Promise<T | null> {
 	return new Promise((resolve, reject) => {					
 		let transaction = db.transaction([tableName], 'readwrite')
 	 	let objectStore = transaction.objectStore(tableName)
@@ -135,7 +135,7 @@ export function getAllItems$<T>(
 	tableName: string,
 	{ query = null, indexName = 'id' }: Query,
 	cb: (entry: T) => void,
-) {
+): Promise<void> {
 	return new Promise((resolve, reject) => {
 		let transaction = db.transaction([tableName], 'readwrite')
 	 	let objectStore = transaction.objectStore(tableName)
@@ -152,13 +152,19 @@ export function getAllItems$<T>(
 			if(cursor) {
 				cb(cursor.value as T)
 				cursor.continue()
+			} else {
+				resolve()
 			}
 		})
 	})
 }
 
-export function clearStore(transaction: IDBTransaction, store: string): Promise<void> {
+export function clearStore(db: IDBDatabase | IDBTransaction, store: string): Promise<void> {
 	return new Promise((resolve, reject) => {
+		let transaction = db instanceof IDBDatabase
+			? db.transaction([store], 'readwrite')
+			: db
+
 		let objectStore = transaction.objectStore(store)
 		let objectStoreRequest = objectStore.clear()
 

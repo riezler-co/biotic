@@ -2,7 +2,7 @@
 import { Migrations, Migration } from './migrations'
 import { getAllItems, updateItem } from './operations'
 
-type Config = {
+export type Config = {
 	version: number;
 	name: string,
 	indicies: Array<string>,
@@ -13,14 +13,14 @@ type Config = {
 	}
 }
 
-type Configs = Map<string, Config>
+export type Configs = Map<string, Config>
 
-type Options = {
+export type Options = {
 	db: string;
 	version: number;
 }
 
-function open(
+export function open(
 	configs: Configs,
 	options: Options, 
 ): Promise<IDBDatabase> {
