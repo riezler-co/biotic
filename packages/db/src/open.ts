@@ -5,12 +5,18 @@ import { getAllItems, updateItem } from './operations'
 export type Config = {
 	version: number;
 	name: string,
-	indicies: Array<string>,
-	migrations: Array<Migration>,
-	primary: string,
-	createIndex: {
+	indicies?: Array<string>,
+	migrations?: Array<Migration>,
+	primary?: string,
+	createIndex?: {
 		[index: string]: (data: unknown) => string;
-	}
+	},
+	
+	onGet?: (data: unknown) => any;
+	onInsert?: (data: unknown) => any;
+	onUpdate?: (data: unknown) => any;
+	onDelete?: (data: unknown) => any;
+	onWrite?: (data: unknown) => any;
 }
 
 export type Configs = Map<string, Config>
@@ -76,17 +82,17 @@ export function open(
 
 				let tableExist = db.objectStoreNames.contains(table)
 
-				let indicies = option
-					.indicies
-					.concat(createIndexToString(option.createIndex))
+				let indicies = !option.indicies
+					? []
+					: option.indicies.concat(createIndexToString(option.createIndex))
 
 				if (!tableExist) {
 					console.log('Create table', table)
 					let objectStore = db.createObjectStore(table, {
-						keyPath: option.primary
+						keyPath: option.primary ?? 'id'
 					});
 
-					indicies.forEach(index => {
+					indicies.concat(['id']).forEach(index => {
 						objectStore.createIndex(index, index, { unique: false })
 					})
 				} else {
@@ -103,7 +109,9 @@ export function open(
 						})
 
 					indicies.forEach(index => {
-						objectStore.createIndex(index, index, { unique: false })
+						if (!objectStore.indexNames.contains(index)) {
+							objectStore.createIndex(index, index, { unique: false })
+						}
 					})
 				}
 				
@@ -118,6 +126,7 @@ export function open(
 			await lock
 
 			for(let [table, option] of configs.entries()) {
+				
 				let migration = MIGRATIONS[table]
 
 				let version = migration?.version ?? 1
@@ -127,23 +136,25 @@ export function open(
 						MIGRATIONS[table] = {
 							version: option.version,
 							indicies: option
-								.indicies
-								.concat(createIndexToString(option.createIndex)),
+								?.indicies
+								?.concat(createIndexToString(option.createIndex)) ?? [],
 						}
 					}
 
 					continue
 				}
 
+				console.log(version < option.version, version, option.version)
+
 			  	if (version < option.version) {
 			  		console.log('Up Migration: ', table)
 			  		console.log({ option })
 
 			  		let start = option
-			  			.migrations
-			  			.findIndex(migration => migration.version > version)
+			  			?.migrations
+			  			?.findIndex(migration => migration.version > version)
 
-			  		let applyMigrations = start >= 0 ? option.migrations.slice(start) : []
+			  		let applyMigrations = start && start >= 0 ? option?.migrations?.slice(start) ?? [] : []
 
 			  		let items = await getAllItems(db, table, {})
 
@@ -156,7 +167,7 @@ export function open(
 			  		await Promise.all(sink)
 			  		MIGRATIONS[table] = {
 			  			version: option.version,
-			  			indicies: option.indicies.concat(createIndexToString(option.createIndex)),
+			  			indicies: option?.indicies?.concat(createIndexToString(option.createIndex)) ?? [],
 			  		}
 			  		continue
 			  	}
@@ -167,7 +178,12 @@ export function open(
 	})
 }
 
-function createIndexToString(obj: Object) {
+function createIndexToString(obj?: Object) {
+
+	if (!obj) {
+		return []
+	}
+
 	return Object
 		.entries(obj)
 		.map(kv => `idx_${kv[0]}`)

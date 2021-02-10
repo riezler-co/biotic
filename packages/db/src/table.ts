@@ -12,75 +12,91 @@ import {
 	clearStore,
 } from './operations';
 
-enum Changes {
+import {
+	Hooks,
+	On,
+	HookType,
+	runIndexHook,
+} from './hooks'
+
+export enum Changes {
 	Update,
 	Insert,
 	Delete,
 }
 
-type UpdateEvent<T> = {
+export type UpdateEvent<T> = {
 	type: typeof Changes.Update,
+	id: string,
 	data: {
 		oldValue: T | null,
 		newValue: T,
 	}
 }
 
-type InsertEvent<T> = {
+export type InsertEvent<T> = {
 	type: typeof Changes.Insert,
+	id: string,
 	data: {
 		oldValue: undefined,
 		newValue: T,
 	}
 }
 
-type DeleteEvent<T> = {
+export type DeleteEvent<T> = {
 	type: typeof Changes.Delete,
+	id: string,
 	data: {
 		oldValue: T,
 		newValue: undefined,
 	}
 }
 
-type ChangeEvent<T> =
+export type ChangeEvent<T> =
 	| UpdateEvent<T>
 	| InsertEvent<T>
 	| DeleteEvent<T>
 
-type SetterOrUpater<T> =
+export type SetterOrUpater<T> =
 	| T
 	| ((value: T | null) => T) 
 
 
-type GetAllOption = {
+export type GetAllOption = {
 	index: string
 }
 
 export class Table<T extends Item> {
 
 	private change$ = new Subject<ChangeEvent<T>>()
-	private db: Promise<IDBDatabase>
 
 	tableConfigs: Configs
 	dbConfig: Options
 	config: Config
+	hooks: Hooks
 
 	constructor(
 		table: string,
 		tableConfigs: Configs,
 		dbConfig: Options,
+		hooks: Hooks,
 	) {
 		this.tableConfigs = tableConfigs
 		this.dbConfig = dbConfig
 		this.config = tableConfigs.get(table)!
-		this.db = open(tableConfigs, dbConfig)
+		this.hooks = hooks
 	}
 
 	get(id: string) {
 		return new Observable<T | null>(subscriber => {
-			this.db.then(async db => {
+			open(this.tableConfigs, this.dbConfig).then(async db => {
 				let currentItem = await getItem<T>(db, this.config.name, id)
-				subscriber.next(currentItem)
+
+				let data = this.hooks
+					.filter(hook => hook.on.includes(On.Get))
+					.reduce((acc, hook) => hook.fn(acc) ?? acc, currentItem)
+
+				subscriber.next(data)
 				subscriber.complete()
 			})
 			.catch(error => subscriber.error(error))
@@ -92,10 +108,13 @@ export class Table<T extends Item> {
 		let query = key ?? null
 
 		return new Observable<T | null>(subscriber => {
-			this.db.then(async db => {
+			open(this.tableConfigs, this.dbConfig).then(async db => {
 				let options = { query, indexName }
+				let hooks = this.hooks.filter(hook => hook.on.includes(On.Get))
+				
 				await getAllItems$<T>(db, this.config.name, options, currentItem => {
-					subscriber.next(currentItem)
+					let data = hooks.reduce((acc, hook) => hook.fn(acc) ?? acc, currentItem)
+					subscriber.next(data)
 				})
 				subscriber.complete()
 			})
@@ -105,14 +124,24 @@ export class Table<T extends Item> {
 
 	insert(value: T) {
 		return new Observable<T>(subscriber => {
-			this.db.then(async db => {
+			open(this.tableConfigs, this.dbConfig).then(async db => {
+				let data = this.hooks
+					.filter(hook => hook.on.includes(On.Insert))
+					.reduce((acc, hook) => {
+						if (hook.type === HookType.Index) {
+							return runIndexHook(acc, hook)
+						} else {
+							return hook.fn(acc) ?? acc
+						}
+					}, value)
 
-				await insertItem(db, this.config.name, value)
+				await insertItem(db, this.config.name, data)
 				subscriber.next(value)
 				subscriber.complete()
 
 				this.change$.next({
 					type: Changes.Insert,
+					id: data.id,
 					data: {
 						oldValue: undefined,
 						newValue: value,
@@ -125,19 +154,31 @@ export class Table<T extends Item> {
 
 	update(id: string, updater: SetterOrUpater<T>) {
 		return new Observable<T>(subscriber => {
-			this.db.then(async db => {
+			open(this.tableConfigs, this.dbConfig).then(async db => {
 				let currentItem = await getItem<T>(db, this.config.name, id)
 				let nextValue = updater instanceof Function
 					? updater(currentItem)
 					: { ...currentItem, ...updater }
 
-				await updateItem(db, this.config.name, nextValue)
+
+				let data = this.hooks
+					.filter(hook => hook.on.includes(On.Update))
+					.reduce((acc, hook) => {
+						if (hook.type === HookType.Index) {
+							return runIndexHook(acc, hook)
+						} else {
+							return hook.fn(acc) ?? acc ?? acc
+						}
+					}, nextValue)
+
+				await updateItem(db, this.config.name, data)
 
 				subscriber.next(nextValue)
 				subscriber.complete()
 
 				this.change$.next({
 					type: Changes.Update,
+					id: nextValue.id,
 					data: {
 						oldValue: currentItem,
 						newValue: nextValue,
@@ -150,22 +191,35 @@ export class Table<T extends Item> {
 
 	updateAll(updater: SetterOrUpater<T>) {
 		return new Observable(subscriber => {
-			this.db.then(db => {
+			open(this.tableConfigs, this.dbConfig).then(db => {
+
+				let hooks = this.hooks
+					.filter(hook => hook.on.includes(On.Update))
+
 				let newItems = this.getAll().pipe(
 					mergeMap(async currentItem => {
 						let newValue = updater instanceof Function
 							? updater(currentItem)
 							: { ...currentItem, ...updater }
 
-						await updateItem(db, this.config.name, newValue)
+						let data = hooks.reduce((acc, hook) => {
+							if (hook.type === HookType.Index) {
+								return runIndexHook(acc, hook)
+							} else {
+								return hook.fn(acc) ?? acc
+							}
+						}, newValue)
 
-						return [currentItem!, newValue]
+						await updateItem(db, this.config.name, data)
+
+						return [currentItem!, data]
 					}),
 				)
 
 				let next = ([oldValue, newValue]: T[]) => {
 					this.change$.next({
 						type: Changes.Update,
+						id: oldValue.id,
 						data: { oldValue, newValue }
 					})
 				}
@@ -182,15 +236,20 @@ export class Table<T extends Item> {
 
 	delete(id: string) {
 		return new Observable<T>(subscriber => {
-			this.db.then(async db => {
+			open(this.tableConfigs, this.dbConfig).then(async db => {
 				let oldValue = await getItem<T>(db, this.config.name, id)
 				await deleteItem(db, this.config.name, id)
 
 				subscriber.next(oldValue!)
 				subscriber.complete()
 
+				this.hooks
+					.filter(hook => hook.on.includes(On.Delete))
+					.reduce((acc, hook) => hook.fn(acc) ?? acc, oldValue)
+
 				this.change$.next({
 					type: Changes.Delete,
+					id: oldValue!.id,
 					data: {
 						oldValue: oldValue!,
 						newValue: undefined,
@@ -203,17 +262,23 @@ export class Table<T extends Item> {
 
 	deleteAll() {
 		return new Observable(subscriber => {
-			this.db.then(async db => {
+			open(this.tableConfigs, this.dbConfig).then(async db => {
+
+				let hooks = this.hooks
+					.filter(hook => hook.on.includes(On.Delete))
 
 				let next = (item: T | null) => {
 					subscriber.next(item!)
 					this.change$.next({
 						type: Changes.Delete,
+						id: item!.id,
 						data: {
 							oldValue: item!,
 							newValue: undefined,
 						}
 					})
+
+					hooks.reduce((acc, hook) => hook.fn(acc) ?? acc, item)
 				}
 
 				this.getAll().subscribe({
