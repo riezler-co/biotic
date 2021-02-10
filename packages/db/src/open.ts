@@ -1,16 +1,16 @@
 
 import { Migrations, Migration } from './migrations'
-import { getAllItems, updateItem } from './operations'
+import { getAllItems$, updateItem } from './operations'
 
 export type Config = {
 	version: number;
-	name: string,
-	indicies?: Array<string>,
-	migrations?: Array<Migration>,
-	primary?: string,
+	name: string;
+	indicies?: Array<string>;
+	migrations?: Array<Migration>;
+	primary?: string;
 	createIndex?: {
 		[index: string]: (data: unknown) => string;
-	},
+	};
 	
 	onGet?: (data: unknown) => any;
 	onInsert?: (data: unknown) => any;
@@ -32,15 +32,11 @@ export function open(
 ): Promise<IDBDatabase> {
 	return new Promise(async (resolve, reject) => {
 		let MIGRATIONS = Migrations.get()
-		let DBOpenRequest = indexedDB.open(options.db, options.version);
+		let DBOpenRequest = indexedDB.open(options.db, options.version)
 
 		DBOpenRequest.onerror = function(event) {
-		  reject({
-		  	type: 'open',
-		  	message: `open.error(${options.db}, ${options.version})`,
-		  	error: DBOpenRequest.error,
-		  })
-		};
+			reject(event)
+		}
 
 		DBOpenRequest.onsuccess = function(event) {
 			resolve(DBOpenRequest.result)
@@ -51,7 +47,7 @@ export function open(
 			let trx = DBOpenRequest.transaction
 
 			if (trx === null) {
-				throw new Error('IDDB upgrade error, can not open transaction');
+				throw new Error('IDDB upgrade error, can not open transaction')
 			}
 
 			let lock: Promise<unknown> = (() => {
@@ -67,15 +63,11 @@ export function open(
 			})()
 
 			trx.onerror = function(event) {
-				console.log('transaction error', event)
+				reject(event)
 			}
 
 			db.onerror = function(event) {
-				reject({
-					type: 'onupgradeneeded',
-					message: `error loading database ${options.db} - v${options.version}`,
-					error: event,
-				})
+				reject(event)
 			}
 
 			for(let [table, option] of configs.entries()) {
@@ -90,7 +82,7 @@ export function open(
 					console.log('Create table', table)
 					let objectStore = db.createObjectStore(table, {
 						keyPath: option.primary ?? 'id'
-					});
+					})
 
 					indicies.concat(['id']).forEach(index => {
 						objectStore.createIndex(index, index, { unique: false })
@@ -144,27 +136,25 @@ export function open(
 					continue
 				}
 
-				console.log(version < option.version, version, option.version)
-
 			  	if (version < option.version) {
-			  		console.log('Up Migration: ', table)
-			  		console.log({ option })
+			  		console.log('Run Migration: ', table)
 
-			  		let start = option
-			  			?.migrations
-			  			?.findIndex(migration => migration.version > version)
+			  		let migrations = option.migrations ?? []
+
+			  		migrations.sort((a, b) => {
+			  			return a.version - b.version
+			  		})
+			  		
+			  		let start = migrations
+			  			.findIndex(migration => migration.version > version)
 
 			  		let applyMigrations = start && start >= 0 ? option?.migrations?.slice(start) ?? [] : []
 
-			  		let items = await getAllItems(db, table, {})
+			  		await getAllItems$(db, table, {}, async item => {
+			  			let newItem = applyMigrations.reduce((oldItem, { migrate }) => migrate(oldItem), item)
+			  			await updateItem(db, table, newItem as any)
+			  		})
 
-			  		let sink = items
-			  			.map(item =>
-			  				applyMigrations.reduce((oldItem, { migrate }) => migrate(oldItem), item)
-			  			)
-			  			.map(newItem => updateItem(db, table, newItem as any))
-
-			  		await Promise.all(sink)
 			  		MIGRATIONS[table] = {
 			  			version: option.version,
 			  			indicies: option?.indicies?.concat(createIndexToString(option.createIndex)) ?? [],

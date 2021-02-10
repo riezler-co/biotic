@@ -12,15 +12,33 @@ export default {
 	argTypes: {},
 }
 
-let db = new Db('test', { version: 1})
+let db = new Db('test', { version: 3 })
 
 let todos = db.tableCreate({
 	name: 'todos',
-	version: 1,
+	version: 3,
 	indicies: ['done', 'created_at'],
 
+	migrations: [{
+		version: 2,
+		migrate: (entry) => {
+			return {
+				...entry,
+				test: 'fuu'
+			}
+		} 
+	}, {
+		version: 3,
+		migrate: (entry) => {
+			return {
+				...entry,
+				version: 3,
+			}
+		}
+	}],
+
 	onGet(item) {
-		console.log('GET: ', item)
+		// console.log('GET: ', item)
 	},
 
 	onInsert(item) {

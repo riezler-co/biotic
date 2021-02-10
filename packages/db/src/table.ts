@@ -1,5 +1,5 @@
 import { Subject, Observable } from 'rxjs'
-import { mergeMap } from 'rxjs/operators'
+import { mergeMap, filter } from 'rxjs/operators'
 
 import { open, Configs, Options, Config } from './open'
 import {
@@ -107,7 +107,7 @@ export class Table<T extends Item> {
 		let indexName = options?.index ?? 'id'
 		let query = key ?? null
 
-		return new Observable<T | null>(subscriber => {
+		return new Observable<T>(subscriber => {
 			open(this.tableConfigs, this.dbConfig).then(async db => {
 				let options = { query, indexName }
 				let hooks = this.hooks.filter(hook => hook.on.includes(On.Get))
@@ -293,7 +293,31 @@ export class Table<T extends Item> {
 		})
 	}
 
-	changes(): Subject<ChangeEvent<T>> {
-		return this.change$
+	changes(id?: string): Observable<ChangeEvent<T>> {
+		if (!id) {
+			return this.change$
+		} else {
+			return this.change$.pipe(
+				filter(change => change.id === id)
+			)
+		}
+	}
+
+	async size(): Promise<number> {
+		let db = await open(this.tableConfigs, this.dbConfig)
+		let transaction = db.transaction([this.config.name], 'readonly')
+		let objectStore = transaction.objectStore(this.config.name)
+
+		return new Promise((resolve, reject) => {
+			let countRequest = objectStore.count()
+
+			countRequest.onsuccess = () => {
+			 	resolve(countRequest.result)
+			}
+
+			countRequest.onerror = (error) => {
+				reject(error)
+			}
+		})
 	}
 }

@@ -134,7 +134,7 @@ export function getAllItems$<T>(
 	db: IDBDatabase,
 	tableName: string,
 	{ query = null, indexName = 'id' }: Query,
-	cb: (entry: T) => void,
+	cb: (entry: T) => any | Promise<any>,
 ): Promise<void> {
 	return new Promise((resolve, reject) => {
 		let transaction = db.transaction([tableName], 'readwrite')
@@ -147,10 +147,10 @@ export function getAllItems$<T>(
 			reject(error)
 		})
 		
-		request.addEventListener('success', (event) => {
+		request.addEventListener('success', async (event) => {
 			let cursor = request.result;
 			if(cursor) {
-				cb(cursor.value as T)
+				await Promise.resolve(cb(cursor.value as T))
 				cursor.continue()
 			} else {
 				resolve()

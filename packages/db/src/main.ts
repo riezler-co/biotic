@@ -1,6 +1,8 @@
 
 
-export { Db as default } from './db'
+export {
+	Db as default
+} from './db'
 
 
 export type {
@@ -10,9 +12,14 @@ export type {
 	ChangeEvent,
 	SetterOrUpater,
 	GetAllOption,
+	Table,
+	Changes,
 } from './table'
 
-export { Table, Changes } from './table'
+
+export type { 
+	KeyValue
+} from './key_value'
 
 
 export type {
@@ -21,10 +28,15 @@ export type {
 	Options as DbConfig,
 } from './open'
 
-export { open } from './open'
+export {
+	open
+} from './open'
 
 
-export type { Item } from './operations'
+export type {
+	Item
+} from './operations'
+
 export {
 	insertItem,
 	getItem,
