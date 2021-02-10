@@ -30,18 +30,8 @@ export class KeyValue<T> {
 	}
 
 	async set(key: string, value: T): Promise<KeyValue<T>> {
-		let hasItem = await this.has(key)
-		
-		if (hasItem) {
-			await this.table
-				.update(key, { id: key, value })
-				.toPromise()
-
-			return this
-		}
-
 		await this.table
-			.insert({ id: key, value })
+			.upsert(key, { id: key, value })
 			.toPromise()
 
 		return this

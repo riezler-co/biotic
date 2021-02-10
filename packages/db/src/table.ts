@@ -1,5 +1,5 @@
 import { Subject, Observable } from 'rxjs'
-import { mergeMap, filter } from 'rxjs/operators'
+import { mergeMap, filter, switchMap } from 'rxjs/operators'
 
 import { open, Configs, Options, Config } from './open'
 import {
@@ -87,7 +87,7 @@ export class Table<T extends Item> {
 		this.hooks = hooks
 	}
 
-	get(id: string) {
+	get(id: string): Observable<T | null> {
 		return new Observable<T | null>(subscriber => {
 			open(this.tableConfigs, this.dbConfig).then(async db => {
 				let currentItem = await getItem<T>(db, this.config.name, id)
@@ -103,7 +103,7 @@ export class Table<T extends Item> {
 		})
 	}
 
-	getAll(key?: string, options?: GetAllOption) {
+	getAll(key?: string, options?: GetAllOption): Observable<T> {
 		let indexName = options?.index ?? 'id'
 		let query = key ?? null
 
@@ -122,7 +122,7 @@ export class Table<T extends Item> {
 		})
 	}
 
-	insert(value: T) {
+	insert(value: T): Observable<T> {
 		return new Observable<T>(subscriber => {
 			open(this.tableConfigs, this.dbConfig).then(async db => {
 				let data = this.hooks
@@ -152,7 +152,7 @@ export class Table<T extends Item> {
 		})
 	}
 
-	update(id: string, updater: SetterOrUpater<T>) {
+	update(id: string, updater: SetterOrUpater<T>): Observable<T> {
 		return new Observable<T>(subscriber => {
 			open(this.tableConfigs, this.dbConfig).then(async db => {
 				let currentItem = await getItem<T>(db, this.config.name, id)
@@ -187,6 +187,18 @@ export class Table<T extends Item> {
 			})
 			.catch(error => subscriber.error(error))
 		})
+	}
+
+	upsert(id: string, value: T): Observable<T> {
+		return this.get(id).pipe(
+			switchMap(item => {
+				if (item === null) {
+					return this.insert(value)
+				} else {
+					return this.update(id, value)
+				}
+			})
+		)
 	}
 
 	updateAll(updater: SetterOrUpater<T>) {
@@ -234,7 +246,7 @@ export class Table<T extends Item> {
 		})
 	}
 
-	delete(id: string) {
+	delete(id: string): Observable<T> {
 		return new Observable<T>(subscriber => {
 			open(this.tableConfigs, this.dbConfig).then(async db => {
 				let oldValue = await getItem<T>(db, this.config.name, id)
@@ -260,7 +272,7 @@ export class Table<T extends Item> {
 		})
 	}
 
-	deleteAll() {
+	deleteAll(): Observable<T> {
 		return new Observable(subscriber => {
 			open(this.tableConfigs, this.dbConfig).then(async db => {
 
