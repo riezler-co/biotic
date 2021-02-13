@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/notification",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "React Notification",
   "main": "lib/main.js",
   "scripts": {
@@ -24,8 +24,8 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/boson": "^0.3.10",
-    "@biotic-ui/std": "^0.3.4",
+    "@biotic-ui/boson": "^0.3.11",
+    "@biotic-ui/std": "^0.3.5",
     "@types/styled-components": "^5.1.4",
     "rxjs": "^6.6.3",
     "typescript": "^4.1.2",
