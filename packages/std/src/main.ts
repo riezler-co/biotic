@@ -28,3 +28,4 @@ export { isPromise } from './is/is_promise'
 
 /* collection */
 export { LRU } from './collection/lru'
+export { TaskQueue } from './collection/task_queue'
