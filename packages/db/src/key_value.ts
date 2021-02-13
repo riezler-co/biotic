@@ -93,8 +93,8 @@ export class KeyValue<T> {
 			.toPromise()
 	}
 
-	async forEach(fn: (item: T) => any): Promise<void> {
-		let values = await this.values()
-		values.forEach(item => fn(item))	
+	async forEach(fn: (item: T, key: string, map: KeyValue<T>) => any): Promise<void> {
+		let values = await this.entries()
+		values.forEach(([key, item]) => fn(item, key, this))	
 	}
 }

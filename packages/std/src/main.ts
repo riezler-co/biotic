@@ -24,3 +24,7 @@ export { useClickHandler } from './hook/use_click_handler'
 
 /* is */
 export { isPromise } from './is/is_promise'
+
+
+/* collection */
+export { LRU } from './collection/lru'
