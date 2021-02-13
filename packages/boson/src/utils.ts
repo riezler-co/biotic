@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs'
+import { BehaviorSubject, Observable } from 'rxjs'
 
 export type ChangeCallback<S> = (newState: S, prevState: S) => void
 export type ChangeObservable<S> = (bs: BehaviorSubject<S>) => Observable<unknown>

@@ -8,8 +8,9 @@ module.exports = function (api) {
     , '@babel/preset-env'
     ]
 
-  let plugins = 
-    [ 'babel-plugin-styled-components'
+  let plugins =
+    [ '@babel/plugin-proposal-class-properties'
+    , 'babel-plugin-styled-components'
     , 'lodash'
     , 'macros'
     ]
