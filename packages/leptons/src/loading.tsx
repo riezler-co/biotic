@@ -91,6 +91,7 @@ let StyledFlow = styled.div`
 	height: calc(var(--size) * 1.3);
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 
 	.sk-flow-dot {
 	  width: 25%;
