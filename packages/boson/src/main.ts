@@ -1,5 +1,5 @@
 
-export type { OnChange, BosonConfig } from './boson'
+export type { OnChange, BosonConfig, Boson } from './boson'
 export { boson } from './boson'
 
 export type { CreateBoson } from './boson_family'

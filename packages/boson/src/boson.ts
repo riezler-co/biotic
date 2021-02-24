@@ -29,8 +29,8 @@ export type Boson<T> = BosonConfig<T> & {
 	unsubscribe: () => void,
 }
 
-export function boson<S>(config: BosonConfig<S>): Boson<S> {
-	let prevState = config.defaultValue
+export function boson<S>(config: BosonConfig<S>, value?: S): Boson<S> {
+	let prevState = value ?? config.defaultValue
 	let history = new ReplaySubject<S>(config.bufferSize)
 
 	history.next(prevState)
@@ -41,7 +41,7 @@ export function boson<S>(config: BosonConfig<S>): Boson<S> {
 		return isChangeCallback(fn)
 	}) as Array<ChangeCallback<S>>
 
-	let state = new BehaviorSubject(config.defaultValue)
+	let state = new BehaviorSubject(value ?? config.defaultValue)
 	state.subscribe(state => {
 		cbs.forEach(cb => {
 			cb(state, prevState)

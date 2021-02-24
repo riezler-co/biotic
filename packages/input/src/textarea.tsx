@@ -1,37 +1,38 @@
-import React
-		 , { useMemo
-		 	 , useState
-		 	 , useLayoutEffect
-		 	 , forwardRef
-		 	 , FormEvent
-		 	 } from 'react'
+import React from 'react'
+import {
+	useMemo,
+	useState,
+	useLayoutEffect,
+	forwardRef,
+	ChangeEvent,
+	TextareaHTMLAttributes
+} from 'react'
 import styled from 'styled-components'
 import { useCombinedRefs, useResize, useThrottle } from '@biotic-ui/std'
 import { InputBase } from '@biotic-ui/leptons'
 
 type Ref = HTMLTextAreaElement
 
-type TextareaProps =
-	{ maxHeight?: number | string
-	; minRows?: number
-	; className?: string
-	; name?: string
-	; placeholder?: string
-	; value?: string
-	; style?: { [key:string]: any }
-	; onChange?: (e: FormEvent<Ref>) => void
-	; onBlur?: (e: FormEvent<Ref>) => void
-	}
+type TextareaProps = {
+	maxHeight?: number | string;
+	minRows?: number;
+	className?: string;
+	name?: string;
+	placeholder?: string;
+	value?: string;
+	style?: { [key:string]: any };
+	onChange?: (e: ChangeEvent<Ref>) => void;
+	onBlur?: (e: ChangeEvent<Ref>) => void;
+}
 
-export let Textarea = forwardRef<Ref, TextareaProps>((props, userRef) => {
-	let { maxHeight = null
-		  , minRows = 1
-		  , className = ''
-		  , name = ''
-		  , placeholder = ''
-		  , value = ''
-		  , style = {}
-		  } = props
+export let Textarea = forwardRef<Ref, TextareaHTMLAttributes<Ref> & TextareaProps>((props, userRef) => {
+	let {
+		maxHeight = null,
+		minRows = 1,
+		className = '',
+		style = {},
+		...rest
+	} = props
 
 	let [input, setInput] = useState<Ref | null>(null)
 	let ref = useCombinedRefs<Ref>(setInput, userRef)
@@ -64,14 +65,13 @@ export let Textarea = forwardRef<Ref, TextareaProps>((props, userRef) => {
 		<StyledText
 			style={style}
 			ref={ref}
-			name={name}
 			className={className}
-			placeholder={placeholder}
 			onChange={props.onChange}
 			onBlur={props.onBlur}
 			value={props.value}
 			rows={minRows}
 			maxHeight={maxHeight}
+			{...rest}
 		></StyledText>
 	)
 })

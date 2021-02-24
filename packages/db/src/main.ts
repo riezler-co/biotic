@@ -13,8 +13,9 @@ export type {
 	SetterOrUpater,
 	GetAllOption,
 	Table,
-	Changes,
 } from './table'
+
+export { Changes } from './table'
 
 
 export type { 

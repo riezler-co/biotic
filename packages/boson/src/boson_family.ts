@@ -5,9 +5,14 @@ import {
 	boson,
 } from './boson'
 
+type FillOptions = {
+	clear?: boolean
+}
+
 export interface CreateBoson<T extends Array<any>, S> {
 	(...args: T): Boson<S>;
-	cache: Map<string, Boson<S>>
+	cache: Map<string, Boson<S>>;
+	fill: (entries: Array<[T, S]>, options: FillOptions) => void;
 }
 
 export function bosonFamily<T extends Array<any>, S>(
@@ -26,11 +31,23 @@ export function bosonFamily<T extends Array<any>, S>(
 
 		let config = createBoson(...args)
 		let b = boson(config)
-
 		cache.set(key, b)
 
 		return b
 	}
 
-	return Object.assign(fn, { cache })
+	let fill = (entries: Array<[T, S]>, options: FillOptions = {}) => {
+		if (options.clear) {
+			cache.clear()
+		}
+
+		entries.forEach(([args, value]) => {
+			let key = getKey(...args)
+			let config = createBoson(...args)
+			let b = boson(config, value)
+			cache.set(key, b)
+		})
+	}
+
+	return Object.assign(fn, { cache, fill })
 }
