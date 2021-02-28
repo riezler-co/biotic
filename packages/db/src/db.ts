@@ -11,7 +11,7 @@ import { Item, clearData } from './operations'
 import { collectHooks } from './hooks'
 
 type Config = {
-	version: 1
+	version: number
 }
 
 export class Db {

@@ -295,8 +295,8 @@ export class Table<T extends Item> {
 
 				this.getAll().subscribe({
 					next,
-					error: subscriber.error,
-					complete: subscriber.complete,
+					error: (err) => subscriber.error(err),
+					complete: () => subscriber.complete(),
 				})
 
 				clearStore(db, this.config.name)
