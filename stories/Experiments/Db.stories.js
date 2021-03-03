@@ -128,8 +128,17 @@ export let Todos = () => {
 
 	}
 
+	function handleDeleteAll() {
+		todos.deleteAll().subscribe(() => {
+			console.log('Deleted')
+		})
+	}
+
 	return (
 		<div>
+
+			<Button onClick={handleDeleteAll}>Delete All</Button>
+
 			<h1>Todos:</h1>
 
 			<ul>

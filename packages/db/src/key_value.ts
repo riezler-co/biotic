@@ -44,7 +44,7 @@ export class KeyValue<T> {
 			return false
 		}
 
-		await this.table.delete(key)
+		await this.table.delete(key).toPromise()
 		return true
 	}
 

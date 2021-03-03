@@ -296,10 +296,12 @@ export class Table<T extends Item> {
 				this.getAll().subscribe({
 					next,
 					error: (err) => subscriber.error(err),
-					complete: () => subscriber.complete(),
+					complete: async () => {
+						await clearStore(db, this.config.name)
+						subscriber.complete()
+					},
 				})
 
-				clearStore(db, this.config.name)
 			})
 			.catch(error => subscriber.error(error))
 		})

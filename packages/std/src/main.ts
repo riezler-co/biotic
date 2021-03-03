@@ -24,8 +24,13 @@ export { useClickHandler } from './hook/use_click_handler'
 
 /* is */
 export { isPromise } from './is/is_promise'
+export { isBrowser }from './is/is_browser'
 
 
 /* collection */
 export { LRU } from './collection/lru'
 export { TaskQueue } from './collection/task_queue'
+
+
+/* data */
+export { base64url } from './data/base64'
