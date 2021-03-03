@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/select",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "description": "React Input",
   "main": "lib/main.js",
   "types": "./lib/main.d.ts",
@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@biotic-ui/leptons": "^0.3.10",
-    "@biotic-ui/std": "^0.3.6",
+    "@biotic-ui/std": "^0.3.7",
     "@types/styled-components": "^5.1.4",
     "typescript": "^4.1.2",
     "webpack": "^4.44.1",
