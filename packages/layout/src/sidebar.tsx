@@ -1,18 +1,18 @@
-import React, { useRef, useMemo, Children, ReactElement } from 'react'
+import React, { useMemo, Children, ReactElement, createContext, useContext } from 'react'
 import styled from 'styled-components'
-import { useScrollShadow, useMatchMedia } from '@biotic-ui/std'
+import { useMatchMedia } from '@biotic-ui/std'
 import { Drawer } from '@biotic-ui/drawer'
 import { Scrollbar } from '@biotic-ui/leptons'
 import { motion, AnimateSharedLayout } from 'framer-motion'
 
-export enum Direction
-	{ Left = 'left'
-	, Right = 'rigth'
-	}
+export enum Direction {
+	Left = 'left',
+	Right = 'rigth',
+}
 
-type LayoutColumns = 
-	{ direction: Direction
-	}
+type LayoutColumns = {
+	direction: Direction,
+}
 
 export let StyledSidebarLayout = styled.div<LayoutColumns>`
 	display: grid;
@@ -30,10 +30,12 @@ function layoutColumns({ direction }: LayoutColumns) {
 	return 'auto 1fr'
 }
 
-type Props =
-	{ children?: ReactElement | Array<ReactElement>
-	, right?: boolean
-	}
+type Props = {
+	children?: ReactElement | Array<ReactElement>,
+	right?: boolean
+}
+
+let SidebarLayoutCtx = createContext({ right: false })
 
 export function SidebarLayout({ children, right = false }: Props) {
 	
@@ -47,13 +49,15 @@ export function SidebarLayout({ children, right = false }: Props) {
 	let direction = right ? Direction.Right : Direction.Left
 
 	return (
-		<AnimateSharedLayout>
-			<StyledSidebarLayout direction={direction}>
-				{ !right && aside }
-				{ main }
-				{ right && aside }
-			</StyledSidebarLayout>
-		</AnimateSharedLayout>
+		<SidebarLayoutCtx.Provider value={{ right }}>
+			<AnimateSharedLayout>
+				<StyledSidebarLayout direction={direction}>
+					{ !right && aside }
+					{ main }
+					{ right && aside }
+				</StyledSidebarLayout>
+			</AnimateSharedLayout>
+		</SidebarLayoutCtx.Provider>
 	)
 }
 
@@ -84,21 +88,24 @@ let ContentWrapper = styled(motion.div)<{ width: number}>`
 
 `
 
-type AsideProps =
-	{ children?: JSX.Element | Array<JSX.Element>
-	; open: boolean
-	; width?: number
-	; drawer?: string
-	; onClose: () => void
-	}
+type AsideProps = {
+	children?: JSX.Element | Array<JSX.Element>;
+	open: boolean;
+	width?: number;
+	drawer?: string;
+	onClose: () => void;
+}
 
 export let Aside = (props: AsideProps) => {
-	let { children
-		  , open
-		  , width = 250
-		  , drawer = ''
-		  , onClose = () => {}
-		  } = props
+	let ctx = useContext(SidebarLayoutCtx)
+
+	let {
+		children,
+		open,
+		width = 250,
+		drawer = '',
+		onClose = () => {}
+	} = props
 	
 	let useDrawer = useMatchMedia(drawer)
 
@@ -106,10 +113,11 @@ export let Aside = (props: AsideProps) => {
 		return (
 			<React.Fragment>
 				
-				<div>{/*
+				{/*
 					this way we don't need to update the grid-template-columns
 					and the main area will get the full width
-				*/}</div>
+				*/}
+				<div />
 
 				<Drawer open={open} maxWidth={width} onClose={() => onClose && onClose()}>
 					{ children }
@@ -119,46 +127,45 @@ export let Aside = (props: AsideProps) => {
 		)
 	}
 
+	let variants = {
+		hidden: {
+			width: 0
+		},
+		visible: { width }	
+	}
 
-	let variants =
-		{ hidden:
-				{ width: 0
-				}
-
-		, visible:
-				{ width: width
-				}
+	let contentVariants = {
+		hidden: {
+			transform: ctx.right
+				? `translateX(${width}px)`
+				: `translateX(-${width}px)`
+		},
+		visible: {
+			transform: 'translateX(0px)'
 		}
+	}
 
-	let contentVariants =
-		{ hidden:
-				{ transform: `translateX(-${width}px)`
-				}
-
-		, visible:
-				{ transform: 'translateX(0px)'
-				}
-		}
-
-	let transition =
-		{ type: 'tween'
-		, ease: 'easeOut'
-		, duration: 0.5
-		}
+	let transition = {
+		type: 'tween',
+		ease: 'easeOut',
+		duration: 0.5,
+	}
 
 	return (
-		<StyledAside layout
-								 as={motion.aside}
-								 variants={variants}
-								 initial={open ? 'visible' : 'hidden'}
-								 animate={open ? 'visible' : 'hidden'}
-								 transition={transition} 
+		<StyledAside
+				layout
+				as={motion.aside}
+				variants={variants}
+				initial={open ? 'visible' : 'hidden'}
+				animate={open ? 'visible' : 'hidden'}
+				transition={transition} 
 		>
-		  <ContentWrapper width={width}
-		  								variants={contentVariants}
-		  								initial={open ? 'visible' : 'hidden'}
-		  								animate={open ? 'visible' : 'hidden'}
-		  								transition={transition} 
+		  <ContentWrapper
+		  			width={width}
+		  			variants={contentVariants}
+					initial={open ? 'visible' : 'hidden'}
+					animate={open ? 'visible' : 'hidden'}
+					transition={transition} 
 		  >
 				{ children }
 		  </ContentWrapper>
