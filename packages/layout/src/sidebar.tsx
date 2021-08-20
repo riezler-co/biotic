@@ -119,7 +119,11 @@ export let Aside = (props: AsideProps) => {
 				*/}
 				<div />
 
-				<Drawer open={open} maxWidth={width} onClose={() => onClose && onClose()}>
+				<Drawer
+					left={!ctx.right}
+					open={open}
+					maxWidth={width}
+					onClose={() => onClose && onClose()}>
 					{ children }
 				</Drawer>
 				
