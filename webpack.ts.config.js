@@ -36,11 +36,6 @@ module.exports = function createConfig (webpackEnv) {
           commonjs2: 'framer-motion',
           amd: 'framer-motion'
         },
-        'recoil': {
-          commonjs: 'recoil',
-          commonjs2: 'recoil',
-          amd: 'recoil'
-        },
         'rxjs': {
           commonjs: 'rxjs',
           commonjs2: 'rxjs',

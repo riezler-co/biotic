@@ -36,9 +36,6 @@
     "react-dom": "^17.0.1",
     "styled-components": "^5.2.1"
   },
-  "dependencies": {
-    "@riezler/react-utils": "^0.1.1"
-  },
   "gitHead": "4d47ca609b3d59878dd7f9280cf9e74228490790",
   "publishConfig": {
     "access": "public"

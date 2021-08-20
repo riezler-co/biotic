@@ -31,10 +31,10 @@ export function useOutsideClick<T extends HTMLElement = HTMLElement>(cb: Callbac
 			}
 		}
 
-		window.addEventListener('click', handle)
+		window.addEventListener('mousedown', handle)
 
 		return () => {
-			window.removeEventListener('click', handle)
+			window.removeEventListener('mousedown', handle)
 		}
 	}, [container])
 

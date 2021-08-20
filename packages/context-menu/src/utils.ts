@@ -1,17 +1,17 @@
 
-type Rect =
-	{ width: number
-	; height: number
-	}
+type Rect = {
+	width: number;
+	height: number;
+}
 
-export type Position =
-	{ y: number
-	; x: number
-	}
+export type Position = {
+	y: number;
+	x: number;
+}
 
 export function getContextMenuPostion(
-		boundingClientRect: Rect
-	, mousePosition: Position
+	boundingClientRect: Rect,
+	mousePosition: Position
 ) {
 	let { width, height } = boundingClientRect
 	let { innerHeight, innerWidth, pageXOffset, pageYOffset } = window

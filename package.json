@@ -10,7 +10,11 @@
     "build": "build-storybook",
     "browser-sync": "browser-sync start --proxy localhost:6006",
     "bootstrap": "lerna bootstrap --hoist",
-    "publish": "lerna publish"
+    "publish": "lerna publish",
+    "clean:lock": "rimraf ./packages/**/package-lock.json",
+    "clean:modules": "rimraf ./packages/**/node_modules",
+    "clean:lib": "rimraf ./packages/**/lib",
+    "clean:all": "npm run clean:lock && npm run clean:modules && npm run clean:lib"
   },
   "author": "Michael Riezler <michael@riezler.co> (https://riezler.co)",
   "license": "MPL-2.0",
@@ -42,9 +46,6 @@
     "styled-components": "^5.2.1",
     "typescript": "^4.1.2"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "dependencies": {
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
@@ -52,6 +53,6 @@
     "@types/styled-components": "^5.1.4",
     "framer-motion": "^2.9.5",
     "lodash": "^4.17.20",
-    "recoil": "0.1.2"
+    "rimraf": "^3.0.2"
   }
 }

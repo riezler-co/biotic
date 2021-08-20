@@ -5,7 +5,7 @@ export let Scrollbar = css`
 	--default-thumb-color: #909090;
 	--default-track-color: #e9e8f3;
 
-	scrollbar-color: var(--scrollbar-track, var(--default-track-color)) var(--scrollbar-thumb, var(--default-thumb-color));
+	scrollbar-color: var(--scrollbar-thumb, var(--default-thumb-color)) var(--scrollbar-track, var(--default-track-color));
 	scrollbar-width: thin; 
 
 	&::-webkit-scrollbar-track {
