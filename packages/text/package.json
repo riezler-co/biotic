@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/text",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "biotic text",
   "main": "lib/main.js",
   "types": "./lib/main.d.ts",
