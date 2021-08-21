@@ -24,7 +24,7 @@ export type Props = {
     onChange?: (inputValue: string) => void;
 }
 
-export const ChipsInput: FunctionComponent<Props & HTMLProps<HTMLDivElement>> = ({
+export let ChipsInput: FunctionComponent<Props & HTMLProps<HTMLDivElement>> = ({
     label,
     onAdd,
     error,
@@ -35,26 +35,16 @@ export const ChipsInput: FunctionComponent<Props & HTMLProps<HTMLDivElement>> = 
     onChange,
     ...props
 }) => {
-    const [focus, setFocus] = useState(false);
-    const input = useRef<HTMLInputElement | null>(null);
-    const wrapper = useRef<HTMLDivElement | null>(null);
-
-    function handleAdd(e: FormEvent) {
-        e.preventDefault()
-
-        if (onAdd && input.current) {
-            const currentValue = input.current.value
-            onAdd([currentValue.trim()])
-            input.current.value = ''
-        }
-    }
+    let [focus, setFocus] = useState(false);
+    let input = useRef<HTMLInputElement | null>(null);
+    let wrapper = useRef<HTMLDivElement | null>(null);
 
     function handleClick(e: MouseEvent) {
         if (!input.current) {
             return
         }
 
-        const isTarget = e.target === wrapper.current
+        let isTarget = e.target === wrapper.current
 
         if (isTarget) {
             input.current.focus()
@@ -62,11 +52,12 @@ export const ChipsInput: FunctionComponent<Props & HTMLProps<HTMLDivElement>> = 
     }
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
-        const { value } = e.target
+        let { value } = e.target
         onChange && onChange(value)
         onCancelDelete()
+
         if (value.includes(separator) && onAdd) {
-            const chips = value
+            let chips = value
                 .split(separator)
                 .map((str) => str.trim())
                 .filter(Boolean)
@@ -76,16 +67,27 @@ export const ChipsInput: FunctionComponent<Props & HTMLProps<HTMLDivElement>> = 
         }
     }
 
-    function handleDelete(e: KeyboardEvent<HTMLInputElement>) {
-        if (e.code !== 'Backspace') {
-            return
+    function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+        if (e.code === 'Backspace') {
+            let target = e.target as HTMLInputElement
+            let isEmpty = target.value === ''
+
+            if (isEmpty && onDelete) {
+                onDelete()
+            }
         }
 
-        const target = e.target as HTMLInputElement
-        const isEmpty = target.value === ''
+        if (e.code === 'Enter') {
+            if (onAdd && input.current) {
+                let currentValue = input.current.value
+                let value = currentValue.trim()
+                if (value === '') {
+                    return
+                }
 
-        if (isEmpty && onDelete) {
-            onDelete()
+                onAdd([value])
+                input.current.value = ''
+            }
         }
     }
 
@@ -99,8 +101,8 @@ export const ChipsInput: FunctionComponent<Props & HTMLProps<HTMLDivElement>> = 
     useOnEscape(handleCancel)
     let outsideClick = useOutsideClick(handleCancel)
 
-    const isEmpty = Children.count(children) === 0
-    const isNotched = !isEmpty || focus || input.current?.value
+    let isEmpty = Children.count(children) === 0
+    let isNotched = !isEmpty || focus || input.current?.value
 
     let ref = useCombinedRefs(wrapper, outsideClick)
 
@@ -120,22 +122,20 @@ export const ChipsInput: FunctionComponent<Props & HTMLProps<HTMLDivElement>> = 
 
             {children}
 
-            <Form onSubmit={handleAdd}>
-                <input
-                    ref={input}
-                    type="text"
-                    onFocus={() => setFocus(true)}
-                    onBlur={() => setFocus(false)}
-                    onChange={handleChange}
-                    onKeyDown={handleDelete}
-                    onClick={() => onCancelDelete()}
-                />
-            </Form>
+            <Input
+                ref={input}
+                type="text"
+                onFocus={() => setFocus(true)}
+                onBlur={() => setFocus(false)}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                onClick={() => onCancelDelete()}
+            />
         </StyledChipsInput>
     );
 };
 
-const Label = styled.span<{ focus: boolean }>`
+let Label = styled.span<{ focus: boolean }>`
     position: absolute;
     top: 15px;
     left: 10px;
@@ -154,7 +154,7 @@ const Label = styled.span<{ focus: boolean }>`
 // can't get the object spread to properly type check
 // thus I am declaring this as any for now....
 // todo: figure out proper typing for object spread
-const StyledChipsInput: any = styled.div<{ focus: boolean; error: boolean }>`
+let StyledChipsInput: any = styled.div<{ focus: boolean; error: boolean }>`
     display: flex;
     flex-wrap: wrap;
     column-gap: 8px;
@@ -173,21 +173,16 @@ const StyledChipsInput: any = styled.div<{ focus: boolean; error: boolean }>`
     }
 `
 
-const Form = styled.form`
+let Input = styled.input`
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    padding: 0;
     flex-grow: 1;
 
-    input {
-        width: 100%;
-        border: none;
-        background: none;
-        font-family: inherit;
-        font-size: inherit;
-        line-height: inherit;
-        padding: 0;
-        height: 100%;
-    }
-
-    input:focus {
+    &:focus {
         outline: none;
     }
 `
