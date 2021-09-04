@@ -19,9 +19,13 @@ import { isPromise } from './utils';
 
 export type SetterOrUpdater<S>
 	= S
-	| ((state: S) => S | Observable<S> | Promise<S>) 
+	| ((state: S) => S | Observable<S> | Promise<S>)
 
-export function useBoson<S>(boson: Boson<S>): [S, (nextState: SetterOrUpdater<S>) => void] {
+export type UpdateFn<State> = (nextState: SetterOrUpdater<State>) => void
+
+export type UseBoson<State> = [State, UpdateFn<State>]
+
+export function useBoson<State>(boson: Boson<State>): UseBoson<State> {
 	let state = useBosonValue(boson)
 	let handleState = useSetBoson(boson)
 	return [state, handleState]

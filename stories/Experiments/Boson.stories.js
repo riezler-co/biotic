@@ -1,4 +1,5 @@
-import { boson, useBoson, useSelector } from '@package/boson/main'
+import { useState } from 'react'
+import { boson, useBoson, useSelector, useQuery, bosonFamily } from '@package/boson/main'
 
 export default {
 	title: 'Experiment/Boson',
@@ -38,6 +39,48 @@ export let Counter = () => {
 			<h1>{ count }</h1>
 			<Elm />
 			<Elm />
+		</div>
+	)
+}
+
+let todosFamily = bosonFamily((id) => {
+	return {
+		key: id,
+		defaultValue: undefined,
+	}
+})
+
+export let Query = () => {
+	let [id, setId] = useState('1')
+
+	let [todo, action] = useQuery(todosFamily(id), () => {
+		return fetch(`https://jsonplaceholder.typicode.com/todos/${id}`)
+  			.then(response => response.json())
+	}, [id])
+
+	console.log({ todo })
+
+	return (
+		<div>
+			<button onClick={action.reload}>Reload</button>
+			<select value={id} onChange={e => setId(e.target.value)}>
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+			</select>
+
+			{ todo.state === 'loading' &&
+				<p>...loading</p>
+			}
+			<div>
+				<h1>{ todo.data?.title }</h1>
+			</div>
+
+			<input
+				value={todo.data?.title ?? ''}
+				onChange={e => action.set({ title: e.target.value })}
+			/>
+			<button onClick={action.reset}>Reset</button>
 		</div>
 	)
 }
