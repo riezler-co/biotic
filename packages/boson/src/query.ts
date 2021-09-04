@@ -72,7 +72,6 @@ export function useQuery<Data, Error=any>(
 
 		fn.current(cancel)
 			.then(data => {
-				console.log({ data })
 				setState(currentState => ({
 					state: QueryState.Success,
 					error: null,
@@ -119,12 +118,12 @@ export function useQuery<Data, Error=any>(
 	}, [state])
 
 	let reload = useCallback((force = false) => {
-		if (state === QueryState.Loading && force === false) {
+		if (state === QueryState.Loading && force !== true) {
 			return
 		}
 
 		run()
-	}, [run])
+	}, [run, state])
 
 	let reset = useCallback(() => {
 		setData(initialData as Data)

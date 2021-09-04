@@ -81,7 +81,7 @@ export let Query = () => {
 				value={todo.data?.title ?? ''}
 				onChange={e => action.set({ title: e.target.value })}
 			/>
-			<button onClick={action.reset}>Reset</button>
+			<button onClick={() => action.reset()}>Reset</button>
 		</div>
 	)
 }
