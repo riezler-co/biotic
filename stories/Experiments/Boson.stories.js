@@ -53,9 +53,10 @@ let todosFamily = bosonFamily((id) => {
 export let Query = () => {
 	let [id, setId] = useState('1')
 
-	let [todo, action] = useQuery(todosFamily(id), () => {
-		return fetch(`https://jsonplaceholder.typicode.com/todos/${id}`)
-  			.then(response => response.json())
+	let [todo, action] = useQuery(todosFamily(id), async () => {
+		await wait()
+		let res = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`)
+  		return res.json()
 	}, [id])
 
 	console.log({ todo })
@@ -83,4 +84,11 @@ export let Query = () => {
 			<button onClick={action.reset}>Reset</button>
 		</div>
 	)
+}
+
+
+function wait() {
+	return new Promise(resolve => {
+		setTimeout(resolve, 2000)
+	})
 }

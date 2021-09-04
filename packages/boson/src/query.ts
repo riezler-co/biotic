@@ -65,6 +65,11 @@ export function useQuery<Data, Error=any>(
 			onCancel = fn
 		}
 
+		setState(currentState => ({
+			...currentState,
+			state: QueryState.Loading,
+		}))
+
 		fn.current(cancel)
 			.then(data => {
 				console.log({ data })
