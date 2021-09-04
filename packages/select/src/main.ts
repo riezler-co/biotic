@@ -1,2 +1,2 @@
 
-export { Select, Option } from './select'
+export { Select, Option, Optgroup } from './select'
