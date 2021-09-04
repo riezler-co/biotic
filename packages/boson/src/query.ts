@@ -101,8 +101,17 @@ export function useQuery<Data, Error=any>(
 
 
 	useEffect(() => {
-		window.addEventListener('fous', e => console.log(e))
-	}, [])
+		function handleFocus() {
+			if (state !== QueryState.Loading) {
+				run()
+			}
+		}
+
+		document.addEventListener('focus', handleFocus)
+		return () => {
+			document.removeEventListener('focus', handleFocus)
+		}
+	}, [state])
 
 	let reload = useCallback((force = false) => {
 		if (state === QueryState.Loading && force === false) {
