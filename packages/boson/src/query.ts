@@ -1,5 +1,5 @@
 import { useCallback, useRef, useEffect } from 'react'
-import { Boson } from "./boson"
+import { Boson } from './boson'
 import { useBoson, UpdateFn } from './hooks'
 import { bosonFamily } from './boson_family'
 import { ObservableInput, from } from 'rxjs'
@@ -18,7 +18,7 @@ export type State = {
 	expireAt: number;
 }
 
-let queryStateFamily = bosonFamily<[string], State>((key) => {
+let queryStateFamily = bosonFamily<[string], State>(() => {
 	return {
 		defaultValue: {
 			state: QueryState.Init,

@@ -35,7 +35,7 @@ export function bosonFamily<T extends Array<any>, S>(
 		let { expireIn ,...config } = createBoson(...args)
 		familiyConfig.expireIn = expireIn ?? familiyConfig.expireIn
 
-		let b = boson({ ...config, key })
+		let b = boson({ ...config, key }, initalValue)
 		cache.set(key, b)
 		return b
 	}

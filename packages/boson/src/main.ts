@@ -17,3 +17,6 @@ export {
 	useBosonEffect,
 	useSelector
 } from './hooks'
+
+export { useMutation } from './mutation'
+export type { UseMutation} from './mutation'
