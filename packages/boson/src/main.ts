@@ -18,5 +18,5 @@ export {
 	useSelector
 } from './hooks'
 
-export { useMutation } from './mutation'
-export type { UseMutation} from './mutation'
+export { useMutation, usePost } from './mutation'
+export type { UseMutation, UsePost } from './mutation'
