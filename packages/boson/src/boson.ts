@@ -42,7 +42,7 @@ export function boson<S>(config: BosonConfig<S>, value?: S): Boson<S> {
 	}) as Array<ChangeCallback<S>>
 
 	let state = new BehaviorSubject(value ?? config.defaultValue)
-	state.subscribe(state => {
+	let subscription = state.subscribe(state => {
 		cbs.forEach(cb => {
 			cb(state, prevState)
 		})
@@ -59,6 +59,7 @@ export function boson<S>(config: BosonConfig<S>, value?: S): Boson<S> {
 		.map(observable => observable.subscribe())
 
 	let unsubscribe = () => {
+		subscription.unsubscribe()
 		subscriptions.forEach(sub => sub.unsubscribe())
 		cbs = []
 	}

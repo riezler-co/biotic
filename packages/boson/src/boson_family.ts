@@ -1,9 +1,9 @@
-
 import {
 	Boson,
 	BosonConfig,
 	boson,
 } from './boson'
+import { nanoid } from 'nanoid'
 
 type FillOptions = {
 	clear?: boolean
@@ -15,25 +15,40 @@ export interface CreateBoson<T extends Array<any>, S> {
 	fill: (entries: Array<[T, S]>, options: FillOptions) => void;
 }
 
+type FamilyConfig<S> = Omit<BosonConfig<S>, 'key'> & {
+	expireIn?: number
+}
+
 export function bosonFamily<T extends Array<any>, S>(
-	createBoson: (...args: T) => BosonConfig<S>,
+	createBoson: (...args: T) => FamilyConfig<S>,
 	getKey: (...args: T) => string = (...args) => args.join(':'),
 ): CreateBoson<T, S> {
+	let ID = nanoid()
+
+	let familiyConfig = {
+		expireIn: 5 * 60 * 1000,
+	}
 
 	let cache = new Map<string, Boson<S>>()
 
-	let fn = (...args: T) => {
-		let key = getKey(...args)
+	function create(key: string, args: T, initalValue?: S) {
+		let { expireIn ,...config } = createBoson(...args)
+		familiyConfig.expireIn = expireIn ?? familiyConfig.expireIn
 
-		if (cache.has(key)) {
-			return cache.get(key)!
+		let b = boson({ ...config, key })
+		cache.set(key, b)
+		return b
+	}
+
+	let fn = (...args: T) => {
+		let key = `${ID}:${getKey(...args)}`
+		let cached = cache.get(key)
+		
+		if (cached) {
+			return cached
 		}
 
-		let config = createBoson(...args)
-		let b = boson(config)
-		cache.set(key, b)
-
-		return b
+		return create(key, args)
 	}
 
 	let fill = (entries: Array<[T, S]>, options: FillOptions = {}) => {
@@ -42,10 +57,8 @@ export function bosonFamily<T extends Array<any>, S>(
 		}
 
 		entries.forEach(([args, value]) => {
-			let key = getKey(...args)
-			let config = createBoson(...args)
-			let b = boson(config, value)
-			cache.set(key, b)
+			let key = `${ID}:${getKey(...args)}`
+			create(key, args, value)
 		})
 	}
 

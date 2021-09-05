@@ -7,8 +7,8 @@ export { bosonFamily } from './boson_family'
 
 export type { SetterOrUpdater, Selector } from './hooks'
 
-export type { QueryState, Query, State, UseQuery } from './query'
-export { useQuery } from './query'
+export type { Query, State, UseQuery } from './query'
+export { useQuery, QueryState } from './query'
 
 export {
 	useBoson,

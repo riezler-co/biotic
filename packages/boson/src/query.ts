@@ -2,6 +2,7 @@ import { useCallback, useRef, useEffect } from 'react'
 import { Boson } from "./boson"
 import { useBoson, UpdateFn } from './hooks'
 import { bosonFamily } from './boson_family'
+import { ObservableInput, from } from 'rxjs'
 
 export enum QueryState {
 	Init = 'inti',
@@ -19,7 +20,6 @@ export type State = {
 
 let queryStateFamily = bosonFamily<[string], State>((key) => {
 	return {
-		key: `query-state:${key}`,
 		defaultValue: {
 			state: QueryState.Init,
 			error: null,
@@ -44,13 +44,24 @@ export type UseQuery<Data, Error> = [
 	}
 ]
 
-type CancelFn = (fn: () => any) => void
+export type Options = {
+	deps?: Array<any>;
+	fetchOnFocus?: boolean;
+	expireIn?: number;
+}
 
-export function useQuery<Data, Error=any>(
+export function useQuery<Error=any, Data=any>(
 	boson: Boson<Data>,
-	fetcher: (cancel: CancelFn) => Promise<Data>,
-	deps: Array<any> = [],
+	fetcher: () => ObservableInput<Data>,
+	options: Options = {},
 ): UseQuery<Data, Error> {
+
+	let {
+		deps = [],
+		fetchOnFocus = false,
+		expireIn = 5 * 60 * 1000,
+	} = options
+
 	let [data, setData] = useBoson(boson)
 	let [{ state, error, initialData, expireAt }, setState] = useBoson(queryStateFamily(boson.key))
 
@@ -59,55 +70,62 @@ export function useQuery<Data, Error=any>(
 		fn.current = fetcher
 	})
 
-	let run = useCallback(() => {
-		let onCancel = () => {}
-		let cancel = (fn: () => any) => {
-			onCancel = fn
-		}
+	let unsubscribe = useRef(() => {})
+	useEffect(() => () => {
+		unsubscribe.current()
+	}, [])
 
+	let run = useCallback(() => {
 		setState(currentState => ({
 			...currentState,
 			state: QueryState.Loading,
 		}))
 
-		fn.current(cancel)
-			.then(data => {
-				setState(currentState => ({
-					state: QueryState.Success,
-					error: null,
-					initialData: currentState.initialData ?? data,
-					expireAt: Date.now() + 5 * 60 * 1000,
-				}))
+		let subscription = from(fn.current()).subscribe({
+			next: (data) => {
+				setState(currentState => {
+					return {
+						state: QueryState.Success,
+						error: null,
+						initialData: currentState.initialData ?? data,
+						expireAt: Date.now() + expireIn,
+					}
+				})
 
 				setData(data)
-			})
-			.catch(error => {
+			},
+
+			error: (error) => {
 				setState({
 					state: QueryState.Error,
 					error,
 					expireAt: Date.now(),
 				})
-			})
+			}
+		})
 
 		return () => {
-			onCancel()
+			subscription.unsubscribe()
 		}
-	}, [boson, setData, setState]) 
+	}, [setData, setState, expireIn]) 
 
-
+	let { key } = boson
 	useEffect(() => {
 		let isExpired = Date.now() > expireAt
 		if (isExpired && state !== QueryState.Loading) {
-			run()
-			return
+			return run()
 		}
-	}, [run, state, expireAt, deps.join(':')])
+	}, [run, key, deps.join(':')])
 
 
 	useEffect(() => {
+		if (!fetchOnFocus) {
+			return
+		}
+
 		function handleFocus() {
 			if (state !== QueryState.Loading) {
-				run()
+				unsubscribe.current = run()
 			}
 		}
 
@@ -115,14 +133,14 @@ export function useQuery<Data, Error=any>(
 		return () => {
 			document.removeEventListener('focus', handleFocus)
 		}
-	}, [state])
+	}, [state, fetchOnFocus])
 
 	let reload = useCallback((force = false) => {
 		if (state === QueryState.Loading && force !== true) {
 			return
 		}
 
-		run()
+		unsubscribe.current = run()
 	}, [run, state])
 
 	let reset = useCallback(() => {

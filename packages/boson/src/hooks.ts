@@ -65,14 +65,24 @@ export function useSetBoson<T>(boson: Boson<T>) {
 }
 
 export function useBosonValue<T>(boson: Boson<T>) {
-	let [state, setState] = useState<T>(boson.state.value)
-	useBosonEffect(boson, setState)
-	return state
+	let [state, setState] = useState({
+		[boson.key]: boson.state.value
+	})
+
+	useBosonEffect(boson, value => {
+		setState(state => {
+			return {
+				...state,
+				[boson.key]: state.value
+			}
+		})
+	})
+
+	return state[boson.key] ?? boson.state.value
 }
 
 export function useBosonEffect<T>(boson: Boson<T>, cb: (s: T) => void) {
 	let fn = useRef(cb)
-
 	useEffect(() => {
 		fn.current = cb
 	})
@@ -80,7 +90,7 @@ export function useBosonEffect<T>(boson: Boson<T>, cb: (s: T) => void) {
 	useEffect(() => {
 		let sub = boson.state.subscribe(state => fn.current(state))
 		return () => sub.unsubscribe()
-	}, [boson])
+	}, [boson.key])
 }
 
 export type Selector<S, R> = (boson: Observable<S>) => Observable<R>
@@ -91,7 +101,6 @@ export function useSelector<S, R=S>(
 	initialState?: R
 ) {
 	let [state, setState] = useState(initialState)
-
 	useEffect(() => {
 
 		let stream = selector(boson.state)

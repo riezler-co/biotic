@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { boson, useBoson, useSelector, useQuery, bosonFamily } from '@package/boson/main'
+import { Button } from '@package/button/main'
 
 export default {
 	title: 'Experiment/Boson',
@@ -17,12 +18,12 @@ let Elm = () => {
 	return (
 		<div style={{ marginBottom: 32 }}>
 			<p style={{ marginBottom: 8 }}>Counter: { state }</p>
-			<button onClick={() => setState(c => c + 1)}>
+			<Button onClick={() => setState(c => c + 1)}>
 				+
-			</button>
-			<button onClick={() => setState(state - 1)}>
+			</Button>
+			<Button onClick={() => setState(state - 1)}>
 				-
-			</button>
+			</Button>
 		</div>
 	)
 }
@@ -43,9 +44,8 @@ export let Counter = () => {
 	)
 }
 
-let todosFamily = bosonFamily((id) => {
+let todosFamily = bosonFamily(() => {
 	return {
-		key: id,
 		defaultValue: undefined,
 	}
 })
@@ -57,9 +57,7 @@ export let Query = () => {
 		await wait()
 		let res = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`)
   		return res.json()
-	}, [id])
-
-	console.log({ todo })
+	})
 
 	return (
 		<div>
