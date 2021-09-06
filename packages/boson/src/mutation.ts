@@ -6,14 +6,15 @@ import { useBoson } from './hooks'
 type Response<Data> = void | null | undefined | Data 
 
 export interface UseMutation<T extends Array<any>, Data, Error> {
-	(...args: T): Promise<Response<Partial<Data>>>;
+	(...args: T): Promise<Response<Data>>;
 	loading: boolean;
-	error: Error | null
+	error: Error | null;
+	reset: () => void;
 }
 
-export function useMutation<Error=any, Args extends Array<any>=any, Data=unknown>(
+export function useMutation<Data=unknown, Error=any, Args extends Array<any>=any>(
 	boson: Boson<Data>,
-	fn: (data: Data, ...args: Args) => ObservableInput<Response<Partial<Data>>>,
+	fn: (data: Data, ...args: Args) => ObservableInput<Response<Data>>,
 ): UseMutation<Args, Data, Error> {
 	let [loading, setLoading] = useState<boolean>(false)
 	let [error, setError] = useState<Error | null>(null)
@@ -39,20 +40,13 @@ export function useMutation<Error=any, Args extends Array<any>=any, Data=unknown
 	let run = useCallback((...args: Args) => {
 		setError(null)
 		setLoading(true)
-		return new Promise<Response<Partial<Data>>>((resolve, reject) => {
+		return new Promise<Response<Data>>((resolve, reject) => {
 			unsubscribe.current = from(_fn.current(_data.current, ...args)).subscribe({
 				next: (response) => {
-					if (response === undefined || response ===  null) {
-						resolve(response)
-						return
+					if (response) {
+						setData(response)
 					}
-
-					setData(currentState => {
-						return {
-							...currentState,
-							...response,
-						}
-					})
+					
 					setLoading(false)
 					resolve(response)
 				},
@@ -67,14 +61,20 @@ export function useMutation<Error=any, Args extends Array<any>=any, Data=unknown
 
 	}, [setData, setLoading, setError])
 
-	return Object.assign(run, { error, loading })
+	let reset = () => {
+		setError(null)
+		setLoading(false)
+	}
+
+	return Object.assign(run, { error, loading, reset })
 }
 
 
 export interface UsePost<T extends Array<any>, Data, Error> {
 	(...args: T): Promise<Response<Data>>;
 	loading: boolean;
-	error: Error | null
+	error: Error | null;
+	reset: () => void;
 }
 
 export function usePost<Data=unknown, Error=any, Args extends Array<any>=any>(
@@ -115,5 +115,10 @@ export function usePost<Data=unknown, Error=any, Args extends Array<any>=any>(
 
 	}, [setLoading, setError])
 
-	return Object.assign(run, { error, loading })
+	let reset = () => {
+		setError(null)
+		setLoading(false)
+	}
+
+	return Object.assign(run, { error, loading, reset })
 }
