@@ -7,6 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "bundle": "webpack --config ../../webpack.ts.config.js --mode production",
+    "dev": "webpack --config ../../webpack.ts.config.js --mode development --watch",
     "types": "tsc --emitDeclarationOnly --declaration --declarationDir ./lib",
     "build": "npm run bundle && npm run types",
     "prepublish": "npm run build"

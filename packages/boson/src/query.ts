@@ -19,14 +19,16 @@ export type State = {
 	reload: boolean;
 }
 
+let defaultState = {
+	state: QueryState.Init,
+	error: null,
+	expireAt: Date.now(),
+	reload: false,
+}
+
 let queryStateFamily = bosonFamily<[string], State>(() => {
 	return {
-		defaultValue: {
-			state: QueryState.Init,
-			error: null,
-			expireAt: Date.now(),
-			reload: false,
-		},
+		defaultValue: { ...defaultState },
 	}
 })
 
@@ -75,7 +77,8 @@ export function useQuery<Error=any, Data=any>(
 	let unsubscribe = useRef(() => {})
 	useEffect(() => () => {
 		unsubscribe.current()
-	}, [])
+		setState({ ...defaultState })
+	}, [setState])
 
 	let run = useCallback(() => {
 		setState(currentState => ({
@@ -104,7 +107,7 @@ export function useQuery<Error=any, Data=any>(
 					expireAt: Date.now(),
 					reload: true,
 				})
-			}
+			},
 		})
 
 		return () => {
@@ -112,28 +115,15 @@ export function useQuery<Error=any, Data=any>(
 		}
 	}, [setData, setState, expireIn]) 
 
+	let { key } = boson
 	useEffect(() => {
-
-		if (queryState.reload === false) {
-			return
-		}
-
 		let isExpired = Date.now() > queryState.expireAt
 		let isLoading = queryState.state === QueryState.Loading
-		
 		if ((isExpired && !isLoading) || (queryState.expireAt === 0 && !isLoading)) {
+			queryState.state = QueryState.Loading
 			return run()
 		}
-
-
-	}, [run, boson.key, queryState.expireAt])
-
-	useEffect(() => {
-		if (queryState.state !== QueryState.Loading) {
-			return run()	
-		}
-	}, [...deps])
-
+	}, [run, key, queryState.expireAt, deps.join(':')])
 
 	useEffect(() => {
 		if (!fetchOnFocus) {
