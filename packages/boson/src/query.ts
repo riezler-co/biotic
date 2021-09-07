@@ -65,6 +65,11 @@ export function useQuery<Error=any, Data=any>(
 	let [data, setData] = useBoson(boson)
 	let [{ state, error, initialData, expireAt }, setState] = useBoson(queryStateFamily(boson.key))
 
+	let _state = useRef(state)
+	useEffect(() => {
+		_state.current = state
+	})
+
 	let fn = useRef(fetcher)
 	useEffect(() => {
 		fn.current = fetcher
@@ -111,10 +116,20 @@ export function useQuery<Error=any, Data=any>(
 	let { key } = boson
 	useEffect(() => {
 		let isExpired = Date.now() > expireAt
-		if (isExpired && state !== QueryState.Loading) {
+		let isLoading = _state.current === QueryState.Loading
+		
+		if ((isExpired && !isLoading) || (expireAt === 0 && !isLoading)) {
 			return run()
 		}
-	}, [run, key, deps.join(':')])
+
+
+	}, [run, key, expireAt])
+
+	useEffect(() => {
+		if (_state.current !== QueryState.Loading) {
+			return run()	
+		}
+	}, [...deps])
 
 
 	useEffect(() => {
