@@ -5,7 +5,7 @@ import { bosonFamily } from './boson_family'
 import { ObservableInput, from } from 'rxjs'
 
 export enum QueryState {
-	Init = 'inti',
+	Init = 'init',
 	Loading = 'loading',
 	Success = 'loaded',
 	Error = 'error',
@@ -83,6 +83,7 @@ export function useQuery<Error=any, Data=any>(
 
 		let subscription = from(fn.current()).subscribe({
 			next: (data) => {
+				setData(data)
 				setState(currentState => {
 					return {
 						state: QueryState.Success,
@@ -91,8 +92,6 @@ export function useQuery<Error=any, Data=any>(
 						expireAt: Date.now() + expireIn,
 					}
 				})
-
-				setData(data)
 			},
 
 			error: (error) => {
