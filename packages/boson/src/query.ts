@@ -16,6 +16,7 @@ export type State = {
 	error: unknown | null;
 	initialData?: unknown;
 	expireAt: number;
+	reload: boolean;
 }
 
 let queryStateFamily = bosonFamily<[string], State>(() => {
@@ -24,6 +25,7 @@ let queryStateFamily = bosonFamily<[string], State>(() => {
 			state: QueryState.Init,
 			error: null,
 			expireAt: Date.now(),
+			reload: false,
 		},
 	}
 })
@@ -63,12 +65,7 @@ export function useQuery<Error=any, Data=any>(
 	} = options
 
 	let [data, setData] = useBoson(boson)
-	let [{ state, error, initialData, expireAt }, setState] = useBoson(queryStateFamily(boson.key))
-
-	let _state = useRef(state)
-	useEffect(() => {
-		_state.current = state
-	})
+	let [queryState, setState] = useBoson(queryStateFamily(boson.key))
 
 	let fn = useRef(fetcher)
 	useEffect(() => {
@@ -91,6 +88,7 @@ export function useQuery<Error=any, Data=any>(
 				setData(data)
 				setState(currentState => {
 					return {
+						reload: true,
 						state: QueryState.Success,
 						error: null,
 						initialData: currentState.initialData ?? data,
@@ -104,6 +102,7 @@ export function useQuery<Error=any, Data=any>(
 					state: QueryState.Error,
 					error,
 					expireAt: Date.now(),
+					reload: true,
 				})
 			}
 		})
@@ -113,20 +112,24 @@ export function useQuery<Error=any, Data=any>(
 		}
 	}, [setData, setState, expireIn]) 
 
-	let { key } = boson
 	useEffect(() => {
-		let isExpired = Date.now() > expireAt
-		let isLoading = _state.current === QueryState.Loading
+
+		if (queryState.reload === false) {
+			return
+		}
+
+		let isExpired = Date.now() > queryState.expireAt
+		let isLoading = queryState.state === QueryState.Loading
 		
-		if ((isExpired && !isLoading) || (expireAt === 0 && !isLoading)) {
+		if ((isExpired && !isLoading) || (queryState.expireAt === 0 && !isLoading)) {
 			return run()
 		}
 
 
-	}, [run, key, expireAt])
+	}, [run, boson.key, queryState.expireAt])
 
 	useEffect(() => {
-		if (_state.current !== QueryState.Loading) {
+		if (queryState.state !== QueryState.Loading) {
 			return run()	
 		}
 	}, [...deps])
@@ -138,7 +141,7 @@ export function useQuery<Error=any, Data=any>(
 		}
 
 		function handleFocus() {
-			if (state !== QueryState.Loading) {
+			if (queryState.state !== QueryState.Loading) {
 				unsubscribe.current = run()
 			}
 		}
@@ -147,24 +150,24 @@ export function useQuery<Error=any, Data=any>(
 		return () => {
 			document.removeEventListener('focus', handleFocus)
 		}
-	}, [state, fetchOnFocus])
+	}, [queryState.state, fetchOnFocus])
 
 	let reload = useCallback((force = false) => {
-		if (state === QueryState.Loading && force !== true) {
+		if (queryState.state === QueryState.Loading && force !== true) {
 			return
 		}
 
 		unsubscribe.current = run()
-	}, [run, state])
+	}, [run, queryState.state])
 
 	let reset = useCallback(() => {
-		setData(initialData as Data)
-	}, [initialData, setData])
+		setData(queryState.initialData as Data)
+	}, [queryState.initialData, setData])
 
 	let query = {
-		state,
+		state: queryState.state,
 		data,
-		error: error as Error | null,
+		error: queryState.error as Error | null,
 	}
 
 	return [query, { reload, reset, set: setData }]
