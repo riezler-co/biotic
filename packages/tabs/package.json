@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/tabs",
-  "version": "0.3.32",
+  "version": "0.3.33",
   "description": "React Utils",
   "main": "lib/main.js",
   "types": "./lib/main.d.ts",
@@ -25,9 +25,9 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/boson": "^0.3.26",
-    "@biotic-ui/leptons": "^0.3.11",
-    "@biotic-ui/std": "^0.3.8",
+    "@biotic-ui/boson": "^0.3.27",
+    "@biotic-ui/leptons": "^0.3.12",
+    "@biotic-ui/std": "^0.3.9",
     "@types/styled-components": "^5.1.4",
     "lodash": "^4.17.20",
     "react-router-dom": "^5.2.0",
