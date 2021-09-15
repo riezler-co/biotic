@@ -87,9 +87,10 @@ export function useQuery<Error=any, Data=any>(
 		}))
 
 		let subscription = from(fn.current()).subscribe({
-			next: (data) => {
+			next: (data: Data) => {
 				setData(data)
 				setState(currentState => {
+					console.log(currentState.initialData, data, currentState.initialData ?? data)
 					return {
 						reload: true,
 						state: QueryState.Success,
@@ -100,7 +101,7 @@ export function useQuery<Error=any, Data=any>(
 				})
 			},
 
-			error: (error) => {
+			error: (error: Error) => {
 				setState({
 					state: QueryState.Error,
 					error,
@@ -158,6 +159,7 @@ export function useQuery<Error=any, Data=any>(
 		state: queryState.state,
 		data,
 		error: queryState.error as Error | null,
+		initialData: queryState.initialData as Data | undefined,
 	}
 
 	return [query, { reload, reset, set: setData }]
