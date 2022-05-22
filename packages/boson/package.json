@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/boson",
-  "version": "0.3.28",
+  "version": "0.3.29",
   "description": "React RxJS state",
   "main": "lib/main.js",
   "types": "./lib/main.d.ts",
