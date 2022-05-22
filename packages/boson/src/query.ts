@@ -62,7 +62,7 @@ export function useQuery<Error=any, Data=any>(
 
 	let {
 		deps = [],
-		fetchOnFocus = false,
+		fetchOnFocus = true,
 		expireIn = 5 * 60 * 1000,
 	} = options
 
@@ -77,14 +77,15 @@ export function useQuery<Error=any, Data=any>(
 	let unsubscribe = useRef(() => {})
 	useEffect(() => () => {
 		unsubscribe.current()
-		setState({ ...defaultState })
 	}, [setState])
 
-	let run = useCallback(() => {
-		setState(currentState => ({
-			...currentState,
-			state: QueryState.Loading,
-		}))
+	let run = useCallback((withLoading: boolean = true) => {
+		if (withLoading) {
+			setState(currentState => ({
+				...currentState,
+				state: QueryState.Loading,
+			}))
+		}
 
 		let subscription = from(fn.current()).subscribe({
 			next: (data: Data) => {
@@ -127,10 +128,10 @@ export function useQuery<Error=any, Data=any>(
 		}
 
 		if ((isExpired && !isLoading) || (expireAt === 0 && !isLoading)) {
-			setState(state => ({ ...state, state: QueryState.Loading }))
+			console.log('fetch: ', key)
 			return run()
 		}
-	}, [run, key, expireAt, state, deps.join(':')])
+	}, [run, key, expireAt, deps.join(':')])
 
 	useEffect(() => {
 		if (!fetchOnFocus) {
@@ -138,8 +139,8 @@ export function useQuery<Error=any, Data=any>(
 		}
 
 		function handleFocus() {
-			if (state !== QueryState.Loading) {
-				unsubscribe.current = run()
+			if (queryState.state !== QueryState.Loading) {
+				unsubscribe.current = run(false)
 			}
 		}
 
