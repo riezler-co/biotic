@@ -36,7 +36,7 @@
   "peerDependencies": {
     "@biotic-ui/leptons": "^0.3.4",
     "@biotic-ui/std": "^0.3.0",
-    "react": "^17.0.1",
+    "react": "16.8 - 18.x",
     "styled-components": "^5.2.1"
   },
   "publishConfig": {

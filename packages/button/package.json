@@ -34,8 +34,7 @@
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
     "@biotic-ui/icon": "^0.3.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "16.8 - 18.x",
     "styled-components": "^5.2.1"
   },
   "dependencies": {

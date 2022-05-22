@@ -90,7 +90,6 @@ export function useQuery<Error=any, Data=any>(
 			next: (data: Data) => {
 				setData(data)
 				setState(currentState => {
-					console.log(currentState.initialData, data, currentState.initialData ?? data)
 					return {
 						reload: true,
 						state: QueryState.Success,
@@ -105,7 +104,7 @@ export function useQuery<Error=any, Data=any>(
 				setState({
 					state: QueryState.Error,
 					error,
-					expireAt: Date.now(),
+					expireAt: Date.now() + expireIn,
 					reload: true,
 				})
 			},
@@ -116,15 +115,22 @@ export function useQuery<Error=any, Data=any>(
 		}
 	}, [setData, setState, expireIn]) 
 
+
 	let { key } = boson
+	let { state, expireAt } = queryState
 	useEffect(() => {
 		let isExpired = Date.now() > queryState.expireAt
-		let isLoading = queryState.state === QueryState.Loading
-		if ((isExpired && !isLoading) || (queryState.expireAt === 0 && !isLoading)) {
-			queryState.state = QueryState.Loading
+		let isLoading = state === QueryState.Loading
+
+		if (isLoading || state === QueryState.Error) {
+			return
+		}
+
+		if ((isExpired && !isLoading) || (expireAt === 0 && !isLoading)) {
+			setState(state => ({ ...state, state: QueryState.Loading }))
 			return run()
 		}
-	}, [run, key, queryState.expireAt, deps.join(':')])
+	}, [run, key, expireAt, state, deps.join(':')])
 
 	useEffect(() => {
 		if (!fetchOnFocus) {
@@ -132,7 +138,7 @@ export function useQuery<Error=any, Data=any>(
 		}
 
 		function handleFocus() {
-			if (queryState.state !== QueryState.Loading) {
+			if (state !== QueryState.Loading) {
 				unsubscribe.current = run()
 			}
 		}
@@ -141,7 +147,7 @@ export function useQuery<Error=any, Data=any>(
 		return () => {
 			document.removeEventListener('focus', handleFocus)
 		}
-	}, [queryState.state, fetchOnFocus])
+	}, [state, fetchOnFocus])
 
 	let reload = useCallback((force = false) => {
 		if (queryState.state === QueryState.Loading && force !== true) {

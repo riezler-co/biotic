@@ -33,8 +33,7 @@
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "16.8 - 18.x",
     "rxjs": "^6.6.3"
   },
   "publishConfig": {

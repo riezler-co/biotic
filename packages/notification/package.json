@@ -37,8 +37,8 @@
   "peerDependencies": {
     "@biotic-ui/boson": "^0.3.9",
     "@biotic-ui/std": "^0.3.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "16.8 - 18.x",
+    "react-dom": "16.8 - 18.x",
     "rxjs": "^6.6.3",
     "styled-components": "^5.2.1"
   },
