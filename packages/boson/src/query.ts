@@ -62,7 +62,7 @@ export function useQuery<Error=any, Data=any>(
 
 	let {
 		deps = [],
-		fetchOnFocus = true,
+		fetchOnFocus = false,
 		expireIn = 5 * 60 * 1000,
 	} = options
 
@@ -128,7 +128,6 @@ export function useQuery<Error=any, Data=any>(
 		}
 
 		if ((isExpired && !isLoading) || (expireAt === 0 && !isLoading)) {
-			console.log('fetch: ', key)
 			return run()
 		}
 	}, [run, key, expireAt, deps.join(':')])
@@ -148,7 +147,7 @@ export function useQuery<Error=any, Data=any>(
 		return () => {
 			document.removeEventListener('focus', handleFocus)
 		}
-	}, [state, fetchOnFocus])
+	}, [fetchOnFocus])
 
 	let reload = useCallback((force = false) => {
 		if (queryState.state === QueryState.Loading && force !== true) {
