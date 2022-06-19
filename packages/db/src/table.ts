@@ -57,9 +57,9 @@ export type ChangeEvent<T> =
 	| InsertEvent<T>
 	| DeleteEvent<T>
 
-export type SetterOrUpater<T> =
-	| T
-	| ((value: T | null) => T) 
+export type SetterOrUpater<Args, Return = Args> =
+	| Return
+	| ((value: Args) => Return) 
 
 
 export type GetAllOption = {
@@ -96,7 +96,7 @@ export class Table<T extends Item> {
 					.filter(hook => hook.on.includes(On.Get))
 					.reduce((acc, hook) => hook.fn(acc) ?? acc, currentItem)
 
-				subscriber.next(data)
+				subscriber.next(data ? data : null)
 				subscriber.complete()
 			})
 			.catch(error => subscriber.error(error))
@@ -136,7 +136,7 @@ export class Table<T extends Item> {
 					}, value)
 
 				await insertItem(db, this.config.name, data)
-				subscriber.next(value)
+				subscriber.next(data)
 				subscriber.complete()
 
 				this.change$.next({
@@ -155,7 +155,13 @@ export class Table<T extends Item> {
 	update(id: string, updater: SetterOrUpater<T>): Observable<T> {
 		return new Observable<T>(subscriber => {
 			open(this.tableConfigs, this.dbConfig).then(async db => {
-				let currentItem = await getItem<T>(db, this.config.name, id)
+				let currentItem = await this.get(id).toPromise()
+
+				if (currentItem === null) {
+					subscriber.complete()
+					return
+				}
+
 				let nextValue = updater instanceof Function
 					? updater(currentItem)
 					: { ...currentItem, ...updater }
@@ -173,7 +179,7 @@ export class Table<T extends Item> {
 
 				await updateItem(db, this.config.name, data)
 
-				subscriber.next(nextValue)
+				subscriber.next(data)
 				subscriber.complete()
 
 				this.change$.next({
@@ -189,11 +195,12 @@ export class Table<T extends Item> {
 		})
 	}
 
-	upsert(id: string, value: T): Observable<T> {
+	upsert(id: string, value: SetterOrUpater<T | null, T>): Observable<T> {
 		return this.get(id).pipe(
 			switchMap(item => {
 				if (item === null) {
-					return this.insert(value)
+					let _item = typeof value === 'function' ? value(item) : value
+					return this.insert(_item)
 				} else {
 					return this.update(id, value)
 				}

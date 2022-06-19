@@ -1,9 +1,8 @@
 import { map, toArray } from 'rxjs/operators'
 
 import { Table } from './table'
-import { open, Configs, Options, Config } from './open'
+import { Configs, Options } from './open'
 import { Hooks } from './hooks'
-import { Item } from './operations'
 
 type KVItem<T> = {
 	id: string;
@@ -96,5 +95,9 @@ export class KeyValue<T> {
 	async forEach(fn: (item: T, key: string, map: KeyValue<T>) => any): Promise<void> {
 		let values = await this.entries()
 		values.forEach(([key, item]) => fn(item, key, this))	
+	}
+
+	changes(key?: string) {
+		return this.table.changes(key)
 	}
 }
