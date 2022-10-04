@@ -1,29 +1,17 @@
 import { useRef, useEffect } from 'react'
 
-type CB =
-  { didTimeout: boolean
-  ; timeRemaining: () => number
-  }
-
-
-type IdelFn = (e: CB) => void
-type IdelCallback = (fn: IdelFn) => number
 type CancelIdleCallback = (id: number) => void
 
-function NoOp (fn: IdelFn) {
+function NoOp (_fn: IdleRequestCallback) {
   return setTimeout(() => {}, 0)
 }
 
-export function useIdleCallback(cb: IdelFn) {
-
-	let savedCallback = useRef<IdelFn>(cb)
-
+export function useIdleCallback(cb: IdleRequestCallback, deps?: Array<unknown>) {
   let requestIdleCallback = useRef<any>(NoOp)
-  let cancelIdleCallback = useRef<any>((t: number) => {})
-
+  let cancelIdleCallback = useRef<CancelIdleCallback>((_: number) => {})
   useEffect(() => {
     requestIdleCallback.current = window.requestIdleCallback ||
-      function (cb: IdelFn) {
+      function (cb: IdleRequestCallback) {
         return setTimeout(function () {
           var start = Date.now()
           cb({ 
@@ -39,16 +27,17 @@ export function useIdleCallback(cb: IdelFn) {
       function (id: number) {
         clearTimeout(id)
       }
-  })
+  }, [])
 
-	useEffect(() => {
-		savedCallback.current = cb
-	})
+  let savedCallback = useRef<IdleRequestCallback>(cb)
+  useEffect(() => {
+    savedCallback.current = cb
+  })
 
 	useEffect(() => {
 		let cancelToken = requestIdleCallback.current(savedCallback.current)
 		return () => {
 			cancelIdleCallback.current(cancelToken)
 		}
-	}, [])
+	}, deps)
 }

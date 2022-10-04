@@ -1,4 +1,4 @@
 
-export function isBrowser(): boolean {
-	return typeof window !== 'undefined' && 'localStorage' in window
+export function isBrowser(it: any = globalThis): boolean {
+	return typeof it.window !== 'undefined' && 'localStorage' in it
 }

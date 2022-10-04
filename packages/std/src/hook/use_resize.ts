@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react'
 
+/**
+ * Calls the given function when a resize event occurs 
+ */
 export function useResize(fn: (e: Event) => void) {
-	let cb = useRef((e: Event) => {})
-	
+	let cb = useRef(fn)
 	useEffect(() => {
 		cb.current = fn
 	})

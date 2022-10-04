@@ -1,50 +1,34 @@
-import { useEffect, useRef, useState } from 'react'
-
-type DOMRect =
-	{ x: number
-	; y: number
-	; width: number
-	; height: number;
-	}
-
-type ResizeObserverSize =
-	{ inlineSize: number
-	; blockSize: number
-	}
-
-export type ResizeObserverEntry =
-	{ target: HTMLElement
-	; contentRect: DOMRect
-	; borderBoxSize: ResizeObserverSize
-	; contentBoxSize: ResizeObserverSize
-	; devicePixelContentBoxSize: ResizeObserverSize
-	}
+import { MutableRefObject, useEffect, useRef } from 'react'
 
 export type Entries = Array<ResizeObserverEntry>
 
-export function useResizeObserver(cb: (e: Entries) => any) {
-	let fn = useRef(cb)
+/**
+ * {@link https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver}
+*/
+export function useResizeObserver<T extends Element>(cb: (e: Entries) => any): MutableRefObject<T | null> {
 	let cleanUp = useRef(() => {})
-	let [ref, setRef] = useState<HTMLElement | null>(null)
+	let container = useRef<T | null>(null)
 
+	let fn = useRef(cb)
 	useEffect(() => {
 		fn.current = cb
 	})
 
+	let { current } = container
 	useEffect(() => {
-		if (!ref) return
+		if (!current) return
 
-		let resizeObserver = new window.ResizeObserver((entries: Entries) => {
+		let resizeObserver = new ResizeObserver((entries: Entries) => {
 			cleanUp.current = fn.current(entries)
 		})
 
-		resizeObserver.observe(ref)
+		resizeObserver.observe(current)
 
 		return () => {
 			resizeObserver.disconnect()
 			cleanUp.current && cleanUp.current()
 		}
-	}, [ref])
+	}, [current])
 
-	return setRef
+	return container
 }

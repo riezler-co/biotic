@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react'
 
+/**
+ * Returns the current network status of the device.
+ * true = online and false = offline
+*/
 export function useOnline() {
   let [online, setOnline] = useState(true)
 
   useEffect(() => {
 
-  	function updateOnlineStatus(event: Event) {
+  	function updateOnlineStatus(_event: Event) {
   	  setOnline(navigator.onLine)
   	}
   	

@@ -1,30 +1,34 @@
-import { useEffect, useRef, RefObject } from 'react'
+import { useEffect, useRef, MutableRefObject } from 'react'
 
-type Callback = (e: MouseEvent) => void
 
-export function useOutsideClick<T extends HTMLElement = HTMLElement>(cb: Callback): RefObject<T> {
+type Callback = (e: Event) => void
+
+/**
+ * Returns a {@link RefObject} that can be attached to an HTMLELement.
+ * The provided callback will be called once the user clicks outside the element.
+*/
+export function useOutsideClick<T extends HTMLElement = HTMLElement>(cb: Callback): MutableRefObject<T | null> {
 	let container = useRef<T | null>(null)
+	
 	let callback = useRef(cb)
-
 	useEffect(() => {
 		callback.current = cb
 	})
 
+	let { current } = container
 	useEffect(() => {
-
-		if (!container.current) {
+		if (!current) {
 			return
 		}
 
-		let handle = (event: MouseEvent) => {
-
-			if (container.current === null) {
+		let handle = (event: Event) => {
+			if (current === null) {
 				return
 			}
 
 			let inTarget = event
 				.composedPath()
-				.includes(container.current)
+				.includes(current)
 
 			if (!inTarget) {
 				callback.current(event)
@@ -32,11 +36,10 @@ export function useOutsideClick<T extends HTMLElement = HTMLElement>(cb: Callbac
 		}
 
 		window.addEventListener('mousedown', handle)
-
 		return () => {
 			window.removeEventListener('mousedown', handle)
 		}
-	}, [container])
+	}, [current])
 
 	return container
 }

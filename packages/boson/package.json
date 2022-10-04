@@ -2,14 +2,14 @@
   "name": "@biotic-ui/boson",
   "version": "0.3.30",
   "description": "React RxJS state",
+  "source": "src/main.ts",
+  "module": "lib/module.js",
   "main": "lib/main.js",
-  "types": "./lib/main.d.ts",
+  "types": "lib/types.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "bundle": "webpack --config ../../webpack.ts.config.js --mode production",
-    "dev": "webpack --config ../../webpack.ts.config.js --mode development --watch",
-    "types": "tsc --emitDeclarationOnly --declaration --declarationDir ./lib",
-    "build": "npm run bundle && npm run types",
+    "watch": "parcel watch",
+    "build": "parcel build",
+    "test": "jest",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -26,10 +26,7 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "rxjs": "^6.6.3",
-    "typescript": "^4.1.2",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "rxjs": "^6.6.3"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {

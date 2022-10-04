@@ -1,21 +1,21 @@
 
-type LRUConfig<Item> = {
+type LRUConfig = {
 	size: number;
 }
 
-export class LRU<Item = any> {
+export class LRU<Item = any, Key = string> {
 
 	readonly cacheSize: number
 
-	private items = new Map<string, Item>()
-	private order: Array<string>
+	private items = new Map<Key, Item>()
+	private order: Array<Key>
 
-	constructor(config: LRUConfig<Item>) {
+	constructor(config: LRUConfig) {
 		this.cacheSize = config.size
 		this.order = []
 	}
 
-	get(key: string): Item | undefined {
+	get(key: Key): Item | undefined {
 
 		if (this.items.has(key)) {
 			this.order = this.moveToBack(key)
@@ -24,7 +24,7 @@ export class LRU<Item = any> {
 		return this.items.get(key)
 	}
 
-	set(key: string, item: Item): LRU<Item> {
+	set(key: Key, item: Item): LRU<Item, Key> {
 
 		if (this.items.has(key)) {
 			this.order = this.moveToBack(key)
@@ -41,11 +41,11 @@ export class LRU<Item = any> {
 		return this
 	}
 
-	has(key: string): boolean {
+	has(key: Key): boolean {
 		return this.items.has(key)
 	}
 
-	delete(key: string): boolean {
+	delete(key: Key): boolean {
 
 		if (this.items.has(key)) {
 			this.items.delete(key)
@@ -73,7 +73,7 @@ export class LRU<Item = any> {
 		return this.items.entries()
 	}
 
-	forEach(cb: (value: Item, key: string, lru: LRU<Item>) => any) {
+	forEach(cb: (value: Item, key: Key, lru: LRU<Item, Key>) => any) {
 		this.items.forEach((value, key) => cb(value, key, this))
 	}
 
@@ -81,7 +81,7 @@ export class LRU<Item = any> {
 		return this.items.size
 	}
 
-	private moveToBack(key: string) {
+	private moveToBack(key: Key) {
 		let index = this.order.indexOf(key)
 		return [
 			...this.order.slice(0, index),

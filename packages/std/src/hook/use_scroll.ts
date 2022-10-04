@@ -1,5 +1,5 @@
-import React, { RefObject } from 'react'
-import _ from 'lodash'
+import { RefObject, useEffect, useRef, useState } from 'react'
+import { useThrottle } from './use_throttle'
 
 function scrollTop(elm: HTMLElement | null) {
   if (!elm) {
@@ -26,10 +26,20 @@ type ScrollState = {
   }
 }
 
-export function useScroll(fn: (s: ScrollState) => void, container: RefObject<HTMLElement> = { current: null }) {
-  let elm = container.current
+type Options = {
+  container?: RefObject<HTMLElement>,
+  timeout?: number,
+}
 
-  let [scroll, setScroll] = React.useState<ScrollState>({
+/**
+ * Returns the current scroll psotion for a given element.
+ * By default, the callback is beeing throttled by 500ms.
+*/
+export function useScroll(fn: (s: ScrollState) => void, options?: Options) {
+  let elm = options?.container?.current ?? null
+  let timeout = options?.timeout ?? 500
+
+  let [scroll, setScroll] = useState<ScrollState>({
 		y: scrollTop(elm),
 		x: scrollLeft(elm),
 		delta: {
@@ -38,13 +48,13 @@ export function useScroll(fn: (s: ScrollState) => void, container: RefObject<HTM
 		}
 	})
 
-  let cb = React.useRef((state: ScrollState) => {})
-  React.useEffect(() => {
+  let cb = useRef(fn)
+  useEffect(() => {
     cb.current = fn
   })
 
-  let handleScroll = React.useCallback(
-    _.throttle(function onScroll() {
+  let handleScroll = useThrottle(
+    function onScroll() {
       let newState = {
         y: scrollTop(elm),
         x: scrollLeft(elm),
@@ -55,20 +65,18 @@ export function useScroll(fn: (s: ScrollState) => void, container: RefObject<HTM
       }
 
       setScroll(newState)
-      cb.current && cb.current(newState)
-    }, 500, { leading: false, trailing: true }),
-    [elm]
+      cb.current(newState)
+    }, timeout, [setScroll], { leading: false, trailing: true }
   )
 
-  React.useEffect(() => {
-    let scrollContainer = container.current ? container.current : window
+  useEffect(() => {
+    let scrollContainer = elm ?? window
     scrollContainer.addEventListener('scroll', handleScroll)
     return () => {
       scrollContainer.removeEventListener('scroll', handleScroll)
       handleScroll.cancel()
     }
-  // eslint-disable-next-line
-  }, [container.current])
+  }, [elm])
 
   return scroll
 }

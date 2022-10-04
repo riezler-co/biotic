@@ -1,21 +1,23 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 
+/* Returns a boolen whether a given media query matches or not.
+ * The value gets update when the value of the match changes.
+ *
+ * {@link https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia} 
+*/
 export function useMatchMedia(mediaQuery: string): boolean {
-
-	let initalMatch = useMemo(() => {
+	let [matches, setMatch] = useState(() => {
 		let mql = window.matchMedia(mediaQuery)
 		return mql.matches
-	}, [mediaQuery])
-
-	let [matches, setMatch] = useState(initalMatch)
+	})
 
 	useEffect(() => {
 		let mql = window.matchMedia(mediaQuery)
 		setMatch(mql.matches)
 		let handleChange = (e: MediaQueryListEvent) => setMatch(e.matches)
-		mql.addListener(handleChange)
+		mql.addEventListener('change', handleChange)
 		return () => {
-			mql.removeListener(handleChange)
+			mql.removeEventListener('change', handleChange)
 		}
 	}, [setMatch, mediaQuery])
 

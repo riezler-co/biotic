@@ -2,14 +2,15 @@
   "name": "@biotic-ui/std",
   "version": "0.3.10",
   "description": "React Utils",
+  "source": "src/main.ts",
+  "module": "lib/module.js",
   "main": "lib/main.js",
-  "types": "./lib/main.d.ts",
+  "types": "lib/types.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config ../../webpack.ts.config.js --mode production",
-    "prepublish": "npm run build && npm run types",
-    "types": "tsc --emitDeclarationOnly --declaration --declarationDir ./lib",
-    "dev": "tsc --noEmit --watch"
+    "watch": "parcel watch",
+    "build": "parcel build",
+    "test": "jest",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -24,23 +25,16 @@
   "bugs": {
     "url": "https://github.com/riezler-co/biotic/issues"
   },
-  "devDependencies": {
-    "@types/lodash": "^4.14.165",
-    "@types/styled-components": "^5.1.4",
-    "lodash": "^4.17.20",
-    "typescript": "^4.1.2",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
-  },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
-    "react": "16.8 - 18.x"
+    "react": "16.8 - 18.x",
+    "styled-components": "^5.2.1"
   },
   "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@types/styled-components": "^5.1.3"
+    "lodash": "^4.17.20"
   }
 }

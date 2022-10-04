@@ -1,6 +1,9 @@
 import { useMemo } from 'react'
 
-export function useQueryParams(queryString: string) {
+/**
+ * Returns a URLSearchParams object.
+ */
+export function useQueryParams(queryString: string = window.location.search) {
 	return useMemo(() => {
 		let searchParams = new URLSearchParams(queryString)
 		return searchParams

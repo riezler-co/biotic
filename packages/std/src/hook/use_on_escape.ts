@@ -1,6 +1,11 @@
 import { useEffect, useRef } from 'react'
 
 let NoOp = (e: KeyboardEvent) => {}
+
+/**
+ * Listens to the escape key and calles the function
+ * when the user presses the escape key.
+*/
 export function useOnEscape(fn = NoOp) {
 	let callback = useRef(fn)
 

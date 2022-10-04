@@ -2,13 +2,14 @@
   "name": "@biotic-ui/notification",
   "version": "0.3.27",
   "description": "React Notification",
+  "source": "src/main.ts",
+  "module": "lib/module.js",
   "main": "lib/main.js",
-  "types": "./lib/main.d.ts",
+  "types": "lib/types.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "bundle": "webpack --config ../../webpack.ts.config.js --mode production",
-    "types": "tsc --emitDeclarationOnly --declaration --declarationDir ./lib",
-    "build": "npm run bundle && npm run types",
+    "watch": "parcel watch",
+    "build": "parcel build",
+    "test": "jest",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -26,12 +27,7 @@
   },
   "devDependencies": {
     "@biotic-ui/boson": "^0.3.30",
-    "@biotic-ui/std": "^0.3.10",
-    "@types/styled-components": "^5.1.4",
-    "rxjs": "^6.6.3",
-    "typescript": "^4.1.2",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "@biotic-ui/std": "^0.3.10"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
@@ -40,7 +36,8 @@
     "react": "16.8 - 18.x",
     "react-dom": "16.8 - 18.x",
     "rxjs": "^6.6.3",
-    "styled-components": "^5.2.1"
+    "styled-components": "^5.2.1",
+    "framer-motion": "7.5.1"
   },
   "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
   "publishConfig": {

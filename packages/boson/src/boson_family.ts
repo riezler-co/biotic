@@ -1,8 +1,4 @@
-import {
-	Boson,
-	BosonConfig,
-	boson,
-} from './boson'
+import { Boson, BosonConfig, boson } from './boson'
 import { nanoid } from 'nanoid'
 
 type FillOptions = {

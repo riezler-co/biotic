@@ -2,13 +2,14 @@
   "name": "@biotic-ui/drawer",
   "version": "0.3.16",
   "description": "React Drawer",
+  "source": "src/main.ts",
+  "module": "lib/module.js",
   "main": "lib/main.js",
-  "types": "./lib/main.d.ts",
+  "types": "lib/types.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "bundle": "webpack --config ../../webpack.ts.config.js --mode production",
-    "types": "tsc --emitDeclarationOnly --declaration --declarationDir ./lib",
-    "build": "npm run bundle && npm run types",
+    "watch": "parcel watch",
+    "build": "parcel build",
+    "test": "jest",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -25,16 +26,12 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/std": "^0.3.10",
-    "@types/styled-components": "^5.1.4",
-    "typescript": "^4.1.2",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "@biotic-ui/std": "^0.3.10"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
     "@biotic-ui/std": "^0.3.0",
-    "framer-motion": "^2.9.5",
+    "framer-motion": "7.5.1",
     "react": "16.8 - 18.x",
     "react-dom": "16.8 - 18.x",
     "styled-components": "^5.2.1"

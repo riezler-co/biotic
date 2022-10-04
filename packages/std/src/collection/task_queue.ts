@@ -6,23 +6,23 @@ type Task<T> = {
 	reject: (x: any) => any;
 }
 
-type TaskCallback<T> = (task: T) => Promise<any>
+type TaskCallback<T> = (task: T) => void
 
-export class TaskQueue<T> {
+export class TaskQueue {
 	private concurrency = 1
 	private running = 0
-	private tasks: Array<Task<T>> = []
-	private listener = new Map<string, TaskCallback<T>>()
+	private tasks: Array<Task<unknown>> = []
+	private listener = new Map<string, TaskCallback<any>>()
 	private paused: boolean = false
 
-	private async runTask(task: Task<T>) {
+	private async runTask(task: Task<unknown>) {
 		this.running = this.running + 1
 
 		let fn = this.listener.get(task.name)
 
 		if (fn) {
 			try {
-				let result = await fn(task.task)
+				let result = await Promise.resolve(fn(task.task))
 				task.resolve(result)
 			} catch (err) {
 				task.reject(err)
@@ -41,11 +41,11 @@ export class TaskQueue<T> {
 		}
 	}
 
-	private enqueueTask(task: Task<T>) {
+	private enqueueTask(task: Task<unknown>) {
 		this.tasks.push(task)
 	}
 
-	push(name: string, task: T) {
+	push<T>(name: string, task: T) {
     	return new Promise(async (resolve, reject) => {
     		if (this.paused === true) {
     			return this.enqueueTask({ name, task, resolve, reject })
@@ -59,7 +59,7 @@ export class TaskQueue<T> {
     	})
 	}
 
-	on(name: string, fn: TaskCallback<T>) {
+	on<T>(name: string, fn: TaskCallback<T>) {
 		this.listener.set(name, fn)
 	}
 
@@ -68,6 +68,7 @@ export class TaskQueue<T> {
 	}
 
 	start() {
+		this.paused = false
 		let nextTask = this.tasks.shift()
 		if (nextTask) {
 			this.runTask(nextTask)
