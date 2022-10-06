@@ -1,37 +1,39 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Ref } from 'react'
 import { createPortal } from 'react-dom'
-import styled, { StyledComponent } from 'styled-components'
+import styled  from 'styled-components'
 
-import { useGetContainer
-			 , useOnEscape
-			 , usePreventScroll
-			 } from '@biotic-ui/std'
+import {
+	useGetContainer,
+	useOnEscape,
+	usePreventScroll
+} from '@biotic-ui/std'
 
-import { Backdrop } from '@biotic-ui/leptons'
-import { motion, AnimatePresence, MotionProps } from 'framer-motion'
+import styles from '@biotic-ui/leptons/styles/backdrop.module.css'
+import { motion, AnimatePresence } from 'framer-motion'
 
 type OnClose = {
-	backdrop: boolean
-	; escape: boolean
-	}
+	backdrop: boolean;
+	escape: boolean
+}
 
-type DialogProps =
-	{ open?: boolean
-	; backdrop?: boolean
-	; onClose?: (e: OnClose) => void
-	; className?: string
-	; parent?: Ref<HTMLElement>
-	}
+type DialogProps = {
+	open?: boolean;
+	backdrop?: boolean;
+	onClose?: (e: OnClose) => void;
+	className?: string;
+	parent?: Ref<HTMLElement>;
+	children?: ReactNode;
+}
 
-export let Dialog: React.FC<DialogProps> = ({
+export let Dialog = ({
 	open = false,
 	children,
 	backdrop = true,
 	onClose = () => {},
 	parent = null,
 	...props
-}) => {
+}: DialogProps) => {
 	let DialogContainer = useGetContainer('biotic-dialog')
 
 	useOnEscape(() => open && onClose({ backdrop: false, escape: true }))
@@ -74,13 +76,12 @@ export let Dialog: React.FC<DialogProps> = ({
 		>
 
 			{ backdrop &&
-				<Backdrop
-						as={motion.div}
-						open={open}
-						initial='hidden'
-						animate={open ? 'visible' : 'hidden'}
-						variants={backdropVariants}
-						onClick={handleBackdrop}
+				<motion.div
+					className={`${styles.backdrop} ${open ? styles['backdrop--open'] : ''}`}
+					initial='hidden'
+					animate={open ? 'visible' : 'hidden'}
+					variants={backdropVariants}
+					onClick={handleBackdrop}
 				/>
 			}
 			<AnimatePresence>

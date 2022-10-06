@@ -6,7 +6,6 @@ import React,
 		 , useEffect
 		 , useMemo
 		 , useCallback
-		 , Suspense
 		 } from 'react';
 
 export interface State {
@@ -185,7 +184,7 @@ export function useData(initialState: any) {
 	let currentState = data[key]
 	let stepData = currentState ? currentState : initialState
 	
-	let setData = useCallback((data) => {
+	let setData = useCallback((data: unknown) => {
 		dispatch({ type: 'setData', key, data })
 	}, [step, key])
 

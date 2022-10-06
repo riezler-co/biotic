@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 
 export let SheetHeader = styled.header`
 	border-bottom: var(--border);
@@ -14,10 +14,10 @@ export let SheetContent = styled.div`
 	padding: var(--baseline-2);
 `
 
-type BottomDrawerProps =
-	{ height?: number
-	; open: boolean
-	}
+type BottomDrawerProps = {
+	height?: number;
+	open: boolean;
+}
 
 export let BottomDrawer = styled.div<BottomDrawerProps>`
 	--bottom-default-sheet-shadow: 0px 8px 21px -5px rgba(0, 0, 0, 0.5);

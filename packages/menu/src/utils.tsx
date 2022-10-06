@@ -1,16 +1,16 @@
 
-export type Rect =
-	{ width: number
-	; height: number
-	; top: number
-	; left: number
-	}
+export type Rect = {
+	width: number;
+	height: number;
+	top: number;
+	left: number
+}
 
 export function getSubmenuPosition(
-		submenuRect: Rect
-	, menuRect: Rect
+	submenuRect: Rect,
+	menuRect: Rect,
 ) {
-	let { innerHeight, innerWidth, pageXOffset, pageYOffset } = window
+	let { innerHeight, innerWidth } = window
 	let menuTop = menuRect.top
 	let menuLeft = menuRect.left + menuRect.width
 

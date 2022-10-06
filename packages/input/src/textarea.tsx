@@ -9,7 +9,7 @@ import {
 } from 'react'
 import styled from 'styled-components'
 import { useCombinedRefs, useResize, useThrottle } from '@biotic-ui/std'
-import { InputBase } from '@biotic-ui/leptons'
+import styles from '@biotic-ui/leptons/styles/input.module.css'
 
 type Ref = HTMLTextAreaElement
 
@@ -65,7 +65,7 @@ export let Textarea = forwardRef<Ref, TextareaHTMLAttributes<Ref> & TextareaProp
 		<StyledText
 			style={style}
 			ref={ref}
-			className={className}
+			className={[styles.input, className].join(' ')}
 			onChange={props.onChange}
 			onBlur={props.onBlur}
 			value={props.value}
@@ -77,9 +77,7 @@ export let Textarea = forwardRef<Ref, TextareaHTMLAttributes<Ref> & TextareaProp
 })
 
 
-let StyledText = styled.textarea<{ maxHeight: number | string | null }>`
-	${InputBase}
-	
+let StyledText = styled.textarea<{ maxHeight: number | string | null }>`	
 	max-block-size: ${p => p.maxHeight === null
 		? 'auto' 
 		: typeof p.maxHeight === 'number'

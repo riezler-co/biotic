@@ -1,9 +1,10 @@
 import styled from 'styled-components'
-import { Scrollbar } from '@biotic-ui/leptons'
+import styles from '@biotic-ui/leptons/style/scrollbar.module.css'
 
-let TBContent = styled.div`
+let TBContent = styled.div.attrs({
+	className: styles.scrollbar
+})`
 	overflow: auto;
-	${Scrollbar}
 `
 
 let TBHeader = styled.header`

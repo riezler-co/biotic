@@ -96,15 +96,6 @@ export function getNextIndex(
 	return nextIndex
 }
 
-let makeId = (): (() => number) => {
-	let id = 0
-	return (): number => {
-		let tmp = id
-		id = id + 1
-		return tmp
-	}
-}
-
 export type EventCallback = (id?: string) => void; 
 
 export function last<T>(array: Array<T>): T | undefined {

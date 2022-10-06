@@ -1,19 +1,20 @@
-import React
-      ,{ useState
-			 , createContext
-			 , useContext
-			 , Children
-			 , cloneElement
-			 , ReactElement
-			 } from 'react'
+import {
+	useState,
+	createContext,
+	useContext,
+	Children,
+	cloneElement,
+	ReactElement,
+    ReactNode
+} from 'react'
 import styled from 'styled-components'
 import { Collapsible } from './collapsible'
-import { AnimateSharedLayout, motion, AnimatePresence } from 'framer-motion'
+import { AnimateSharedLayout, motion } from 'framer-motion'
 
-type UseAccordion =
-	{ open: Array<number>
-	; multi: boolean
-	}
+type UseAccordion = {
+	open: Array<number>;
+	multi: boolean;
+}
 
 let defaultOptions: UseAccordion = {
 	open: [],
@@ -45,17 +46,17 @@ export function useAccordion(userOptions: UseAccordion = defaultOptions) {
 }
 
 
-type AccordionProps =
-	{ open: Array<number>
-	; onClose: (i: number) => void
-	; onOpen: (i: number) => void
-	; 
-	}
+type AccordionProps = {
+	open: Array<number>;
+	onClose: (i: number) => void;
+	onOpen: (i: number) => void;
+	children?: ReactNode;
+}
 
 let AccordionCtx = createContext<AccordionProps>({
 	open: [],
-	onOpen: (n: number) => {},
-	onClose: (n: number) => {},
+	onOpen: (_: number) => {},
+	onClose: (_: number) => {},
 })
 
 let List = styled(motion.ul)`
@@ -82,9 +83,12 @@ export let Accordion: React.FC<AccordionProps> = ({ open, onClose, onOpen, child
 }
 
 
-type AccordionItemProps = React.FC<{ index: number }>
+type AccordionItemProps = {
+	index: number;
+	children?: ReactNode
+}
 
-export let AccordionItem: AccordionItemProps = ({ children, index }) => {
+export let AccordionItem = ({ children, index }: AccordionItemProps) => {
 
 	let _children = Children.map(children, (node) => {
 		return cloneElement((node as ReactElement), { index })
@@ -106,9 +110,13 @@ let StyledAccordionTitle = styled(motion.button)`
 	padding: calc(var(--baseline) / 2) var(--baseline);
 `
 
-type AccordionTitleProps = React.FC<{ index: number, className?: string }>
+type AccordionTitleProps = {
+	index: number,
+	className?: string,
+	children?: ReactNode,
+}
 
-export let AccordionTitle: AccordionTitleProps = ({ children, index, className, ...props }) => {
+export let AccordionTitle = ({ children, index, className, ...props }: AccordionTitleProps) => {
 	let { open, onOpen, onClose } = useContext(AccordionCtx)
 	let isOpen = open.includes(index)
 
@@ -131,9 +139,12 @@ let StyledAccordionContent = styled(Collapsible)`
 	padding: ${p => p.open ? 'calc(var(--baseline) / 2)' : '0'} var(--baseline);
 `
 
-type AccordionConentProps = React.FC<{ index: number }>
+type AccordionConentProps = {
+	index: number;
+	children: ReactNode;
+}
 
-export let AccordionConent: AccordionConentProps = ({ children, index, ...props }) => {
+export let AccordionConent = ({ children, index, ...props }: AccordionConentProps) => {
 	let { open } = useContext(AccordionCtx)
 
 	return (

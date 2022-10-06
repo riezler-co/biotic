@@ -1,9 +1,9 @@
-import React from 'react'
-import { FC, useRef, useEffect, Fragment } from 'react'
+import React, { ReactNode } from 'react'
+import { Fragment } from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { useOnEscape } from '@biotic-ui/std'
-import { Backdrop } from '@biotic-ui/leptons'
+import styles from '@biotic-ui/leptons/style/backdrop.module.css'
 
 export enum Position {
 	Bottom,
@@ -72,14 +72,15 @@ export let FloatingTaskBarContent = styled.div<{ open: boolean, position: Positi
 `
 
 type Props = {
-	open?: boolean;
-	onClose?: () => void;
-	position?: Position;
-	closeBotton?: boolean;
-	backdrop?: boolean;
+	open?: boolean,
+	onClose?: () => void,
+	position?: Position,
+	closeBotton?: boolean,
+	backdrop?: boolean,
+	children?: ReactNode,
 }
 
-export let FloatingTaskBar: FC<Props> = ({
+export let FloatingTaskBar = ({
 	children,
 	onClose = () => {},
 	open = false,
@@ -87,7 +88,7 @@ export let FloatingTaskBar: FC<Props> = ({
 	closeBotton = true,
 	backdrop = false,
 	...props
-}) => {
+}: Props) => {
 	
 	let variants = {
 		hidden: {
@@ -110,9 +111,8 @@ export let FloatingTaskBar: FC<Props> = ({
 	return (
 		<Fragment>
 			{ backdrop &&
-				<Backdrop
-					as={motion.div}
-					open={open}
+				<motion.div
+					className={`${styles.backdrop} ${open ? styles['backdrop--open'] : ''}`}
 					initial='hidden'
 					animate={open ? 'visible' : 'hidden'}
 					variants={backdropVariants}
@@ -204,7 +204,7 @@ let CloseWrapper = styled.button`
 	}
 `
 
-let X: FC<{}> = () => {
+let X = () => {
 	return (
 		<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="var(--task-bar-background, #000)" viewBox="0 0 256 256">
 			<rect width="256" height="256" fill="none"></rect>

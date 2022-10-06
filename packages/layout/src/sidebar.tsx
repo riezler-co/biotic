@@ -2,7 +2,7 @@ import React, { useMemo, Children, ReactElement, createContext, useContext } fro
 import styled from 'styled-components'
 import { useMatchMedia } from '@biotic-ui/std'
 import { Drawer } from '@biotic-ui/drawer'
-import { Scrollbar } from '@biotic-ui/leptons'
+import styles from '@biotic-ui/leptons/style/scrollbar.module.css'
 import { motion, AnimateSharedLayout } from 'framer-motion'
 
 export enum Direction {
@@ -132,10 +132,8 @@ export let Aside = (props: AsideProps) => {
 	}
 
 	let variants = {
-		hidden: {
-			width: 0
-		},
-		visible: { width }	
+		hidden: { width: 0 },
+		visible: { width },	
 	}
 
 	let contentVariants = {
@@ -157,29 +155,31 @@ export let Aside = (props: AsideProps) => {
 
 	return (
 		<StyledAside
-				layout
-				as={motion.aside}
-				variants={variants}
-				initial={open ? 'visible' : 'hidden'}
-				animate={open ? 'visible' : 'hidden'}
-				transition={transition} 
+			layout
+			as={motion.aside}
+			variants={variants}
+			initial={open ? 'visible' : 'hidden'}
+			animate={open ? 'visible' : 'hidden'}
+			transition={transition} 
 		>
 		  <ContentWrapper
-		  			width={width}
-		  			variants={contentVariants}
-					initial={open ? 'visible' : 'hidden'}
-					animate={open ? 'visible' : 'hidden'}
-					transition={transition} 
+  			width={width}
+  			variants={contentVariants}
+			initial={open ? 'visible' : 'hidden'}
+			animate={open ? 'visible' : 'hidden'}
+			transition={transition} 
 		  >
-				{ children }
+			{ children }
 		  </ContentWrapper>
 		</StyledAside>
 	)
 }
 
-export let Main = styled(motion.main).attrs({ layout: true })`
+export let Main = styled(motion.main).attrs({
+	layout: true,
+	className: styles.scrollbar
+})`
 	overflow: auto;
 	height: 100%;
 	width: 100%;
-	${Scrollbar}
 `

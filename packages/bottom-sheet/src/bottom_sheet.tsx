@@ -1,51 +1,51 @@
 import React from 'react'
 
-import { useEffect
-			 , useState
-			 , useRef
-			 , useLayoutEffect 
-			 , MouseEvent
-			 } from 'react'
+import {
+	useEffect,
+	useState,
+	MouseEvent
+} from 'react'
 
 import { createPortal } from 'react-dom'
-import { useGetContainer
-			 , usePreventScroll
-			 , useOnEscape
-			 , useWindowSize
-			 , useResizeObserver
-			 } from '@biotic-ui/std'
+import {
+	useGetContainer,
+	usePreventScroll,
+	useOnEscape,
+	useWindowSize,
+	useResizeObserver
+} from '@biotic-ui/std'
 
-import { Backdrop } from '@biotic-ui/leptons'
-import { motion, AnimatePresence, useMotionValue } from 'framer-motion'
+import styles from '@biotic-ui/leptons/style/backdrop.module.css'
+import { motion, AnimatePresence } from 'framer-motion'
 
 import { BottomDrawer } from './styled'
 
-type CloseEvent =
-	{ backdrop: boolean
-	; escape: boolean
-	}
+type CloseEvent = {
+	backdrop: boolean;
+	escape: boolean;
+}
 
-type Props =
-	{ children?: JSX.Element | Array<JSX.Element>
-	; open?: boolean
-	; onClose?: (e: CloseEvent) => void
-	; height?: number | null
-	; minHeight?: number
-	; scrollable?: boolean
-	; className?: string
-	; onClick?: (e: MouseEvent) => void
-	}
+type Props = {
+	children?: JSX.Element | Array<JSX.Element>;
+	open?: boolean;
+	onClose?: (e: CloseEvent) => void;
+	height?: number | null;
+	minHeight?: number;
+	scrollable?: boolean;
+	className?: string;
+	onClick?: (e: MouseEvent) => void;
+}
 
-export let BottomSheet = (
-	{ children
-	, open = false
-	, onClose = () => {}
-	, height = null
-	, minHeight = 0
-	, scrollable = false
-	, className
-	, onClick
-	}: Props) => {
+export let BottomSheet = ({
+	children,
+	open = false,
+	onClose = () => {},
+	height = null,
+	minHeight = 0,
+	scrollable = false,
+	className,
+	onClick,
+}: Props) => {
 
 	let SheetContainer = useGetContainer('biotic-bottom-drawer-container')
 
@@ -66,7 +66,7 @@ export let BottomSheet = (
 		innerHeight,
 		sheet,
 		minHeight,
-		openUntil
+		openUntil,
 	})
 
 	useOnEscape(() => open && onClose({ backdrop: false, escape: true }))
@@ -94,53 +94,48 @@ export let BottomSheet = (
 		}
 	})
 
-	let backdropVariants =
-		{ hidden:
-				{ opacity: 0 }
-
-		, visible:
-				{ opacity: 1 }
-		}
+	let backdropVariants = {
+		hidden: { opacity: 0 },
+		visible: { opacity: 1 }
+	}
 		
-	let spring =
-		{ type: 'spring'
-		, damping: 21
-		, stiffness: 130
-		}
-
-	let transform = useMotionValue(0)
+	let spring = {
+		type: 'spring',
+		damping: 21,
+		stiffness: 130
+	}
 
 	let Sheet = (
 		<React.Fragment>
 			
 			{
 				!scrollable &&
-				<Backdrop as={motion.div}
-									open={open}
-									initial='hidden'
-									animate={open ? 'visible' : 'hidden'}
-									variants={backdropVariants}
-									onClick={handleBackdrop}
-				/>
+					<motion.div
+						className={`${styles.backdrop} ${open ? styles['backdrop--open'] : ''}`}
+						initial='hidden'
+						animate={open ? 'visible' : 'hidden'}
+						variants={backdropVariants}
+						onClick={handleBackdrop}
+					/>
 			}
 
 			<AnimatePresence>
 				{ open &&
-						<BottomDrawer
-							as={motion.div}
-							onClick={onClick}
-							className={className}
-							open={open}
-							initial={{ transform: 'translateY(100%)' }}
-							animate={{ transform: 'translateY(0%)' }}
-							exit={{ transform: 'translateY(100%)' }}
-							height={sheetHeight}
-							transition={spring}
-						>
-							<motion.div ref={contentRef}>
-								{ children }
-							</motion.div>
-						</BottomDrawer>
+					<BottomDrawer
+						as={motion.div}
+						onClick={onClick}
+						className={className}
+						open={open}
+						initial={{ transform: 'translateY(100%)' }}
+						animate={{ transform: 'translateY(0%)' }}
+						exit={{ transform: 'translateY(100%)' }}
+						height={sheetHeight}
+						transition={spring}
+					>
+						<motion.div ref={contentRef}>
+							{ children }
+						</motion.div>
+					</BottomDrawer>
 				}
 			</AnimatePresence>
 			
@@ -150,20 +145,20 @@ export let BottomSheet = (
 	return SheetContainer ? createPortal(Sheet, SheetContainer) : null
 }
 
-type GetSheetHeight =
-	{ height: number | null
-	; innerHeight: number
-	; minHeight: number
-	; sheet: { height: number }
-	; openUntil: number
-	}
+type GetSheetHeight = {
+	height: number | null;
+	innerHeight: number;
+	minHeight: number;
+	sheet: { height: number };
+	openUntil: number
+}
 
-function getSheetHeight(
-	{ height
-	, innerHeight
-	, minHeight
-	, sheet
-	, openUntil
+function getSheetHeight({
+	height,
+	innerHeight,
+	minHeight,
+	sheet,
+	openUntil,
 }: GetSheetHeight) {
 
 	if (height === 1) {

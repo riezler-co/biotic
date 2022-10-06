@@ -1,4 +1,4 @@
-import React from 'react'
+import { Children, cloneElement, ReactNode } from 'react'
 import {
 	useState,
 	useEffect,
@@ -6,7 +6,6 @@ import {
 	ReactElement,
 	MouseEvent,
 	forwardRef,
-	FC,
 } from 'react'
 import { createPortal } from 'react-dom'
 import { getContextMenuPostion } from './utils'
@@ -18,33 +17,36 @@ import {
 	useOutsideClick,
 	useCombinedRefs,
 } from '@biotic-ui/std'
-import styled from 'styled-components'
 import { BottomSheet } from '@biotic-ui/bottom-sheet'
 
 type NavProps = {
 	position: Position;
 	onClose: () => void;
-	children: JSX.Element;
+	children?: ReactNode;
 }
 
 let Nav = forwardRef<HTMLElement, NavProps>(({ position, onClose, children }, outerRef) => {
-	
+	let outsideRef = useOutsideClick(onClose)
 	let [ref, setRef] = useState<HTMLElement | null>(null)
-	let mainRef = useCombinedRefs(setRef, outerRef)
+	let mainRef = useCombinedRefs(setRef, outerRef, outsideRef)
 
 	useEffect(() => {
+		let close = () => onClose()
 		let handleScroll = (e: WheelEvent) => {
 			let path = e.composedPath()
 			let isMenu = path.find(node => node === ref)
 			
 			if (isMenu === undefined) {
-				onClose && onClose()
+				close()
 			}
 
 		}
+
 		window.addEventListener('wheel', handleScroll)
+		window.addEventListener('contextmenu', close)
 		return () => {
 			window.removeEventListener('wheel', handleScroll)
+			window.removeEventListener('contextmenu', close)
 		}
 	}, [ref])
 
@@ -59,8 +61,8 @@ let Nav = forwardRef<HTMLElement, NavProps>(({ position, onClose, children }, ou
 
 	useOnEscape(onClose)
 
-	let child = React.Children.only(children) as ReactElement
-	return React.cloneElement(child, {
+	let child = Children.only(children) as ReactElement
+	return cloneElement(child, {
 		style: { position: 'absolute', zIndex: 9999 },
 		ref: mainRef,
 		onClick: onClose
@@ -71,9 +73,9 @@ let DefaultOptions = {
 	delay: 1000
 }
 
-type ContextMenuProps =
-	{ children: JSX.Element
-	}
+type ContextMenuProps = {
+	children?: ReactNode
+}
 
 export function useContextMenu(userOptions = {}) {
 	let options = { ...DefaultOptions, ...userOptions }
@@ -103,7 +105,7 @@ export function useContextMenu(userOptions = {}) {
 		}
 
 		if (useBottomSheet) {
-			let menu = React.cloneElement(children, {
+			let menu = cloneElement(children as ReactElement, {
 				replace: true
 			})
 

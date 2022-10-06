@@ -1,13 +1,14 @@
-import React from 'react'
+import { cloneElement, ReactNode } from 'react'
 import { Children, useState, ReactElement } from 'react'
-import { motion, AnimateSharedLayout, MotionProps } from 'framer-motion'
-import styled, { css, StyledProps } from 'styled-components'
+import { motion } from 'framer-motion'
+import styled, { StyledProps } from 'styled-components'
 
 type PanelProps = {
-	side?: 'left' | 'right';
-	width?: string | number;
-	stacked?: boolean;
-	id?: string;
+	side?: 'left' | 'right',
+	width?: string | number,
+	stacked?: boolean,
+	id?: string,
+	children?: ReactNode,
 }
 
 export let Panel = styled.div<PanelProps>`
@@ -67,12 +68,12 @@ let StyledModal = styled.div<{ side: 'left' | 'right' }>`
 	height: 100%;
 `
 
-export let PanelModal: React.FC<PanelProps> = ({
+export let PanelModal = ({
 	children,
 	side = 'right',
 	width = 'auto',
 	...props
-}) => {
+}: PanelProps) => {
 	return (
 		<StyledModal side={side} {...props}>
 			<Panel side={side} width={width}>
@@ -100,10 +101,11 @@ let Handler = styled.button`
 `
 
 type StackedPanelProps = {
-	onActivate?: (ids: Array<string>) => void;
+	onActivate?: (ids: Array<string>) => void,
+	children?: ReactNode,
 }
 
-export let StackedPanels: React.FC<StackedPanelProps> = ({ children, onActivate, ...props }) => {
+export let StackedPanels = ({ children, onActivate, ...props }: StackedPanelProps) => {
 
 	let [closed, setClosed] = useState(true)
 
@@ -132,7 +134,7 @@ export let StackedPanels: React.FC<StackedPanelProps> = ({ children, onActivate,
 			stiffness: 130,
 		}
 
-		return React.cloneElement(elm, {
+		return cloneElement(elm, {
 			as: motion.div,
 			width: `calc(100% - var(--baseline) * ${index})`,
 			initial: 'closed',

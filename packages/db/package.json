@@ -10,6 +10,7 @@
     "watch": "parcel watch",
     "build": "parcel build",
     "test": "jest",
+    "check": "tsc --noEmit",
     "prepublish": "npm run build"
   },
   "repository": {

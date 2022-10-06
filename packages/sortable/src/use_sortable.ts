@@ -2,10 +2,10 @@ import { useRef, useContext } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import { SortableCtx } from './ctx'
 
-type UseSortable =
-	{ id: string
-	; index: number
-	}
+type UseSortable = {
+    id: string,
+    index: number,
+}
 
 export function useSortable({ id, index }: UseSortable) {
 	let ctx = useContext(SortableCtx)
@@ -63,7 +63,7 @@ export function useSortable({ id, index }: UseSortable) {
         // to avoid expensive index searches.
         item.index = hoverIndex;
     },
-    drop(item, monitor) {
+    drop(item, _) {
       if (!ref.current) {
         return
       }
@@ -72,19 +72,20 @@ export function useSortable({ id, index }: UseSortable) {
     }
 	})
 
-	let [{isDragging}, drag] = useDrag({
-    item: { type: 'list-item', id, index },
-    collect: monitor => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  })
+	let [collected, drag] = useDrag({
+        type: 'list-item',
+        item: { id, index },
+        collect: (monitor) => ({
+          isDragging: !!monitor.isDragging(),
+        }),
+    })
 
-  let style =
-  	{ opacity: isDragging ? 0 : 1
-  	, cursor: 'move'
-  	}
+    let style = {
+        opacity: collected.isDragging ? 0 : 1,
+        cursor: 'move',
+    }
 
-  drag(drop(ref))
+    drag(drop(ref))
 
-	return { ref, style, layout: true }
+    return { ref, style, layout: true }
 }

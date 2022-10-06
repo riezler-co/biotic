@@ -1,14 +1,18 @@
-import React, { useState, FC, InputHTMLAttributes, forwardRef } from 'react'
+import React, { useState, InputHTMLAttributes, forwardRef } from 'react'
 import styled from 'styled-components'
-import { InputBase } from '@biotic-ui/leptons'
+import styles from '@biotic-ui/leptons/styles/input.module.css'
 
-let StyledInput = styled.input`
-  ${InputBase}
-`
+type InputProps = InputHTMLAttributes<HTMLInputElement>
 
-export let Input = StyledInput
+export let Input = forwardRef<HTMLInputElement, InputProps>(({ className = '', ...props }, ref) => {
+	return <input
+		ref={ref}
+		{...props}
+		className={[styles.input, className].join(' ')}
+	/>
+})
 
-export let Password = forwardRef<HTMLInputElement, InputHTMLAttributes<{}>>(({ children , ...props }, ref) => {
+export let Password = forwardRef<HTMLInputElement, InputProps>(({ children , ...props }, ref) => {
 	let [type, setType] = useState<'password' | 'text'>('password')
 
 	function handleShow() {
@@ -21,7 +25,7 @@ export let Password = forwardRef<HTMLInputElement, InputHTMLAttributes<{}>>(({ c
 
 	return (
 		<PasswordWrapper>
-			<StyledInput {...props} type={type} ref={ref} />
+			<Input {...props} type={type} ref={ref} />
 			<Button type="button" onMouseDown={handleShow} onMouseUp={handleHide}>
 				{ type === 'text' &&
 					<Eye />				

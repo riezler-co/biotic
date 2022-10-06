@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
-import { useResizeObserver } from '@biotic-ui/std'
 import { motion, AnimatePresence, Transition } from 'framer-motion'
 
 let Wrapper = styled(motion.div)`
@@ -13,17 +12,18 @@ let DefaultTransition = {
 	duration: 0.2
 }
 
-type CollapsibleProps = React.FC<{
+type CollapsibleProps = {
 	open: boolean,
-	transition?: Transition
-}>
+	transition?: Transition,
+	children?: ReactNode,
+}
 
-export let Collapsible: CollapsibleProps = ({
+export let Collapsible = ({
 	children,
 	open,
 	transition = DefaultTransition,
 	...props
-}) => {
+}: CollapsibleProps) => {
 
 	let variants = {
 		visible: { transform: 'translateY(0%)' },

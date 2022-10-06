@@ -1,40 +1,37 @@
+import {
+	Children,
+	useMemo,
+	useState,
+	useLayoutEffect,
+	useRef,
+	useCallback,
+	ReactElement,
+	MouseEvent,
+	forwardRef,
+    cloneElement,
+    Fragment,
+    ReactNode,
+} from 'react'
 
-import React, { Ref } from 'react'
-
-import { Children
-			 , useMemo
-			 , useState
-			 , useEffect
-			 , useLayoutEffect
-			 , useRef
-			 , useCallback
-			 , ReactElement
-			 , MouseEvent
-			 } from 'react'
-
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import ArrowRight from './arrow_right'
 import { getSubmenuPosition } from './utils'
 import ArrowBack from './arrow_back'
 import { useCombinedRefs, useResize } from '@biotic-ui/std'
 import { StyledMenu, StyledMenuItem, MenuItemTitle } from './styled'
 
-type Props =
-	{ children: JSX.Element | Array<JSX.Element>
-  ; icon?: boolean
-  ; submenu?: boolean
-  ; replace?: boolean
-  ; className?: string
-  ; style?: { [key:string]: any }
-  ; onClick?: (e: MouseEvent) => void
-  }
+type Props = {
+	children?: ReactNode;
+	icon?: boolean;
+	submenu?: boolean;
+	replace?: boolean;
+	className?: string;
+	style?: { [key:string]: any };
+	onClick?: (e: MouseEvent) => void
+}
 
-
-// TODO: figure out how to type this...
-type MenuRef = any
-
-export let Menu = React.forwardRef<MenuRef, Props>((props, outerRef) => {
-	let menuRef = useRef<MenuRef>(null)
+export let Menu = forwardRef<Element, Props>((props, outerRef) => {
+	let menuRef = useRef<Element | null>(null)
 	let [hover, setHover] = useState(true)
 
 	let ref = useCombinedRefs(outerRef, menuRef)
@@ -66,13 +63,14 @@ export let Menu = React.forwardRef<MenuRef, Props>((props, outerRef) => {
 	useResize(shouldHover)
 
 	let [submenu, setSubmenu] = useState<ReactElement | null>(null) 
-	let { children
-		  , icon: hasIcon
-		  , submenu: hasSubmenu
-		  , replace = false
-		  , className = ''
-		  , style = {}
-		  } = props
+	let {
+		children,
+		icon: hasIcon,
+		submenu: hasSubmenu,
+		replace = false,
+		className = '',
+		style = {}
+	} = props
 
 	function handleSetSubmenu(submenu: ReactElement) {
 
@@ -88,15 +86,15 @@ export let Menu = React.forwardRef<MenuRef, Props>((props, outerRef) => {
 		}
 
 		let BackItem = (
-			<React.Fragment>
+			<Fragment>
 				<MenuItem onClick={handleBack} hasIcon={hasIcon} icon={BackIcon}>
 					<MenuItemTitle>Back</MenuItemTitle>
 				</MenuItem>
 				<Divider />
-			</React.Fragment>
+			</Fragment>
 		)
 
-		let menu = React.cloneElement(submenu, {
+		let menu = cloneElement(submenu, {
 			children: appendItem(submenu.props.children, BackItem)
 		}) as ReactElement
 
@@ -105,7 +103,7 @@ export let Menu = React.forwardRef<MenuRef, Props>((props, outerRef) => {
 
 	let _children = useMemo(() => Children.map(children, node => {
 		let menu = (node as JSX.Element)
-		return React.cloneElement(menu, {
+		return cloneElement(menu, {
 			hasSubmenu: hasSubmenu,
 			hasIcon: hasIcon,
 			replace: replace || !hover,
@@ -115,50 +113,57 @@ export let Menu = React.forwardRef<MenuRef, Props>((props, outerRef) => {
 
 	if (submenu) {
 		return (
-			<div ref={ref}
-					 onContextMenu={e => e.preventDefault()}
-					 className={className}
-					 style={style}
-					 onClick={props.onClick}>
+			<div
+				ref={ref}
+				onContextMenu={e => e.preventDefault()}
+				className={className}
+				style={style}
+				onClick={props.onClick}
+			>
 				{ submenu }
 			</div>
 		)
 	}
 
 	return (
-		<StyledMenu ref={ref}
-							  onContextMenu={e => e.preventDefault()}
-							  className={className}
-							  style={style}
-							  onClick={props.onClick}>
+		<StyledMenu
+			ref={ref}
+			onContextMenu={e => e.preventDefault()}
+			className={className}
+			style={style}
+			onClick={props.onClick}
+		>
 			{ _children }
 		</StyledMenu>
 	)
 })
 
-type MenuItemProps =
-	{ children?: JSX.Element | Array<JSX.Element>
-	; onClick?: (e: MouseEvent) => void 
-	; hasSubmenu?: boolean
-	; hasIcon?: boolean
-	; icon?: JSX.Element
-	; replace?: boolean 
-	; setSubmenu?: (e: ReactElement) => void
-	}
+type MenuItemProps = {
+	children?: JSX.Element | Array<JSX.Element>,
+	onClick?: (e: MouseEvent) => void,
+	hasSubmenu?: boolean,
+	hasIcon?: boolean,
+	icon?: JSX.Element,
+	replace?: boolean ,
+	setSubmenu?: (e: ReactElement) => void,
+}
 
 export let MenuItem = (props: MenuItemProps) => {
-	let { children
-			, onClick
-			, hasSubmenu
-			, hasIcon
-			, icon
-			, replace
-			, setSubmenu
-			} = props
+	let {
+		children,
+		onClick,
+		hasSubmenu,
+		hasIcon,
+		icon,
+		replace,
+		setSubmenu,
+	} = props
+	
 	let _children = useMemo<Array<ReactElement>>(
 			() => Children.toArray(children) as Array<ReactElement>
 		, [children, hasSubmenu, hasIcon]
 	)
+
 	let title = useMemo(() => _children.find(node => node.type === MenuItemTitle), [children, hasSubmenu, hasIcon])
 	let submenuRef = useRef<HTMLElement | null>(null)
 	let itemRef = useRef(null)
@@ -171,7 +176,7 @@ export let MenuItem = (props: MenuItemProps) => {
 			return null
 		}
 
-		return React.cloneElement(items[0], {
+		return cloneElement(items[0], {
 			ref: submenuRef
 		})
 	}
@@ -182,7 +187,7 @@ export let MenuItem = (props: MenuItemProps) => {
 		throw new Error('missing title')
 	}
 
-	let Title = React.cloneElement(title, {
+	let Title = cloneElement(title, {
 		key: 'title',
 		children: submenu === null ? title.props.children : pushArrow(title.props.children),
 		hasSubmenu: hasSubmenu,

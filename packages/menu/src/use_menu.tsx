@@ -1,9 +1,8 @@
-import React, { Children, useState, ReactElement, SyntheticEvent } from 'react'
+import React, { Children, useState, SyntheticEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { useGetContainer, useOnEscape, useOutsideClick, useCombinedRefs } from '@biotic-ui/std'
 import { usePopper } from 'react-popper'
 import { Placement } from '@popperjs/core'
-import { Menu } from './menu'
 
 type Config = {
 	placement?: Placement

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Scrollbar } from '@biotic-ui/leptons'
+import styles from '@biotic-ui/leptons/style/scrollbar.module.css'
 
 export let StyledTabBar = styled.header`
 	display: flex;
@@ -15,9 +15,10 @@ export let StyledTabBar = styled.header`
 	}
 `
 
-export let StyledTabContent = styled.div`
+export let StyledTabContent = styled.div.attrs({
+	className: styles.scrollbar
+})`
 	overflow: auto;
-	${Scrollbar}
 `
 
 export let StyledTab = styled.button`

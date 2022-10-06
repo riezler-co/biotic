@@ -1,7 +1,6 @@
 import {
 	useEffect,
 	useCallback,
-	useState,
 	useRef,
 	SyntheticEvent
 } from 'react'
@@ -28,7 +27,6 @@ import type {
 	TabsState,
 	TabItem,
 	ActiveState,
-	TabState,
 	ScrollState,
 	EventCallback,
 	TabsHistory
@@ -93,7 +91,7 @@ export function useTabHistory(group = DEFAULT_GROUP) {
 	let [history, setHistory] = useBoson(tabsHistory)
 	let active = useActiveState(group)
 
-	let push = useCallback(config => {
+	let push = useCallback((config: TabItem) => {
 
 		let tab = {
 			...config,
@@ -122,9 +120,9 @@ export function useTabHistory(group = DEFAULT_GROUP) {
 
 		let items = [...tabs.items, tab]
 		let length = tabs.length + 1
-		let ids = { ...tabs.ids, [tab.id]: true }
+		let ids = { ...tabs.ids, [tab.id]: tab.id }
 		
-		setTabs(tabs => ({ ...tabs, items , length, ids }))
+		setTabs(tabs => ({ ...tabs, items, length, ids }))
 		
 		let index = length - 1
 		let { type, id } = tab
@@ -132,7 +130,7 @@ export function useTabHistory(group = DEFAULT_GROUP) {
 	}, [tabs, setTabs, history, setHistory])
 
 
-	let replace = useCallback((tab) => {
+	let replace = useCallback((tab: ActiveState) => {
 		setHistory(history => {
 			let last = history.items.length - 1
 			let items = [
@@ -144,7 +142,7 @@ export function useTabHistory(group = DEFAULT_GROUP) {
 		})
 	}, [setHistory])
 
-	let activate = useCallback((entry) => {
+	let activate = useCallback((entry: ActiveState) => {
 		setHistory(history => {
 			let items = [...history.items, entry]
 			let currentIndex = items.length - 1
@@ -161,7 +159,7 @@ export function useCloseTab(group = DEFAULT_GROUP) {
 	let [tabs, setTabs] = useBoson(tabsState)
 	let { active, replace } = useTabHistory(group)
 
-	let close = useCallback((id) => {
+	let close = useCallback((id: string) => {
 
 		if (!isOpen(tabs.ids, id) || active === null) {
 			return
@@ -177,8 +175,9 @@ export function useCloseTab(group = DEFAULT_GROUP) {
 
 		let ids = {
 			...tabs.ids,
-			[id]: undefined,
 		}
+
+		delete tabs.ids[id]
 
 		let length = Math.max(tabs.length - 1, 0)
 
@@ -318,7 +317,7 @@ export function useScrollState(id: string): UseScrollState {
 		return scrollState.state.value
 	}, [id, scrollState])
 
-	let reset = useCallback((id) => {
+	let reset = useCallback((id: string) => {
 		makeScrollState.cache.delete(id)
 	}, [id])
 

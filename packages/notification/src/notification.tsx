@@ -4,10 +4,7 @@ import {
 	useRef,
 	useCallback,
 	useEffect,
-	cloneElement,
 	useState,
-	useLayoutEffect,
-	forwardRef,
 	MouseEvent,
 } from 'react'
 import { createPortal } from 'react-dom'
@@ -101,7 +98,6 @@ export let Notifications: React.FC<{}> = () => {
 	let Container = useGetContainer('biotic-notifications')
 	let [state, setStore] = useBoson(store)
 	let [hover, setHover] = useState(false)
-	let [nodes, setNodex] = useState([])
 	let resolver = useRef<Resolve>(() => {})
 
 	function onMouseEnter() {
@@ -122,18 +118,21 @@ export let Notifications: React.FC<{}> = () => {
 
 	let NotificationContainer = (
 		<StyledNotifications
-						ref={ref}
-						onMouseEnter={onMouseEnter}
-						onClick={onMouseEnter}
-						onMouseLeave={onMouseLeave}>
+			ref={ref}
+			onMouseEnter={onMouseEnter}
+			onClick={onMouseEnter}
+			onMouseLeave={onMouseLeave}
+		>
 			<AnimatePresence initial={false}>
 				{ 
 					state.notifications.map(({ id, Component }, index) => {
 						return (
-							<ListItem key={id} 
-											  index={index}
-											  open={hover}
-											  lastIndex={state.notifications.length - 1}>
+							<ListItem
+								key={id} 
+								index={index}
+								open={hover}
+								lastIndex={state.notifications.length - 1}
+							>
 								{ createElement(Component, { onClose: () => setStore(closeImmediate(id)) }) }
 							</ListItem>
 						)
@@ -169,7 +168,7 @@ type ListItemProps = {
 	lastIndex: number
 }
 
-let ListItem: React.FC<ListItemProps> = ({ index, children, open , lastIndex }) => {
+let ListItem: React.FC<ListItemProps> = ({ children }) => {
 	return (
 		<StyledNotification
 				initial={{ opacity: 0, transform: 'scale(0.62)' }}

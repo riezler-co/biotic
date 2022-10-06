@@ -10,6 +10,7 @@
     "watch": "parcel watch",
     "build": "parcel build",
     "test": "jest",
+    "check": "tsc --noEmit",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -31,7 +32,7 @@
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
     "@biotic-ui/std": "^0.3.0",
-    "react": "16.8 - 18.x",
+    "react": "17 - 18.x",
     "react-dom": "16.8 - 18.x",
     "styled-components": "^5.2.1"
   },

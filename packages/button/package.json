@@ -11,6 +11,7 @@
     "bundle": "webpack --config ../../webpack.ts.config.js --mode production",
     "types": "tsc --emitDeclarationOnly --declaration --declarationDir ./lib",
     "build": "npm run bundle && npm run types",
+    "check": "tsc --noEmit",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -32,11 +33,12 @@
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
     "@biotic-ui/icon": "^0.3.0",
-    "react": "16.8 - 18.x",
+    "react": "17 - 18.x",
     "styled-components": "^5.2.1"
   },
   "dependencies": {
-    "@biotic-ui/leptons": "^0.3.13"
+    "@biotic-ui/leptons": "^0.3.13",
+    "phosphor-react": "^1.4.1"
   },
   "publishConfig": {
     "access": "public"

@@ -1,8 +1,9 @@
 
-export { Button
-			 , IconButton
-			 , CloseButton
-			 , Fab
-			 , LinkButton
-			 , OutlineButton
-			 } from './button'
+export {
+	Button,
+	IconButton,
+	CloseButton,
+	Fab,
+	LinkButton,
+	OutlineButton,
+} from './button'

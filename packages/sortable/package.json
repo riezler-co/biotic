@@ -10,6 +10,7 @@
     "watch": "parcel watch",
     "build": "parcel build",
     "test": "jest",
+    "check": "tsc --noEmit",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -32,7 +33,7 @@
   "peerDependencies": {
     "@biotic-ui/std": "^0.3.0",
     "framer-motion": "7.5.1",
-    "react": "16.8 - 18.x",
+    "react": "17 - 18.x",
     "styled-components": "^5.2.1"
   },
   "dependencies": {
