@@ -1,10 +1,5 @@
 import { ReactNode } from 'react'
-import styled from 'styled-components'
 import { motion, AnimatePresence, Transition } from 'framer-motion'
-
-let Wrapper = styled(motion.div)`
-	overflow: hidden;
-`
 
 let DefaultTransition = {
 	type: "tween",
@@ -16,6 +11,7 @@ type CollapsibleProps = {
 	open: boolean,
 	transition?: Transition,
 	children?: ReactNode,
+	className?: string,
 }
 
 export let Collapsible = ({
@@ -38,13 +34,15 @@ export let Collapsible = ({
 	return (
 		<AnimatePresence initial={!open}>
 			{ open && (
-				<Wrapper layout
+				<motion.div
+					layout
 					key="wrapper"
 		            initial="collapsed"
 		            animate="open"
 		            exit="collapsed"
 		            variants={wrapper}
 		            transition={transition}
+		            style={{ overflow: 'hidden' }}
 		            {...props}
 				>
 					<motion.div
@@ -57,7 +55,7 @@ export let Collapsible = ({
 			    	>
 						{ children }	
 					</motion.div>
-				</Wrapper>
+				</motion.div>
 			)}
 		</AnimatePresence>
 	)
