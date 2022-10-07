@@ -1,9 +1,9 @@
-import React from 'react'
-
 import {
 	useEffect,
 	useState,
-	MouseEvent
+	MouseEvent,
+	RefObject,
+    Fragment
 } from 'react'
 
 import { createPortal } from 'react-dom'
@@ -15,10 +15,10 @@ import {
 	useResizeObserver
 } from '@biotic-ui/std'
 
-import styles from '@biotic-ui/leptons/style/backdrop.module.css'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, MotionStyle } from 'framer-motion'
 
-import { BottomDrawer } from './styled'
+import backdropStyles from '@biotic-ui/leptons/style/backdrop.module.css'
+import styles from './bottom_sheet.module.css'
 
 type CloseEvent = {
 	backdrop: boolean;
@@ -106,12 +106,11 @@ export let BottomSheet = ({
 	}
 
 	let Sheet = (
-		<React.Fragment>
-			
+		<Fragment>
 			{
 				!scrollable &&
 					<motion.div
-						className={`${styles.backdrop} ${open ? styles['backdrop--open'] : ''}`}
+						className={`${backdropStyles.backdrop} ${open ? styles['backdrop--open'] : ''}`}
 						initial='hidden'
 						animate={open ? 'visible' : 'hidden'}
 						variants={backdropVariants}
@@ -121,25 +120,23 @@ export let BottomSheet = ({
 
 			<AnimatePresence>
 				{ open &&
-					<BottomDrawer
-						as={motion.div}
+					<motion.div
 						onClick={onClick}
-						className={className}
-						open={open}
+						className={[styles['bottom-sheet-drawer'], open ? styles['bottom-sheet-drawer--open'] : '', className].join('')}
 						initial={{ transform: 'translateY(100%)' }}
 						animate={{ transform: 'translateY(0%)' }}
 						exit={{ transform: 'translateY(100%)' }}
-						height={sheetHeight}
+						style={{ '--sheet-height': sheetHeight } as MotionStyle}
 						transition={spring}
 					>
-						<motion.div ref={contentRef}>
+						<motion.div ref={contentRef as RefObject<HTMLDivElement>}>
 							{ children }
 						</motion.div>
-					</BottomDrawer>
+					</motion.div>
 				}
 			</AnimatePresence>
 			
-		</React.Fragment>
+		</Fragment>
 	)
 
 	return SheetContainer ? createPortal(Sheet, SheetContainer) : null
