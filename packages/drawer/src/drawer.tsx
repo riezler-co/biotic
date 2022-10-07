@@ -1,6 +1,5 @@
-import React from 'react'
+import { Fragment, ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import styled from 'styled-components'
 
 import {
 	useGetContainer,
@@ -8,32 +7,8 @@ import {
 	usePreventScroll
 } from '@biotic-ui/std'
 
-import styles from '@biotic-ui/leptons/styles/backdrop.modules.css'
-import { motion } from 'framer-motion'
-
-type StyledProps = {
-	width?: string,
-	side?: 'left' | 'right',
-	isOpen: boolean,
-}
-
-let StyledDrawer = styled.div<StyledProps>`
-	max-width: 100vw;
-	height: 100vh;
-	position: fixed;
-	box-shadow: ${p => p.isOpen ? 'var(--shadow-3)' : 'none'};
-	background: var(--drawer-background, #fff);
-	overflow-y: auto;
-	top: 0;
-	z-index: 11;
-	${p => p.width ? `width: ${p.width}`: ``};
-	${p => p.side === 'left' ? 'left: 0' : 'right: 0'};
-
-	--menu-box-shadow: none;
-	--menu-width: auto;
-	--menu-padding: 0;
-	--menu-border: none;
-`
+import backdropStyles from '@biotic-ui/leptons/style/backdrop.module.css'
+import styles from './drawer.module.css'
 
 type CloseEvent = {
 	backdrop: boolean,
@@ -42,7 +17,7 @@ type CloseEvent = {
 
 type Props = {
 	open: boolean,
-	children?: JSX.Element | Array<JSX.Element>,
+	children?: ReactNode,
 	maxWidth?: 'auto' | number,
 	onClose: (e: CloseEvent) => void,
 	left?: boolean,
@@ -69,48 +44,33 @@ export function Drawer(props: Props) {
 		onClose && onClose({ backdrop: true, escape: false })
 	}
 
-	let backdropVariants = {
-		hidden: { opacity: 0 },
-		visible: { opacity: 1 },
-	}
+	let backdropClasses = [
+		backdropStyles.backdrop,
+		open ? backdropStyles['backdrop--open'] : ''
+	].join(' ')
 
-	let translate = maxWidth === 'auto' ? '100vw' : `${maxWidth}px`
-	let drawerVariants = {
-		hidden: { transform: left ? `translateX(-${translate})` : `translateX(${translate})` },
-		visible: { transform: 'translateX(0px)' },
-	}
-
-	let spring = {
-		type: 'spring',
-		damping: 21,
-		stiffness: 130
-	}
+	let classes = [
+		styles.drawer,
+		left ? styles['drawer--left'] : styles['drawer--right'],
+		open ? styles['drawer--open'] : '',
+	].join(' ')
 
 	let Drawer = (
-		<React.Fragment>
+		<Fragment>
 			{ !scrollable &&
-				<motion.div 
-					className={`${styles.backdrop} ${open ? styles['backdrop--open'] : ''}`}
-					initial='hidden'
-					animate={open ? 'visible' : 'hidden'}
-					variants={backdropVariants}
+				<div 
+					className={backdropClasses}
 					onClick={handleBackdrop}
 				/>
 
 			}
-			<StyledDrawer
-				as={motion.div}
-				initial='hidden'
-				animate={open ? 'visible' : 'hidden'}
-				variants={drawerVariants}
-				side={left ? 'left' : 'right'}
-				width={translate}
-				transition={spring} 
-				isOpen={open}
+			<div
+				className={classes}
+				style={{ maxWidth }}
 			>
 				{ children }
-			</StyledDrawer>
-		</React.Fragment>
+			</div>
+		</Fragment>
 	)
 	return DrawerContainer ? createPortal(Drawer, DrawerContainer) : null
 }
