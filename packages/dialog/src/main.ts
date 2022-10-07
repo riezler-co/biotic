@@ -1,4 +1,2 @@
 
-export { Dialog as default
-			 , DialogContent
-			 } from './dialog'
+export { Dialog } from './dialog'

@@ -35,8 +35,7 @@
     "@biotic-ui/bottom-sheet": "^0.3.4",
     "@biotic-ui/std": "^0.3.0",
     "react": "17 - 18.x",
-    "react-dom": "16.9 - 18.x",
-    "styled-components": "^5.2.1"
+    "react-dom": "16.9 - 18.x"
   },
   "dependencies": {
     "@biotic-ui/bottom-sheet": "^0.3.16"

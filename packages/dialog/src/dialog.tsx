@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { Ref } from 'react'
 import { createPortal } from 'react-dom'
-import styled  from 'styled-components'
+import { motion, AnimatePresence } from 'framer-motion'
 
 import {
 	useGetContainer,
@@ -9,8 +9,9 @@ import {
 	usePreventScroll
 } from '@biotic-ui/std'
 
-import styles from '@biotic-ui/leptons/styles/backdrop.module.css'
-import { motion, AnimatePresence } from 'framer-motion'
+
+import backdropStyles from '@biotic-ui/leptons/styles/backdrop.module.css'
+import styles from './dialog.module.css'
 
 type OnClose = {
 	backdrop: boolean;
@@ -32,6 +33,7 @@ export let Dialog = ({
 	backdrop = true,
 	onClose = () => {},
 	parent = null,
+	className = '',
 	...props
 }: DialogProps) => {
 	let DialogContainer = useGetContainer('biotic-dialog')
@@ -68,65 +70,42 @@ export let Dialog = ({
 	}
 
 	let DialogPortal = (
-		<Wrapper
-				variants={wrapperVariants}
-				initial='hidden'
-				animate={open ? 'visible' : 'hidden'}
-				{...props}
+		<motion.div
+			{...props}
+			variants={wrapperVariants}
+			initial='hidden'
+			animate={open ? 'visible' : 'hidden'}
+			className={[styles.dialog, className].join(' ')}
 		>
 
 			{ backdrop &&
 				<motion.div
-					className={`${styles.backdrop} ${open ? styles['backdrop--open'] : ''}`}
+					className={`${backdropStyles.backdrop} ${open ? backdropStyles['backdrop--open'] : ''}`}
 					initial='hidden'
 					animate={open ? 'visible' : 'hidden'}
 					variants={backdropVariants}
 					onClick={handleBackdrop}
 				/>
 			}
+
 			<AnimatePresence>
 				{ open &&
-					<DialogContent
-								as={motion.div}
-								aria-hidden={!open}
-								role='dialog'
-								initial={{ transform: 'scale(0.95)' }}
-								animate={{ transform: 'scale(1)' }}
-								exit={{ transform: 'scale(0.95)' }}
-								transition={spring} 
+					<motion.div
+						aria-hidden={!open}
+						role='dialog'
+						initial={{ transform: 'scale(0.95)' }}
+						animate={{ transform: 'scale(1)' }}
+						exit={{ transform: 'scale(0.95)' }}
+						transition={spring}
+						className={styles['dialog-content']}
 					>
 						{ children }
-					</DialogContent>
+					</motion.div>
 				}
 			</AnimatePresence>
 
-		</Wrapper>
+		</motion.div>
 	)
 
 	return DialogContainer ? createPortal(DialogPortal, DialogContainer) : null
 }
-
-let Wrapper = styled(motion.div)`
-	display: none;
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	align-items: center;
-	justify-content: center;
-	height: 100vh;
-	width: 100vw;
-`
-
-export let DialogContent = styled.div`
-	box-shadow: var(--dialog-shadow, var(--shadow-3));
-	position: absolute;
-	background: var(--dialog-background, #fff);
-	z-index: 11;
-	padding: var(--dialog-padding, var(--baseline-2));
-	border-radius: var(--border-radius, var(--baseline));
-	max-width: 100vw;
-	max-height: 100vh;
-	overflow: auto;
-`

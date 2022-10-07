@@ -34,8 +34,7 @@
     "@biotic-ui/std": "^0.3.0",
     "framer-motion": "7.5.1",
     "react": "17 - 18.x",
-    "react-dom": "16.8 - 18.x",
-    "styled-components": "^5.2.1"
+    "react-dom": "16.8 - 18.x"
   },
   "dependencies": {
     "@biotic-ui/leptons": "^0.3.13"
