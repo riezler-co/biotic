@@ -1,6 +1,7 @@
 .button {
 	--defaut-shadow: var(--shadow-2);
 	--default-button-background: rgb(239 239 239);
+	--default-button-hover: rgb(220 220 220);
 	--default-button-border: 1px solid rgb(215 215 215);
 
 	position: relative;
@@ -21,11 +22,19 @@
 	border: var(--button-border, var(--default-button-border));
 }
 
-.button[data-raised] {
+.button:not([disabled]):hover {
+	background: var(--button-bg--hover, var(--default-button-hover));
+}
+
+.button--raised {
 	color:  var(--button-raised-color, #fff);
 	background: var(--button-raised-bg, #141923);
 	box-shadow: var(--shadow-2);
-	border-color: var(--button-raised-border-color, #232c3e);;
+	border-color: var(--button-raised-border-color, #292f39);;
+}
+
+.button--raised:not([disabled]):hover {
+	background: var(--button-raised-bg--hover, #292f39);
 }
 
 .button span {
@@ -34,6 +43,7 @@
 	align-items: center;
 }
 
+.button-fab:disabled,
 .button:disabled {
 	cursor: default;
 	opacity: 0.8;
@@ -72,10 +82,18 @@
 	cursor: pointer;
 }
 
+.button-fab:not([disabled]):hover {
+	background: var(--button-raised-bg--hover, #292f39);
+}
+
 .button-fab svg {
 	fill: var(--button-icon-fill, currentColor);
 	width: 68%;
 	height: 68%;
+}
+
+.button-fab--raised {
+	box-shadow: var(--shadow-3);
 }
 
 .button-icon {

@@ -20,12 +20,18 @@ export let Button = forwardRef<HTMLButtonElement, ButtonProps>(({
 	raised,
 	...props
 }, outerRef) => {
+
+	let classes = [
+		styles.button,
+		raised ? styles['button--raised'] : '',
+		className
+	]
+
 	return (
 		<button
 			ref={outerRef}
 			{...props}
-			data-raised={raised}
-			className={[styles.button, className].join(' ')}
+			className={classes.join(' ')}
 			disabled={loading ? true : disabled}>
 			<span>
 				{ loading && <Pulse className={styles['button--loading']} size='1em' /> }
@@ -66,17 +72,23 @@ export let Fab = forwardRef<HTMLButtonElement, ButtonProps>(({
 	children,
 	loading = false,
 	disabled = false,
+	raised = false,
 	className = '',
 	...props
 }, outerRef) => {
+	let classes = [
+		styles['button-fab'],
+		raised ? styles['button-fab--raised'] : '',
+		className,,
+	].join(' ')
 	return (
 		<button
 			ref={outerRef}
 			{...props}
-			className={[styles['button-fab'], className].join(' ')}
+			className={classes}
 			disabled={loading ? true : disabled}
 		>
-			{ children }
+			{ loading ? <Pulse size='1em' /> : children }
 		</button>
 	)
 })

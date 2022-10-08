@@ -11,6 +11,7 @@
     "build": "parcel build",
     "test": "jest",
     "check": "tsc --noEmit",
+    "examples": "parcel serve examples/index.html",
     "prepublish": "npm run build"
   },
   "repository": {

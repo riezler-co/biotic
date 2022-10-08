@@ -16,7 +16,7 @@ export let drawer = () => {
 			</button>
 
 			<Drawer open={open} onClose={() => setOpen(false)}>
-				
+				<div style={{ width: 300 }}></div>
 			</Drawer>
 		</div>
 	)
