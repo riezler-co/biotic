@@ -68,7 +68,10 @@ export let makeTabsHistory = bosonFamily<[string], TabsHistory>(group => {
 export function useTabs(group = DEFAULT_GROUP): TabsState {
 	let tabsState = makeTabsState(group)
 	let tabs = useBosonValue(tabsState)
-	return tabs
+	return {
+		...tabs,
+		items: tabs.items.map(item => ({ ...item, isStatic: undefined }))
+	}
 }
 
 export function useActiveState(group = DEFAULT_GROUP): ActiveState | null {
@@ -92,7 +95,6 @@ export function useTabHistory(group = DEFAULT_GROUP) {
 	let active = useActiveState(group)
 
 	let push = useCallback((config: TabItem) => {
-
 		let tab = {
 			...config,
 			closable: true,
@@ -265,13 +267,13 @@ export let makeTabState= bosonFamily<[string], any | null>(tab => {
 })
 
 type UseTabState<T> = [
-	T | null,
+	T,
 	((nextState: SetterOrUpdater<T>) => void),
 ]
 
 export function useTabState<T>(
 	id: string,
-	defaultState = null
+	defaultState: T,
 ): UseTabState<T> {
 	let tabState = makeTabState(id)
 	let [state, setState] = useBoson<T>(tabState)
@@ -290,7 +292,7 @@ export let Scroll = makeScrollState
 type UseScrollState = [
 	() => ScrollState,
 	(e: SyntheticEvent) => void,
-	(id: string) => void,
+	(id?: string) => void,
 ]
 
 export function useScrollState(id: string): UseScrollState {
@@ -317,8 +319,10 @@ export function useScrollState(id: string): UseScrollState {
 		return scrollState.state.value
 	}, [id, scrollState])
 
-	let reset = useCallback((id: string) => {
-		makeScrollState.cache.delete(id)
+	let reset = useCallback((id?: string) => {
+		if (id) {
+			makeScrollState.cache.delete(id)
+		}
 	}, [id])
 
 	return [

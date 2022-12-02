@@ -1,5 +1,6 @@
 import { HTMLAttributes } from 'react'
-import styles from './loading.module.css'
+import * as styles from './loading.styles'
+import { getLength } from '../utils'
 
 type LoadingProps = HTMLAttributes<HTMLDivElement> & {
 	size?: string | number;
@@ -8,14 +9,14 @@ type LoadingProps = HTMLAttributes<HTMLDivElement> & {
 
 export let Pulse = ({ size, color, className = '', style = {}, ...props }: LoadingProps) => {
 	let classes = [
-		styles['loading-base'],
-		styles['loading-pulse'],
+		styles.base,
+		styles.pulse,
 		className
 	]
 
 	let _style = {
 		...style,
-		'--loading-size': size,
+		'--loading-size': getLength(size),
 		'--loading-color': color,
 	} 
 
@@ -28,14 +29,13 @@ export let Pulse = ({ size, color, className = '', style = {}, ...props }: Loadi
 
 export let Bounce = ({ className, size, color, style, ...props }: LoadingProps) => {
 	let classes = [
-		styles['loading-base'],
-		styles['loading-bounce'],
+		styles.bounce,
 		className
 	]
 
 	let _style = {
 		...style,
-		'--loading-size': size,
+		'--loading-size': getLength(size),
 		'--loading-color': color,
 	} 
 
@@ -45,22 +45,21 @@ export let Bounce = ({ className, size, color, style, ...props }: LoadingProps) 
 			style={_style}
 			className={classes.join(' ')}
 		>
-		    <div className={styles['loading-bounce-dot']}></div>
-        	<div className={styles['loading-bounce-dot']}></div>
+		    <div className={styles.bounceDot}></div>
+        	<div className={styles.bounceDot}></div>
 		</div>
 	)
 }
 
 export let Flow = ({ className, size, color, style, ...props }: LoadingProps) => {
 	let classes = [
-		styles['loading-base'],
-		styles['loading-flow'],
+		styles.flow,
 		className
 	]
 
 	let _style = {
 		...style,
-		'--loading-size': size,
+		'--loading-size': getLength(size),
 		'--loading-color': color,
 	} 
 
@@ -70,23 +69,22 @@ export let Flow = ({ className, size, color, style, ...props }: LoadingProps) =>
 			style={_style}
 			className={classes.join(' ')}
 		>
-			<div className={styles['loading-flow-dot']}></div>
-			<div className={styles['loading-flow-dot']}></div>
-			<div className={styles['loading-flow-dot']}></div>
+			<div className={styles.flowDot}></div>
+			<div className={styles.flowDot}></div>
+			<div className={styles.flowDot}></div>
 		</div>
 	)
 }
 
 export let CircleFade = ({ className, size, color, style, ...props }: LoadingProps) => {
 	let classes = [
-		styles['loading-base'],
-		styles['loading-circle-fade'],
+		styles.circleFade,
 		className
 	]
 
 	let _style = {
 		...style,
-		'--loading-size': size,
+		'--loading-size': getLength(size),
 		'--loading-color': color,
 	}
 
@@ -96,18 +94,18 @@ export let CircleFade = ({ className, size, color, style, ...props }: LoadingPro
 			style={_style}
 			className={classes.join(' ')}
 		>
-			<div className={styles['loading-circle-fade-dot']}></div>
-			<div className={styles['loading-circle-fade-dot']}></div>
-			<div className={styles['loading-circle-fade-dot']}></div>
-			<div className={styles['loading-circle-fade-dot']}></div>
-			<div className={styles['loading-circle-fade-dot']}></div>
-			<div className={styles['loading-circle-fade-dot']}></div>
-			<div className={styles['loading-circle-fade-dot']}></div>
-			<div className={styles['loading-circle-fade-dot']}></div>
-			<div className={styles['loading-circle-fade-dot']}></div>
-			<div className={styles['loading-circle-fade-dot']}></div>
-			<div className={styles['loading-circle-fade-dot']}></div>
-			<div className={styles['loading-circle-fade-dot']}></div>
+			<div className={styles.circleFadeDot}></div>
+			<div className={styles.circleFadeDot}></div>
+			<div className={styles.circleFadeDot}></div>
+			<div className={styles.circleFadeDot}></div>
+			<div className={styles.circleFadeDot}></div>
+			<div className={styles.circleFadeDot}></div>
+			<div className={styles.circleFadeDot}></div>
+			<div className={styles.circleFadeDot}></div>
+			<div className={styles.circleFadeDot}></div>
+			<div className={styles.circleFadeDot}></div>
+			<div className={styles.circleFadeDot}></div>
+			<div className={styles.circleFadeDot}></div>
 		</div>
 	)
 }

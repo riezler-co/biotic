@@ -1,4 +1,4 @@
-import 'open-props/open-props.min.css'
+window.global ||= window;
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },

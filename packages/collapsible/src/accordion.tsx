@@ -5,15 +5,15 @@ import {
 	Children,
 	cloneElement,
 	ReactElement,
-    ReactNode
+    ReactNode,
 } from 'react'
 import { Collapsible } from './collapsible'
 import { AnimateSharedLayout, motion } from 'framer-motion'
-import styles from './style.module.css'
+import * as styles from './accordion.styles'
 
 type UseAccordion = {
-	open: Array<number>;
-	multi: boolean;
+	open?: Array<number>;
+	multi?: boolean;
 }
 
 let defaultOptions: UseAccordion = {
@@ -23,7 +23,7 @@ let defaultOptions: UseAccordion = {
 
 export function useAccordion(userOptions: UseAccordion = defaultOptions) {
 	let options = { ...defaultOptions, ...userOptions }
-	let [open, setOpen] = useState(options.open)
+	let [open, setOpen] = useState(options.open ?? [])
 
 	let onOpen = (index: number) => {
 		if (!options.multi) {
@@ -51,6 +51,7 @@ type AccordionProps = {
 	onClose: (i: number) => void;
 	onOpen: (i: number) => void;
 	children?: ReactNode;
+	className?: string;
 }
 
 let AccordionCtx = createContext<AccordionProps>({
@@ -59,16 +60,25 @@ let AccordionCtx = createContext<AccordionProps>({
 	onClose: (_: number) => {},
 })
 
-export let Accordion: React.FC<AccordionProps> = ({ open, onClose, onOpen, children }) => {
-	
+export let Accordion = ({
+	className = '',
+	open,
+	onClose,
+	onOpen,
+	children,
+}: AccordionProps) => {
 	let _children = Children.map(children, (node, index) => {
-		return cloneElement((node as ReactElement), { index })
+		return (
+			<IndexCtx.Provider value={index}>
+				{ node }
+			</IndexCtx.Provider>
+		)
 	})
 
 	return (
 		<AccordionCtx.Provider value={{ open, onClose, onOpen }}>
 			<AnimateSharedLayout>
-				<motion.ul layout className={styles['accordion-list']}>
+				<motion.ul layout className={[styles.list, className].join(' ')}>
 					{ _children }
 				</motion.ul>
 			</AnimateSharedLayout>
@@ -76,13 +86,14 @@ export let Accordion: React.FC<AccordionProps> = ({ open, onClose, onOpen, child
 	)	
 }
 
+let IndexCtx = createContext<number>(0)
 
 type AccordionItemProps = {
-	index: number;
 	children?: ReactNode
 }
 
-export let AccordionItem = ({ children, index }: AccordionItemProps) => {
+export let AccordionItem = ({ children }: AccordionItemProps) => {
+	let index = useContext(IndexCtx)
 
 	let _children = Children.map(children, (node) => {
 		return cloneElement((node as ReactElement), { index })
@@ -96,12 +107,12 @@ export let AccordionItem = ({ children, index }: AccordionItemProps) => {
 }
 
 type AccordionTitleProps = {
-	index: number,
 	className?: string,
 	children?: ReactNode,
 }
 
-export let AccordionTitle = ({ children, index, className, ...props }: AccordionTitleProps) => {
+export let AccordionTitle = ({ children, className, ...props }: AccordionTitleProps) => {
+	let index = useContext(IndexCtx)
 	let { open, onOpen, onClose } = useContext(AccordionCtx)
 	let isOpen = open.includes(index)
 
@@ -111,7 +122,7 @@ export let AccordionTitle = ({ children, index, className, ...props }: Accordion
 	}
 
 	let classes = [
-		styles['accordion-title'],
+		styles.title,
 		className,
 		isOpen ? 'is-open' : '',
 	].join(' ')
@@ -129,17 +140,17 @@ export let AccordionTitle = ({ children, index, className, ...props }: Accordion
 }
 
 type AccordionConentProps = {
-	index: number;
 	children: ReactNode;
 	className?: string;
 }
 
-export let AccordionConent = ({ children, index, className, ...props }: AccordionConentProps) => {
+export let AccordionConent = ({ children, className, ...props }: AccordionConentProps) => {
+	let index = useContext(IndexCtx)
 	let { open } = useContext(AccordionCtx)
 
 	let classes = [
-		styles['accordion-content'],
-		open ? styles['accordion-content--open'] : '',
+		styles.content,
+		open ? styles.contentOpen : '',
 		className ?? '',
 	]
 

@@ -1,4 +1,3 @@
-import React from 'react'
 import {
 	createElement,
 	useRef,
@@ -6,10 +5,14 @@ import {
 	useEffect,
 	useState,
 	MouseEvent,
+	forwardRef,
+	HTMLAttributes,
+	ReactNode,
 } from 'react'
+
 import { createPortal } from 'react-dom'
 import { useGetContainer, useOutsideClick } from '@biotic-ui/std'
-import styled from 'styled-components'
+import { css, cx } from '@emotion/css'
 import { motion, AnimatePresence } from 'framer-motion'
 import { boson, useBoson, useSetBoson, SetterOrUpdater } from '@biotic-ui/boson'
 
@@ -93,7 +96,7 @@ export function useNotification(Component: NotificationElement) {
 	return { open: _open, close: _close, closeImmediate: _closeImmediate }
 }
 
-export let Notifications: React.FC<{}> = () => {
+export let Notifications = (props: HTMLAttributes<HTMLUListElement>) => {
 
 	let Container = useGetContainer('biotic-notifications')
 	let [state, setStore] = useBoson(store)
@@ -117,11 +120,13 @@ export let Notifications: React.FC<{}> = () => {
 	let ref = useOutsideClick<HTMLUListElement>(onMouseLeave)
 
 	let NotificationContainer = (
-		<StyledNotifications
+		<ul
 			ref={ref}
+			{ ...props }
 			onMouseEnter={onMouseEnter}
 			onClick={onMouseEnter}
 			onMouseLeave={onMouseLeave}
+			className={cx(notifications, props.className)}
 		>
 			<AnimatePresence initial={false}>
 				{ 
@@ -139,16 +144,16 @@ export let Notifications: React.FC<{}> = () => {
 					}) 
 				}
 			</AnimatePresence>
-		</StyledNotifications>
+		</ul>
 	)
 
 	return Container ? createPortal(NotificationContainer, Container) : null
 }
 
-let StyledNotifications = styled.ul`
+let notifications = css`
 	position: fixed;
-	bottom: var(--notification-bottom, var(--baseline));
-	right: var(--notification-right, var(--baseline));
+	bottom: var(--notification-bottom, var(--size-2));
+	right: var(--notification-right, var(--size-2));
 	display: flex;
 	padding: 0;
 	list-style-type: none;
@@ -157,45 +162,53 @@ let StyledNotifications = styled.ul`
 	margin-bottom: 0;
 `
 
-let StyledNotification = styled(motion.li)<{ positionTransition: boolean }>`
-	margin-top: var(--notification-spacing, calc(var(--baseline) * 0.38));
+let listItem = css`
+	margin-top: var(--notification-spacing, calc(var(--size-2) * 0.38));
 `
 
 type ListItemProps = {
 	index: number;
-	children: JSX.Element | Array<JSX.Element>;
+	children: ReactNode;
 	open: boolean;
 	lastIndex: number
 }
 
-let ListItem: React.FC<ListItemProps> = ({ children }) => {
+let ListItem = ({ children }: ListItemProps) => {
 	return (
-		<StyledNotification
-				initial={{ opacity: 0, transform: 'scale(0.62)' }}
-				animate={{ opacity: 1, transform: 'scale(1)' }}
-				exit={{ opacity: 0, transform: 'scale(0.62)' }}
-				positionTransition
+		<motion.li
+			initial={{ opacity: 0, transform: 'scale(0.62)' }}
+			animate={{ opacity: 1, transform: 'scale(1)' }}
+			exit={{ opacity: 0, transform: 'scale(0.62)' }}
+			className={listItem}
 		>
 			{ children }
-		</StyledNotification>
+		</motion.li>
 	)
 }
 
-export let Notification = styled.div`
+export let notification = css`
 	--default-border: 1px solid #fff;
 	background: var(--notification-background, #222);
 	color: var(--notification-color, #fff);
-	padding: var(--baseline) calc(var(--baseline) * 1.62);
+	padding: var(--size-2) calc(var(--size-2) * 1.62);
 	border: var(--notification-border, var(--default-border));
-	border-radius: var(--baseline);
+	border-radius: var(--size-2);
 	width: 300px;
 	display: flex;
 	justify-content: space-between;
-	padding-right: var(--baseline-half);
+	padding-right: var(--size);
 	max-width: 95vw;
 `
 
-let Button = styled.button`
+export let Notification = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>((props, ref) => {
+	return <div
+		ref={ref}
+		{...props}
+		className={cx(notification, props.className)}
+	/>
+})
+
+let buttonClass = css`
 	background: none;
 	border: none;
 	cursor: pointer;
@@ -215,11 +228,11 @@ type CloseProps = {
 
 export function Close({ onClick }: CloseProps) {
 	return (
-		<Button onClick={onClick}>
+		<button onClick={onClick} className={buttonClass}>
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 				<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
 				<path d="M0 0h24v24H0z" fill="none"/>
 			</svg>
-		</Button>
+		</button>
 	)
 }

@@ -1,6 +1,8 @@
 import {
 	FunctionComponent,
-	ComponentClass
+	ComponentClass,
+    createContext,
+    useContext
 } from 'react'
 
 export type As = {
@@ -11,9 +13,9 @@ export type As = {
 }
 
 export type TabItem = {
-	closable: boolean;
+	closable?: boolean;
 	id: string;
-	isStatic: boolean;
+	isStatic?: boolean;
 	title?: string;
 	type: string;
 }
@@ -101,3 +103,15 @@ export type EventCallback = (id?: string) => void;
 export function last<T>(array: Array<T>): T | undefined {
 	return array[array.length - 1]
 }
+
+export let PanelIdCtx = createContext<string | undefined>(undefined)
+
+export function usePanelId(): string {
+	let id = useContext(PanelIdCtx)
+
+	if (id === undefined) {
+		throw new Error('Invalid Panel Context')
+	}
+
+	return id
+} 

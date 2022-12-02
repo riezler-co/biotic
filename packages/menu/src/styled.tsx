@@ -1,70 +1,78 @@
-import styled from 'styled-components'
+import { forwardRef, HTMLAttributes } from 'react'
+import { list, listItem, itemTitle, titleSubmenu, titleIcon } from './menu.styles'
 
-export let StyledMenu = styled.ul`
-	--default-padding: calc(var(--baseline) / 2) 0;
+type MenuProps = HTMLAttributes<HTMLElement>
 
-	inline-size: var(--menu-width, calc(var(--baseline) * 34));
-	max-inline-size: var(--menu-max-width, calc(100vw - 1em));
-	background: var(--menu-bg, #fff);
-	color: var(--menu-color, #444);
-	border-color: var(--border-color);
-	border: var(--border);
-	box-shadow: var(--menu-box-shadow, var(--shadow-1)) ;
-	list-style-type: none;
-	padding: var(--menu-padding, --default-padding);
-	margin: 0;
-`
+export let StyledMenu = forwardRef<HTMLUListElement, MenuProps>(({
+	className = '',
+	children,
+	...props
+}, ref) => {
+	let classes = [
+		'menu-list',
+		list,
+		className,
+	].join(' ')
 
-export let StyledMenuItem = styled.li`
-	position: relative;
+	return (
+		<ul ref={ref} className={classes} {...props}>
+			{ children }
+		</ul>
+	)
+})
 
-	${StyledMenu} {
-		position: absolute;
-		display: none;
+export let StyledMenuItem = forwardRef<HTMLLIElement, MenuProps>(({
+	className = '',
+	children,
+	...props
+}, ref) => {
+	let classes = [
+		listItem,
+		className,
+	].join(' ')
+
+	return (
+		<li ref={ref} className={classes} {...props }>
+			{ children }
+		</li>
+	)
+})
+
+type MenuItemTitleProps = HTMLAttributes<HTMLButtonElement> & {
+	cursor?: string,
+	hasSubmenu?: boolean,
+	hasIcon?: boolean,
+}
+
+export let MenuItemTitle = forwardRef<HTMLButtonElement, MenuItemTitleProps>(({
+	className = '',
+	cursor = 'default',
+	hasSubmenu = false,
+	hasIcon = false,
+	style = {},
+	children,
+	...props
+}, ref) => {
+	let classes = [
+		itemTitle,
+		hasSubmenu ? titleSubmenu : '',
+		hasIcon ? titleIcon : '',
+		className,
+	].join(' ')
+
+	let s = {
+		...style,
+		cursor
 	}
 
-	&:hover ${StyledMenu} {
-		display: block;
-	}
-`
-
-type MenuItemTitleProps =
-	{ cursor?: string
-	; hasSubmenu?: boolean
-	; hasIcon?: boolean
-	}
-
-export let MenuItemTitle = styled.button<MenuItemTitleProps>`
-	inline-size: 100%;
-	background: none;
-	border: none;
-	text-align: left;
-	font-size: var(--menu-font-size, 1em);
-	padding-inline: 0.5em;
-	padding-block: 0.4375em;
-	padding-inline-end: ${p => p.hasSubmenu ? '1.5em' : 'var(--baseline)'};
-	padding-inline-start: ${p => p.hasIcon ? '2em' : 'var(--baseline)'};
-	display: flex;
-	align-items: center;
-	position: relative;
-	cursor: ${p => p.cursor};
-	color: inherit;
-	text-decoration: none;
-	user-select: none;
-
-	span.arrow_right {
-		position: absolute;
-		right: 0;
-		block-size: 100%;
-	}
-
-	span.arrow_right svg {
-		inline-size: 1.62em;
-		block-size: 1.62em;
-		margin-block-start: 0.2em;
-	}
-
-	&:hover {;
-		background: var(--menu-item-hover, rgba(230, 230, 230, 0.8))
-	}
-`
+	return (
+		<button
+			ref={ref}
+			className={classes}
+			style={s}
+			{...props}
+		>
+			{ children }			
+		</button>
+	)
+})

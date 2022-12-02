@@ -10,8 +10,7 @@
     "watch": "parcel watch",
     "build": "parcel build",
     "test": "jest",
-    "check": "tsc --noEmit",
-    "prepublish": "npm run build"
+    "check": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -26,16 +25,12 @@
   "bugs": {
     "url": "https://github.com/riezler-co/biotic/issues"
   },
-  "devDependencies": {
-    "@biotic-ui/leptons": "^0.3.13",
-    "@biotic-ui/std": "^0.3.10"
-  },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
     "@biotic-ui/leptons": "^0.3.4",
     "@biotic-ui/std": "^0.3.0",
     "react": "17 - 18.x",
-    "styled-components": "^5.2.1"
+    "@emotion/css": "^11.10.5"
   },
   "gitHead": "4d47ca609b3d59878dd7f9280cf9e74228490790",
   "publishConfig": {

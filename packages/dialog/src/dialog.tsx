@@ -1,5 +1,4 @@
-import { ReactNode } from 'react'
-import { Ref } from 'react'
+import { ReactNode, Ref } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -10,8 +9,8 @@ import {
 } from '@biotic-ui/std'
 
 
-import backdropStyles from '@biotic-ui/leptons/styles/backdrop.module.css'
-import styles from './dialog.module.css'
+import { backdrop as backdropClass } from '@biotic-ui/leptons'
+import  * as styles from './dialog.styles'
 
 type OnClose = {
 	backdrop: boolean;
@@ -27,6 +26,9 @@ type DialogProps = {
 	children?: ReactNode;
 }
 
+/**
+ * TODO: Use native dialog element
+*/
 export let Dialog = ({
 	open = false,
 	children,
@@ -80,7 +82,7 @@ export let Dialog = ({
 
 			{ backdrop &&
 				<motion.div
-					className={`${backdropStyles.backdrop} ${open ? backdropStyles['backdrop--open'] : ''}`}
+					className={`${backdropClass} ${open ? `${backdropClass}--open` : ''}`}
 					initial='hidden'
 					animate={open ? 'visible' : 'hidden'}
 					variants={backdropVariants}
@@ -97,7 +99,7 @@ export let Dialog = ({
 						animate={{ transform: 'scale(1)' }}
 						exit={{ transform: 'scale(0.95)' }}
 						transition={spring}
-						className={styles['dialog-content']}
+						className={styles.content}
 					>
 						{ children }
 					</motion.div>

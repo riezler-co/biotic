@@ -11,8 +11,7 @@
     "build": "parcel build",
     "test": "jest",
     "check": "tsc --noEmit",
-    "examples": "parcel serve examples/index.html",
-    "prepublish": "npm run build"
+    "examples": "parcel serve examples/index.html"
   },
   "repository": {
     "type": "git",
@@ -33,6 +32,7 @@
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
     "@biotic-ui/std": "^0.3.0",
+    "@emotion/css": "^11.10.5",
     "react": "17 - 18.x",
     "react-dom": "17 - 18.x"
   },

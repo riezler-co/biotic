@@ -1,20 +1,5 @@
 
 :root {
-	/* Spacing */
-	--baseline: 8px;
-	--baseline-half: calc(var(--baseline) * 0.5);
-	--baseline-2: calc(var(--baseline) * 2);
-	--baseline-3: calc(var(--baseline) * 3);
-	--baseline-4: calc(var(--baseline) * 4);
-	--baseline-5: calc(var(--baseline) * 5);
-
-	/* Shadows */
-	--shadow-1: 0 1px 3px rgba(0,0,0,0.13), 0 1px 2px rgba(0,0,0,0.24);
-	--shadow-2: 0 3px 5px rgba(0,0,0,0.16), 0 3px 5px rgba(0,0,0,0.23);
-	--shadow-3: 0 8px 21px rgba(0,0,0,0.21), 0 5px 5px rgba(0,0,0,0.23);
-	--shadow-4: 0 13px 34px rgba(0,0,0,0.25), 0 8px 8px rgba(0,0,0,0.21);
-	--shadow-5: 0 21px 55px rgba(0,0,0,0.34), 0 21px 13px rgba(0,0,0,0.21);
-
 	/* Scrollbar */
 	--scrollbar-thumb: #909090;
 	--scrollbar-track: #e9e8f3;
@@ -22,32 +7,31 @@
 
 	/* Colors */
 	--cyan: #8be9fd;	
-  	--green: #50fa7b;	
-  	--orange: #ffb86c;	
-  	--pink: #ff79c6;
-  	--purple: #bd93f9;
-  	--red: #ff5555;	
-  	--yellow: #f1fa8c;
-  	--magenta: #fe55fe;
-  	--foreground: #f8f8f2;
-  	--background: #282a36;
-  	--active: #44475a;
-  	--muted: #6272a4;
+	--green: #50fa7b;	
+	--orange: #ffb86c;	
+	--pink: #ff79c6;
+	--purple: #bd93f9;
+	--red: #ff5555;	
+	--yellow: #f1fa8c;
+	--magenta: #fe55fe;
+	--foreground: #f8f8f2;
+	--background: #282a36;
+	--active: #44475a;
+	--muted: #6272a4;
 
-  	--blue: #2557e9;
-  	--color-error: var(--red);
+	--blue: #2557e9;
+	--color-error: var(--red);
 
-  	/* Border */
-  	--border-color: #e9e9e9;
-  	--border: 1px solid var(--border-color);
+	/* Border */
+	--border-color: #e9e9e9;
+	--border: 1px solid var(--border-color);
 
-  	/* Misc */
+  /* Misc */
 	--backdrop: rgba(63, 63, 63, 0.1);
 
 	/* Panel */
-
 	--basement-color: rgba(0,0,0, 0.2);
-	--basement: inset 0 0 calc(var(--baseline) * 16) var(--baseline-5) var(--basement-color);
+	--basement: inset 0 0 calc(var(--size-2) * 16) var(--size-7) var(--basement-color);
 }
 
 html {
@@ -67,6 +51,7 @@ body {
 	block-size: 100%;
 	line-height: 1.5;
 	font-family: var(--font-copy);
+	padding: 0;
 }
 
 p {
@@ -86,7 +71,7 @@ label {
 }
 
 h1, h2, h3, h4, h5 {
-  margin-block-end: var(--baseline);
+  margin-block-end: var(--size-2);
   margin-block-start: 0;
   font-family: var(--font-headline);
   font-weight: 500;
@@ -118,6 +103,6 @@ h6 {
 }
 
 small,
-.text_small {
+.text-small {
 	font-size: 0.75rem;
 }

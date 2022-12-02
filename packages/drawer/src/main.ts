@@ -1,2 +1,2 @@
 
-export { Drawer } from './drawer'
+export { Drawer, Position as DrawerPosition } from './drawer'

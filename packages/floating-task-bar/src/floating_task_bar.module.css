@@ -1,0 +1,66 @@
+
+.floating-taskbar {
+	position: fixed;
+	z-index: 10;
+}
+
+.floating-taskbar-content {
+	position: relative;
+	background: var(--task-bar-background, #000);
+	padding: var(--_content-padding);
+	display: inline-flex;
+	flex-direction: var(--_content-direction);
+	grid-column-gap: var(--baseline-3);
+	grid-row-gap: var(--baseline-3);
+	border-radius: var(--baseline-2);
+	box-shadow: var(--_content-shadow, var(--shadow-5));
+}
+
+.floating-taskbar-task {
+	--size: calc(var(--baseline) * 6);
+	min-width: var(--size);
+	min-height: var(--size);
+	padding: var(---baseline);
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: none;
+	border: none;
+	color: var(--task-bar-color, #fff);
+	flex-direction: column;
+}
+
+.floating-taskbar-task svg {
+	fill: currentColor;
+	width: var(--baseline-3);
+	height: var(--baseline-3);
+}
+
+.floating-taskbar-task-label {
+	width: 100%;
+	text-align: center;
+	display: block;
+	margin-top: var(--baseline);
+	margin-bottom: 0;	
+}
+
+.floating-taskbar-close-wrapper {
+	position: absolute;
+	top: -8px;
+	right: -8px;
+	background: #fff;
+	border: 1px solid var(--task-bar-background, #000);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	width: 24px;
+	height: 24px;
+	padding: 4px;
+}
+
+.floating-taskbar-close-wrapper svg {
+	width: var(--baseline-3);
+	height: var(--baseline-3);
+}

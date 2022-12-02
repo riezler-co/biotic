@@ -1,11 +1,9 @@
-import React, { MouseEvent } from 'react'
-import styled from 'styled-components'
+import { css, cx } from '@emotion/css'
+import { HTMLAttributes, MouseEvent } from 'react'
 import { StyledTab } from './styled'
-import { As } from './utils'
 
 type TabProps
-	= React.HTMLAttributes<HTMLElement>
-	& As
+	= HTMLAttributes<HTMLElement>
 	& {
 		type: string
 		id: string;
@@ -17,32 +15,37 @@ type TabProps
 	}
 
 
-export let Tab: React.FC<TabProps> = ({
+export let Tab = ({
 	children,
 	isActive = false,
 	closable = false,
-	as = 'li',
 	icon = <Close />,
 	onClick,
 	onClose,
 	...props
-}) => {
+}: TabProps) => {
 	return (
-		<TabWrapper isActive={isActive} as={as} {...props}>
-			<StyledTab onClick={onClick}>
+		<li
+			{...props}
+			className={cx(
+				wrapper,
+				{ [wrapperActive]: isActive },
+			)}
+		>
+			<button className={StyledTab} onClick={onClick}>
 				{ children }
-			</StyledTab>
+			</button>
 			{ 
 				closable &&
-				<CloseButton onClick={onClose}>
+				<button className={CloseButton} onClick={onClose}>
 					{ icon }
-				</CloseButton>
+				</button>
 			}
-		</TabWrapper>
+		</li>
 	)
 }
 
-export let CloseButton = styled.button`
+export let CloseButton = css`
 	border: none;
 	background: none;
 	cursor: pointer;
@@ -61,19 +64,27 @@ export let CloseButton = styled.button`
 	}
 `
 
-export let TabWrapper = styled.li<{ isActive: boolean }>`
+export let wrapper = css`
 	list-style-type: none;
-	background: ${p => p.isActive ? '#fff' : 'grey'};
+	background: var(--tab-background, grey);
 	display: flex;
 	align-items: center;
 	border-left: 2px solid grey;
 
 	:hover {
-		background: ${p => p.isActive ? '#fff' : 'darkgrey'};
+		background: var(--tab-background-hover, darkgrey);
 	}
 `
 
-let Close: React.FC<{}> = () => {
+let wrapperActive = css`
+	background: var(--tab-background--active, #fff);
+
+	&:hover {
+		background: var(--tab-background-hover--active, #fff);
+	}
+`
+
+let Close = () => {
 	return (
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 			<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>

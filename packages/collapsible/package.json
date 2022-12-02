@@ -10,8 +10,7 @@
     "watch": "parcel watch",
     "build": "parcel build",
     "test": "jest",
-    "check": "tsc --noEmit",
-    "prepublish": "npm run build"
+    "check": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -33,7 +32,8 @@
   "peerDependencies": {
     "@biotic-ui/std": "^0.3.0",
     "framer-motion": "7.5.1",
-    "react": "17 - 18.x"
+    "react": "17 - 18.x",
+    "@emotion/css": "^11.10.5"
   },
   "gitHead": "aa286c278d255c6e014a6714da74e77c0ef15013",
   "publishConfig": {

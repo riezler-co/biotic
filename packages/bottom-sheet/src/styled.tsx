@@ -1,11 +1,11 @@
 import { forwardRef, HTMLAttributes } from 'react'
-import styles from './bottom_sheet.module.css'
+import * as styles from './bottom_sheet.styles'
 
 export let SheetHeader = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>((props, ref) => {
 	return <header
 		{...props}
 		ref={ref}
-		className={[styles['bottom-sheet-header'], props.className ?? ''].join(' ')}
+		className={[styles.header, props.className ?? ''].join(' ')}
 	/>
 })
 
@@ -13,7 +13,7 @@ export let SheetTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadin
 	return <h4
 		{...props}
 		ref={ref}
-		className={[styles['bottom-sheet-title'], props.className ?? ''].join(' ')}
+		className={[styles.title, props.className ?? ''].join(' ')}
 	/>
 })
 
@@ -21,6 +21,6 @@ export let SheetContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivEleme
 	return <div
 		{...props}
 		ref={ref}
-		className={[styles['bottom-sheet-content'], props.className ?? ''].join(' ')}
+		className={[styles.content, props.className ?? ''].join(' ')}
 	/>
 })

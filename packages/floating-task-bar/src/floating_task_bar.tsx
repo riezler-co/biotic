@@ -1,75 +1,17 @@
-import React, { ReactNode } from 'react'
-import { Fragment } from 'react'
-import styled from 'styled-components'
+import { Fragment, forwardRef, HTMLAttributes, ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { useOnEscape } from '@biotic-ui/std'
-import styles from '@biotic-ui/leptons/style/backdrop.module.css'
+import { backdrop as backdropClass } from '@biotic-ui/leptons'
+import * as styles from './floating_task_bar.styles'
 
 export enum Position {
-	Bottom,
-	Top,
-	Left,
-	Right,
+	Bottom = 'bottom',
+	Top = 'top',
+	Left = 'left',
+	Right = 'right',
 }
 
-function getPosition(position: Position): string {
-	switch (position) {
-		case Position.Top:
-			return 'top: var(--baseline-2)'
-
-		case Position.Left:
-			return 'left: var(--baseline-2)'
-
-		case Position.Right:
-			return 'right: var(--baseline-2)'
-		
-		case Position.Bottom:
-			return 'bottom: var(--baseline-2);'
-	}
-}
-
-function getTaskDirection(position: Position): string {
-	if (position === Position.Top || position === Position.Bottom) {
-		return 'row'
-	}
-
-	return 'column'
-}
-
-function getDirection(position: Position) {
-	if (position === Position.Top || position === Position.Bottom) {
-		return 'left: 50%'
-	}
-
-	return 'top: 50%'
-}
-
-export let StyledFloatingTaskBar = styled(motion.div)<{ position: Position }>`
-	position: fixed;
-	z-index: 10;
-	${p => getPosition(p.position)};
-	${p => getDirection(p.position)};
-`
-
-function getPadding(position: Position): string {
-	if (position === Position.Top || position === Position.Bottom) {
-		return 'var(--baseline-2) calc(var(--baseline) * 5)'
-	}
-
-	return 'calc(var(--baseline) * 4) var(--baseline-2) '
-}
-
-export let FloatingTaskBarContent = styled.div<{ open: boolean, position: Position }>`
-	position: relative;
-	background: var(--task-bar-background, #000);
-	padding: ${p => getPadding(p.position)};
-	display: inline-flex;
-	flex-direction: ${p => getTaskDirection(p.position)};
-	grid-column-gap: var(--baseline-3);
-	grid-row-gap: var(--baseline-3);
-	border-radius: var(--baseline-2);
-	${p => p.open ? 'box-shadow: var(--shadow-5);' : '' }
-`
+let positions = Object.values(Position)
 
 type Props = {
 	open?: boolean,
@@ -89,14 +31,16 @@ export let FloatingTaskBar = ({
 	backdrop = false,
 	...props
 }: Props) => {
+
+	let _position = positions.includes(position) ? position : Position.Bottom
 	
 	let variants = {
 		hidden: {
-			transform: hiddenTransform[position],
+			transform: hiddenTransform[_position],
 			opacity: 0,
 		},
 		visible: {
-			transform: visibleTransform[position],
+			transform: visibleTransform[_position],
 			opacity: 1,
 		}
 	}
@@ -112,7 +56,7 @@ export let FloatingTaskBar = ({
 		<Fragment>
 			{ backdrop &&
 				<motion.div
-					className={`${styles.backdrop} ${open ? styles['backdrop--open'] : ''}`}
+					className={`${backdropClass} ${open ? `${backdropClass}--open` : ''}`}
 					initial='hidden'
 					animate={open ? 'visible' : 'hidden'}
 					variants={backdropVariants}
@@ -120,14 +64,25 @@ export let FloatingTaskBar = ({
 				/>
 			}
 			
-			<StyledFloatingTaskBar
+			<motion.div
 				initial='hidden'
 				animate={open ? 'visible' : 'hidden'}
 				variants={variants}
-				position={position}
+				className={styles.taskbar}
+				style={{
+					[_position]: 'var(--size-3)',
+					[getDirection(_position)]: '50%',
+				}}
 				{...props}
 			>
-				<FloatingTaskBarContent open={open} position={position}>
+				<div
+					className={styles.content}
+					style={{
+						padding: getPadding(_position),
+						flexDirection: getTaskDirection(_position),
+						boxShadow: open ? 'var(--shadow-2)' : ''
+					}}
+				>
 					{ children }
 
 					{ closeBotton &&	
@@ -135,11 +90,36 @@ export let FloatingTaskBar = ({
 							<X/>
 						</CloseWrapper>
 					}
-				</FloatingTaskBarContent>
-			</StyledFloatingTaskBar>
+				</div>
+			</motion.div>
 		</Fragment>
 	)
 }
+
+function getTaskDirection(position: Position): 'row' | 'column' {
+	if (position === Position.Top || position === Position.Bottom) {
+		return 'row'
+	}
+
+	return 'column'
+}
+
+function getDirection(position: Position): 'left' | 'top' {
+	if (position === Position.Top || position === Position.Bottom) {
+		return 'left'
+	}
+
+	return 'top'
+}
+
+function getPadding(position: Position): string {
+	if (position === Position.Top || position === Position.Bottom) {
+		return 'var(--size-3) calc(var(--size-2) * 5)'
+	}
+
+	return 'calc(var(--size-2) * 4) var(--size-3) '
+}
+
 
 let hiddenTransform = {
 	[Position.Bottom]: 'translateY(100%) translateX(-50%)',
@@ -155,54 +135,59 @@ let visibleTransform = {
 	[Position.Left]: 'translateX(0%) translateY(-50%)',
 }
 
-export let Task = styled.button`
-	--size: calc(var(--baseline) * 6);
-	min-width: var(--size);
-	min-height: var(--size);
-	padding: var(---baseline);
-	position: relative;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background: none;
-	border: none;
-	color: var(--task-bar-color, #fff);
-	flex-direction: column;
+export let Task = forwardRef<HTMLButtonElement, HTMLAttributes<HTMLButtonElement>>(({
+	className = '',
+	...props
+}, ref) => {
+	let classes = [
+		styles.taskbarItem,
+		className,
+	].join(' ')
 
-	svg {
-		fill: currentColor;
-		width: var(--baseline-3);
-		height: var(--baseline-3);
-	}
-`
+	return (
+		<button
+			ref={ref}
+			{...props}
+			className={classes}
+		/>
+	)
+})
 
-export let TaskLabel = styled.label`
-	width: 100%;
-	text-align: center;
-	display: block;
-	margin-top: var(--baseline);
-	margin-bottom: 0;
-`
+export let TaskLabel = forwardRef<HTMLLabelElement, HTMLAttributes<HTMLLabelElement>>(({
+	className = '',
+	...props
+}, ref) => {
+	let classes = [
+		styles.label,
+		className,
+	].join(' ')
 
-let CloseWrapper = styled.button`
-	position: absolute;
-	top: -8px;
-	right: -8px;
-	background: #fff;
-	border: 1px solid var(--task-bar-background, #000);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 50%;
-	width: 24px;
-	height: 24px;
-	padding: 4px;
+	return (
+		<label
+			ref={ref}
+			{...props}
+			className={classes}
+		/>
+	)
+})
 
-	svg {
-		width: var(--baseline-3);
-		height: var(--baseline-3);
-	}
-`
+let CloseWrapper = forwardRef<HTMLButtonElement, HTMLAttributes<HTMLButtonElement>>(({
+	className = '',
+	...props
+}, ref) => {
+	let classes = [
+		styles.close,
+		className,
+	].join(' ')
+
+	return (
+		<button
+			ref={ref}
+			{...props}
+			className={classes}
+		/>
+	)
+})
 
 let X = () => {
 	return (

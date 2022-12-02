@@ -10,8 +10,7 @@
     "watch": "parcel watch",
     "build": "parcel build",
     "test": "jest",
-    "check": "tsc --noEmit",
-    "prepublish": "npm run build"
+    "check": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -31,10 +30,10 @@
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
+    "@emotion/css": "^11.10.5",
     "@biotic-ui/std": "^0.3.0",
     "react": "17 - 18.x",
-    "react-dom": "16.8 - 18.x",
-    "styled-components": "^5.2.1"
+    "react-dom": "16.8 - 18.x"
   },
   "dependencies": {
     "@popperjs/core": "^2.5.4",

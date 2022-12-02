@@ -13,12 +13,12 @@ import {
     ReactNode,
 } from 'react'
 
-import styled from 'styled-components'
 import ArrowRight from './arrow_right'
 import { getSubmenuPosition } from './utils'
 import ArrowBack from './arrow_back'
 import { useCombinedRefs, useResize } from '@biotic-ui/std'
 import { StyledMenu, StyledMenuItem, MenuItemTitle } from './styled'
+import { divider, iconWrapper } from './menu.styles'
 
 type Props = {
 	children?: ReactNode;
@@ -160,11 +160,15 @@ export let MenuItem = (props: MenuItemProps) => {
 	} = props
 	
 	let _children = useMemo<Array<ReactElement>>(
-			() => Children.toArray(children) as Array<ReactElement>
-		, [children, hasSubmenu, hasIcon]
+		() => Children.toArray(children) as Array<ReactElement>,
+		[children, hasSubmenu, hasIcon]
 	)
 
-	let title = useMemo(() => _children.find(node => node.type === MenuItemTitle), [children, hasSubmenu, hasIcon])
+	let title = useMemo(
+		() => _children.find(node => node.type === MenuItemTitle),
+		[children, hasSubmenu, hasIcon]
+	)
+
 	let submenuRef = useRef<HTMLElement | null>(null)
 	let itemRef = useRef(null)
 
@@ -184,7 +188,7 @@ export let MenuItem = (props: MenuItemProps) => {
 	let submenu = useMemo(getSubmenu, [_children])
 
 	if (!title) {
-		throw new Error('missing title')
+		return null
 	}
 
 	let Title = cloneElement(title, {
@@ -237,13 +241,6 @@ export let MenuItem = (props: MenuItemProps) => {
 	)
 }
 
-export let Divider = styled.hr`
-	margin-block-start: 0.25em;
-	background: var(--menu-border-color, #e9e9e9);
-	border: none;
-	height: 1px;
-`
-
 function pushArrow(children: JSX.Element) {
 	let _children = Children.toArray(children)
 	let arrow = (
@@ -260,18 +257,20 @@ function appendItem(children: JSX.Element, item: JSX.Element) {
 	return [item, ..._children]
 }
 
-let IconWrapper = styled.span`
-	position: absolute;
-	inset-inline-start: 0;
-	inline-size: 2em;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 2;
-	block-size: 100%;
+type IconWrapperProps = {
+	children?: ReactNode,
+}
 
-	svg {
-		inline-size: 1em;
-		block-size: 1em;
-	}
-`
+export let Divider = () => {
+	return (
+		<hr className={divider} />
+	)
+}
+
+let IconWrapper = ({ children }: IconWrapperProps) => {
+	return (
+		<span className={iconWrapper}>
+			{ children }
+		</span>
+	)
+}

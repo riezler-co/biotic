@@ -11,7 +11,6 @@ export {
 
 export {
 	Tab,
-	TabWrapper,
 	CloseButton
 } from './tab'
 
@@ -35,3 +34,5 @@ export {
 	StyledTab,
 	StyledTabs
 } from './styled'
+
+export { PanelIdCtx, usePanelId } from './utils'

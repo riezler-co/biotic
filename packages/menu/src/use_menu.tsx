@@ -1,4 +1,4 @@
-import React, { Children, useState, SyntheticEvent } from 'react'
+import React, { Children, useState, SyntheticEvent, MouseEventHandler } from 'react'
 import { createPortal } from 'react-dom'
 import { useGetContainer, useOnEscape, useOutsideClick, useCombinedRefs } from '@biotic-ui/std'
 import { usePopper } from 'react-popper'
@@ -18,7 +18,7 @@ type ContainerProps = {
 
 type UseMenu = {
 	ref: (e: HTMLElement | null) => void ;
-	onClick: (e: MouseEvent) => void;
+	onClick: MouseEventHandler<HTMLElement>;
 	MenuContainer: React.FC<ContainerProps>;
 }
 
@@ -80,7 +80,7 @@ export function useMenu(userConfig: Config = DefaultConfig): UseMenu {
 		return MENU_CONTAINER ? createPortal(PopperMenu, MENU_CONTAINER) : null
 	}
 
-	let onClick = (e: MouseEvent) => {
+	let onClick: MouseEventHandler<HTMLElement> = (e) => {
 		// we stop propagation here otherwise
 		// useOutsideClick will regiser a click
 		// event and immediately close the menu.

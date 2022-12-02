@@ -1,20 +1,16 @@
-import React from 'react'
 import {
 	Children,
 	useMemo,
 	useEffect,
-	useRef,
-	useState,
 	ReactElement,
 	createContext,
 	useContext,
+    cloneElement,
+    HTMLAttributes,
 } from 'react'
 
-import {
-	StyledTabs,
-	StyledTabBar,
-	StyledTabContent
-} from './styled'
+import { scrollbar } from '@biotic-ui/leptons'
+import { StyledTabs, StyledTabBar, StyledTabContent } from './styled'
 
 import { useSetBoson } from '@biotic-ui/boson'
 
@@ -23,8 +19,6 @@ import {
 	useScrollState,
 	useRestoreScroll,
 	useCloseTab,
-	useOnTabClose,
-	useTabState,
 	useTabHistory,
 	useActiveState
 } from './hook'
@@ -32,8 +26,9 @@ import {
 import {
 	toTabObject,
 	isStatic,
-	As
+	PanelIdCtx,
 } from './utils'
+import { cx } from '@emotion/css'
 
 export let TabsCtx = createContext('default')
 
@@ -44,29 +39,25 @@ export function useGroup() {
 
 type TabProps
 	= React.HTMLAttributes<HTMLElement>
-	& As
 	& {
 		children: JSX.Element | Array<JSX.Element>;
 		group?: string;
  	} 
 
-export function Tabs({ children, group = 'default', as = 'div', ...props }: TabProps) {
+export function Tabs({ children, group = 'default', ...props }: TabProps) {
 	return (
-		<StyledTabs as={as} {...props}>
+		<div {...props} className={cx(StyledTabs, props.className)}>
 			<TabsCtx.Provider value={group}>
 				{ children }
 			</TabsCtx.Provider>
-		</StyledTabs>
+		</div>
 	)
 }
 
 
-type TabBarProps
-	= React.HTMLAttributes<HTMLElement>
-	& As
-	& { children: Array<JSX.Element> } 
+type TabBarProps = React.HTMLAttributes<HTMLElement> 
 
-export function TabBar({ children, as = 'ul', ...props }: TabBarProps) {
+export function TabBar({ children, ...props }: TabBarProps) {
 	let group = useContext(TabsCtx)
 	let tabsState = makeTabsState(group)
 	let setTabs = useSetBoson(tabsState)
@@ -75,24 +66,24 @@ export function TabBar({ children, as = 'ul', ...props }: TabBarProps) {
 
 	let _children = useMemo(() => {
 		return Children.map(children, (node, index) => {
-			let { isStatic = true } = node.props
-			return React.cloneElement(node, {
+			let elm = (node as ReactElement)
+			return cloneElement(elm, {
 				onClick: () => {
 					history.activate({
 						index,
-						type: node.props.type,
-						id: node.props.id
+						type: elm.props.type,
+						id: elm.props.id
 					})
 				},
 
 				onClose: () => {
-					closeTab.close(node.props.id)
+					closeTab.close(elm.props.id)
 				},
 
-				isActive: active && active.id === node.props.id
+				isActive: active && active.id === elm.props.id
 			})
 		})
-	}, [children, active])
+	}, [children, active]) ?? []
 
 	let length = _children.length
 	useEffect(() => {
@@ -104,9 +95,9 @@ export function TabBar({ children, as = 'ul', ...props }: TabBarProps) {
 	}, [length])
 
 	return (
-		<StyledTabBar as={as} {...props}>
+		<header {...props} className={cx(StyledTabBar, props.className)}>
 			{ _children }
-		</StyledTabBar>
+		</header>
 	)
 }
 
@@ -132,24 +123,24 @@ export function TabContent({ children, fallback = null }: TabContentProps) {
 		return fallback
 	}
 
-	return React.cloneElement(panel, {
+	return cloneElement(panel, {
 		key: active === null ? '' : active.id
 	})
 }
 
 type TabPanelProps
-	= React.HTMLAttributes<HTMLElement>
-	& As
+	= HTMLAttributes<HTMLElement>
 	& {
-		children: JSX.Element;
-		scrollGroup?: string;
+		children: JSX.Element,
+		scrollGroup?: string,
+		type: string,
 	}
 
 
-export function TabPanel({ children, scrollGroup, as = 'div', ...props }: TabPanelProps) {
+export function TabPanel({ children, scrollGroup, ...props }: TabPanelProps) {
 	let group = useContext(TabsCtx)
 	let active = useActiveState(group)
-	let _child = React.Children.only(children)
+	let _child = Children.only(children)
 
 	let id = useMemo(() => {
 		if(active === null) {
@@ -163,14 +154,22 @@ export function TabPanel({ children, scrollGroup, as = 'div', ...props }: TabPan
 		return active.id
 	}, [active, scrollGroup])
 
-	let child = React.cloneElement(_child, { id })
+	let child = cloneElement(_child, { id })
 	let tabId = `tab_panel:${id}`
 	let [, setScroll] = useScrollState(tabId)
 	let ref = useRestoreScroll(tabId)
 
 	return (
-		<StyledTabContent as={as} id={tabId} onScroll={setScroll} ref={ref} {...props}>
-			{ child }
-		</StyledTabContent>
+		<PanelIdCtx.Provider value={id}>
+			<div
+				ref={ref}
+				id={tabId}
+				onScroll={setScroll}
+				{...props}
+				className={cx(StyledTabContent, scrollbar, props.className)}
+			>
+				{ child }
+			</div>
+		</PanelIdCtx.Provider>
 	)
 }

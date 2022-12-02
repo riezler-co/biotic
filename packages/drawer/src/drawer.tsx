@@ -7,12 +7,17 @@ import {
 	usePreventScroll
 } from '@biotic-ui/std'
 
-import backdropStyles from '@biotic-ui/leptons/style/backdrop.module.css'
-import styles from './drawer.module.css'
+import { backdrop as backdropClass } from '@biotic-ui/leptons'
+import * as styles from './drawer.styles'
 
 type CloseEvent = {
 	backdrop: boolean,
 	escape: boolean
+}
+
+export enum Position {
+	Left = 'left',
+	Right = 'right'
 }
 
 type Props = {
@@ -20,7 +25,7 @@ type Props = {
 	children?: ReactNode,
 	maxWidth?: 'auto' | number,
 	onClose: (e: CloseEvent) => void,
-	left?: boolean,
+	position?: Position,
 	scrollable?: boolean,
 }
 
@@ -31,7 +36,7 @@ export function Drawer(props: Props) {
 		children,
 		maxWidth = 'auto',
 		onClose = NoOp,
-		left = true,
+		position = Position.Left,
 		scrollable = false,
 	} = props
 
@@ -45,14 +50,14 @@ export function Drawer(props: Props) {
 	}
 
 	let backdropClasses = [
-		backdropStyles.backdrop,
-		open ? backdropStyles['backdrop--open'] : ''
+		backdropClass,
+		open ? `${backdropClass}--open` : ''
 	].join(' ')
 
 	let classes = [
 		styles.drawer,
-		left ? styles['drawer--left'] : styles['drawer--right'],
-		open ? styles['drawer--open'] : '',
+		position === Position.Left ? styles.position.left : styles.position.right,
+		open ? styles.open : '',
 	].join(' ')
 
 	let Drawer = (

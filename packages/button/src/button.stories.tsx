@@ -12,10 +12,6 @@ let StyledButton = styled(Button)`
   --button-raised-bg: lightblue;
   --button-border: 1px dashed #f0f;
   --button-raised-bg--hover: #7dcfea;
-
-  &.werkbank-button--raised {
-    --loading-color: yellow;
-  }
 `
 
 export default {

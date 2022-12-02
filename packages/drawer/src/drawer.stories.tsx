@@ -1,21 +1,31 @@
 import { useState } from 'react'
-import { Drawer } from './drawer'
+import { StoryFn, Meta } from '@storybook/react'
+
+import { Drawer, Position } from './drawer'
+import { Button } from '@biotic-ui/button'
 
 export default {
-	title: 'Drawer'
-}
+	title: 'Drawer',
+	argTypes: {
+		position: {
+			defaultValue: Position.Left,
+		  	control: 'select',
+			options: Object.values(Position),
+		}
+	}
+} as Meta
 
-export let drawer = () => {
+export let drawer: StoryFn = (args) => {
 	let [open, setOpen] = useState(false)
 
 	return (
 		<div>
 				
-			<button onClick={() => setOpen(true)}>
+			<Button onClick={() => setOpen(true)}>
 				Open
-			</button>
+			</Button>
 
-			<Drawer open={open} onClose={() => setOpen(false)}>
+			<Drawer {...args} open={open} onClose={() => setOpen(false)}>
 				<div style={{ width: 300 }}></div>
 			</Drawer>
 		</div>
