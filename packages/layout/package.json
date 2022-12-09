@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/layout",
-  "version": "0.3.16",
+  "version": "0.4.1",
   "description": "biotic layout components",
   "source": "src/main.ts",
   "module": "lib/module.js",
@@ -25,19 +25,14 @@
   "bugs": {
     "url": "https://github.com/riezler-co/biotic/issues"
   },
-  "devDependencies": {
-    "@biotic-ui/drawer": "^0.3.16",
-    "@biotic-ui/leptons": "^0.3.13",
-    "@biotic-ui/std": "^0.3.10"
-  },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
-    "@biotic-ui/drawer": "^0.3.4",
-    "@biotic-ui/leptons": "^0.3.4",
-    "@biotic-ui/std": "^0.3.0",
-    "framer-motion": "7.5.1",
-    "react": "17 - 18.x",
-    "@emotion/css": "^11.10.5"
+    "@biotic-ui/drawer": "^0.4.1",
+    "@biotic-ui/leptons": "^0.4.1",
+    "@biotic-ui/std": "^0.4.1",
+    "@emotion/css": "^11.10.5",
+    "framer-motion": "^7.5.1",
+    "react": "17 - 18.x"
   },
   "gitHead": "4d47ca609b3d59878dd7f9280cf9e74228490790",
   "publishConfig": {

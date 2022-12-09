@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/tabs",
-  "version": "0.3.36",
+  "version": "0.4.1",
   "description": "React Utils",
   "source": "src/main.ts",
   "module": "lib/module.js",
@@ -25,20 +25,14 @@
   "bugs": {
     "url": "https://github.com/riezler-co/biotic/issues"
   },
-  "devDependencies": {
-    "@biotic-ui/boson": "^0.3.30",
-    "@biotic-ui/leptons": "^0.3.13",
-    "@biotic-ui/std": "^0.3.10",
-    "rxjs": "^6.6.3"
-  },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
-    "@biotic-ui/boson": "^0.3.9",
-    "@biotic-ui/leptons": "^0.3.4",
-    "@biotic-ui/std": "^0.3.0",
+    "@biotic-ui/boson": "^0.4.1",
+    "@biotic-ui/leptons": "^0.4.1",
+    "@biotic-ui/std": "^0.4.1",
+    "@emotion/css": "^11.10.5",
     "react": "17 - 18.x",
-    "rxjs": "^6.6.3",
-    "@emotion/css": "^11.10.5"
+    "rxjs": "^6.6.3"
   },
   "gitHead": "4d47ca609b3d59878dd7f9280cf9e74228490790",
   "publishConfig": {

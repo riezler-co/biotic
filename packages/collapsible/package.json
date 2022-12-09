@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/collapsible",
-  "version": "0.3.10",
+  "version": "0.4.1",
   "description": "React Collapsible",
   "source": "src/main.ts",
   "module": "lib/module.js",
@@ -25,15 +25,12 @@
   "bugs": {
     "url": "https://github.com/riezler-co/biotic/issues"
   },
-  "devDependencies": {
-    "@biotic-ui/std": "^0.3.10"
-  },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
-    "@biotic-ui/std": "^0.3.0",
-    "framer-motion": "7.5.1",
-    "react": "17 - 18.x",
-    "@emotion/css": "^11.10.5"
+    "@biotic-ui/std": "^0.4.1",
+    "@emotion/css": "^11.10.5",
+    "framer-motion": "^7.5.1",
+    "react": "17 - 18.x"
   },
   "gitHead": "aa286c278d255c6e014a6714da74e77c0ef15013",
   "publishConfig": {

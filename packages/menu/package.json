@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/menu",
-  "version": "0.3.11",
+  "version": "0.4.1",
   "description": "React Menu",
   "source": "src/main.ts",
   "module": "lib/module.js",
@@ -26,16 +26,14 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "devDependencies": {
-    "@biotic-ui/std": "^0.3.10"
+    "@biotic-ui/std": "^0.4.0"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
+    "@biotic-ui/std": "^0.4.1",
     "@emotion/css": "^11.10.5",
-    "@biotic-ui/std": "^0.3.0",
     "react": "17 - 18.x",
-    "react-dom": "16.8 - 18.x"
-  },
-  "dependencies": {
+    "react-dom": "16.8 - 18.x",
     "@popperjs/core": "^2.5.4",
     "react-popper": "^2.2.4"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/db",
-  "version": "0.3.19",
+  "version": "0.4.1",
   "description": "RxJS IDDB",
   "source": "src/main.ts",
   "module": "lib/module.js",

@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/notification",
-  "version": "0.3.27",
+  "version": "0.4.1",
   "description": "React Notification",
   "source": "src/main.ts",
   "module": "lib/module.js",
@@ -25,19 +25,15 @@
   "bugs": {
     "url": "https://github.com/riezler-co/biotic/issues"
   },
-  "devDependencies": {
-    "@biotic-ui/boson": "^0.3.30",
-    "@biotic-ui/std": "^0.3.10"
-  },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
+    "@biotic-ui/boson": "^0.4.1",
+    "@biotic-ui/std": "^0.4.1",
     "@emotion/css": "^11.10.5",
-    "@biotic-ui/boson": "^0.3.9",
-    "@biotic-ui/std": "^0.3.0",
+    "framer-motion": "^7.5.1",
     "react": "17 - 18.x",
     "react-dom": "16.8 - 18.x",
-    "rxjs": "^6.6.3",
-    "framer-motion": "7.5.1"
+    "rxjs": "^6.6.3"
   },
   "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
   "publishConfig": {

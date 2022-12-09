@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/button",
-  "version": "0.3.13",
+  "version": "0.4.1",
   "description": "biotic button",
   "source": "src/main.ts",
   "module": "lib/module.js",
@@ -26,18 +26,12 @@
   "bugs": {
     "url": "https://github.com/riezler-co/biotic/issues"
   },
-  "devDependencies": {
-    "@biotic-ui/icon": "^0.3.5",
-    "styled-components": "^5.3.6"
-  },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
-    "@biotic-ui/leptons": "^0.3.13",
+    "@biotic-ui/leptons": "^0.4.1",
     "@emotion/css": "^11.10.5",
+    "phosphor-react": "^1.4.1",
     "react": "17 - 18.x"
-  },
-  "dependencies": {
-    "phosphor-react": "^1.4.1"
   },
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/stepper",
-  "version": "0.3.5",
+  "version": "0.4.1",
   "description": "React Stepper",
   "source": "src/main.ts",
   "module": "lib/module.js",
@@ -27,8 +27,7 @@
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
-    "react": "17 - 18.x",
-    "styled-components": "^5.2.1"
+    "react": "17 - 18.x"
   },
   "gitHead": "c2003d6180c869c628e34dfc3aaae5f525114fc9",
   "publishConfig": {

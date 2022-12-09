@@ -13,5 +13,5 @@ export let header = css`
 export let container = css`
 	display: grid;
 	height: 100%;
-	grid-template-rows: calc(var(--size-3) * 5) auto;
+	grid-template-rows: var(--size-9) auto;
 `

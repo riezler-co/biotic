@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/context-menu",
-  "version": "0.3.16",
+  "version": "0.4.1",
   "description": "Mobile First context menu for react",
   "source": "src/main.ts",
   "module": "lib/module.js",
@@ -25,19 +25,12 @@
   "bugs": {
     "url": "https://github.com/riezler-co/biotic/issues"
   },
-  "devDependencies": {
-    "@biotic-ui/bottom-sheet": "^0.3.4",
-    "@biotic-ui/std": "^0.3.10"
-  },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
-    "@biotic-ui/bottom-sheet": "^0.3.4",
-    "@biotic-ui/std": "^0.3.0",
+    "@biotic-ui/bottom-sheet": "^0.4.1",
+    "@biotic-ui/std": "^0.4.1",
     "react": "17 - 18.x",
     "react-dom": "16.9 - 18.x"
-  },
-  "dependencies": {
-    "@biotic-ui/bottom-sheet": "^0.3.16"
   },
   "gitHead": "4d47ca609b3d59878dd7f9280cf9e74228490790",
   "publishConfig": {

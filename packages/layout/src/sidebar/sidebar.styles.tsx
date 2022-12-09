@@ -26,6 +26,7 @@ export let content = css`
 	width: var(--_aside-width);
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 
 	--drawer-background: var(--aside-background, #fff);
 	--menu-bg: var(--aside-background, #fff);
