@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/layout",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "biotic layout components",
   "source": "src/main.ts",
   "module": "lib/module.js",
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "dependencies": {
-    "@biotic-ui/drawer": "^0.5.0",
+    "@biotic-ui/drawer": "^0.5.2",
     "@biotic-ui/leptons": "^0.5.0",
     "@biotic-ui/std": "^0.5.0",
     "framer-motion": "^7.5.1",
