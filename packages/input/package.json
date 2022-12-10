@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/input",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "React Input",
   "source": "src/main.ts",
   "module": "lib/module.js",
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "dependencies": {
-    "@biotic-ui/std": "^0.4.1",
+    "@biotic-ui/std": "^0.5.0",
     "react": "17 - 18.x"
   },
   "gitHead": "4d47ca609b3d59878dd7f9280cf9e74228490790",

@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/button",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "biotic button",
   "source": "src/main.ts",
   "module": "lib/module.js",
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "dependencies": {
-    "@biotic-ui/leptons": "^0.4.1",
+    "@biotic-ui/leptons": "^0.5.0",
     "phosphor-react": "^1.4.1",
     "react": "17 - 18.x"
   },

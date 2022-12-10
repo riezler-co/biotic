@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/leptons",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "biotic shared components",
   "source": "src/main.ts",
   "module": "lib/module.js",
