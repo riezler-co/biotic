@@ -20,7 +20,7 @@
     "packages:build": "parcel build ./packages/*",
     "packages:watch": "parcel watch ./packages/*",
     "packages:check": "lerna run check",
-    "publish": "npm run packages:build && lerna publish --ignore-prepublish"
+    "publish": "npm run packages:build && npm run packages:check && lerna publish --ignore-prepublish"
   },
   "author": "Michael Riezler <michael@riezler.co> (https://riezler.co)",
   "license": "MPL-2.0",
