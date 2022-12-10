@@ -26,12 +26,10 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
-  "peerDependencies": {
+  "dependencies": {
     "@biotic-ui/std": "^0.4.1",
     "framer-motion": "^7.5.1",
-    "react": "17 - 18.x"
-  },
-  "dependencies": {
+    "react": "17 - 18.x",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1"
   },

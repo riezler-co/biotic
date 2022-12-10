@@ -26,7 +26,7 @@
     "url": "https://github.com/riezler-co/biotic/issues"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
-  "peerDependencies": {
+  "dependencies": {
     "framer-motion": "^7.5.1",
     "react": "17 - 18.x"
   },

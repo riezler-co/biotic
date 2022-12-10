@@ -29,7 +29,7 @@
     "rxjs": "^6.6.3"
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
-  "peerDependencies": {
+  "dependencies": {
     "rxjs": "^6.6.3"
   },
   "publishConfig": {

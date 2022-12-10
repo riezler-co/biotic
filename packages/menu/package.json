@@ -25,11 +25,8 @@
   "bugs": {
     "url": "https://github.com/riezler-co/biotic/issues"
   },
-  "devDependencies": {
-    "@biotic-ui/std": "^0.4.0"
-  },
   "homepage": "https://github.com/riezler-co/biotic#readme",
-  "peerDependencies": {
+  "dependencies": {
     "@biotic-ui/std": "^0.4.1",
     "react": "17 - 18.x",
     "react-dom": "16.8 - 18.x",
