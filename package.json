@@ -17,9 +17,10 @@
     "test": "jest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build:packages": "parcel build ./packages/*",
-    "watch:packages": "parcel watch ./packages/*",
-    "publish": "npm run build:packages && lerna publish --ignore-prepublish"
+    "packages:build": "parcel build ./packages/*",
+    "packages:watch": "parcel watch ./packages/*",
+    "packages:check": "lerna run check",
+    "publish": "npm run packages:build && lerna publish --ignore-prepublish"
   },
   "author": "Michael Riezler <michael@riezler.co> (https://riezler.co)",
   "license": "MPL-2.0",
@@ -48,7 +49,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.1.2",
     "jest-environment-jsdom": "^29.1.2",
-    "lerna": "^5.5.4",
+    "lerna": "^5.6.2",
     "lightningcss": "^1.16.0",
     "open-props": "^1.4.16",
     "parcel": "^2.8.1",
