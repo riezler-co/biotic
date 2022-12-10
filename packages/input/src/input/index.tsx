@@ -1,6 +1,4 @@
 import { useState, InputHTMLAttributes, forwardRef } from 'react'
-import { input as inputClass } from '@biotic-ui/leptons'
-import { switchViewButton, passwordWrapper } from '../styled'
 
 type InputProps = InputHTMLAttributes<HTMLInputElement>
 
@@ -8,7 +6,7 @@ export let Input = forwardRef<HTMLInputElement, InputProps>(({ className = '', .
 	return <input
 		ref={ref}
 		{...props}
-		className={[inputClass, className].join(' ')}
+		className={['biotic-input', className].join(' ')}
 	/>
 })
 
@@ -24,9 +22,9 @@ export let Password = forwardRef<HTMLInputElement, InputProps>(({ children , ...
 	}
 
 	return (
-		<div className={passwordWrapper}>
+		<div className='biotic-input-wrapper--password'>
 			<Input {...props} type={type} ref={ref} />
-			<button className={switchViewButton} type="button" onMouseDown={handleShow} onMouseUp={handleHide}>
+			<button className='biotic-input-switch-view' type="button" onMouseDown={handleShow} onMouseUp={handleHide}>
 				{ type === 'text' &&
 					<Eye />				
 				}

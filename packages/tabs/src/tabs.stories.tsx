@@ -9,6 +9,7 @@ import {
 
 import { useForm } from '@biotic-ui/std'
 
+import '../style.css'
 import {
 	Tabs,
 	TabBar,

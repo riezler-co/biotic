@@ -8,8 +8,6 @@ import {
 } from 'react'
 
 import { useCombinedRefs, useResize, useThrottle } from '@biotic-ui/std'
-import { input as inputClass } from '@biotic-ui/leptons'
-import { textareaClass } from '../styled'
 
 type Ref = HTMLTextAreaElement
 
@@ -69,7 +67,7 @@ export let Textarea = forwardRef<Ref, TextareaProps>(({
 		<textarea
 			style={styles}
 			ref={ref}
-			className={[inputClass, textareaClass, className].join(' ')}
+			className={['biotic-input', 'biotic-textarea', className].join(' ')}
 			value={value}
 			rows={minRows}
 			{...rest}

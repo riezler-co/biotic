@@ -9,9 +9,6 @@ import {
     HTMLAttributes,
 } from 'react'
 
-import { scrollbar } from '@biotic-ui/leptons'
-import { StyledTabs, StyledTabBar, StyledTabContent } from './styled'
-
 import { useSetBoson } from '@biotic-ui/boson'
 
 import {
@@ -28,7 +25,6 @@ import {
 	isStatic,
 	PanelIdCtx,
 } from './utils'
-import { cx } from '@emotion/css'
 
 export let TabsCtx = createContext('default')
 
@@ -45,8 +41,13 @@ type TabProps
  	} 
 
 export function Tabs({ children, group = 'default', ...props }: TabProps) {
+	let classes = [
+		'biotic-tabs-tab-list',
+		props.className ?? ''
+	].join(' ')
+
 	return (
-		<div {...props} className={cx(StyledTabs, props.className)}>
+		<div {...props} className={classes}>
 			<TabsCtx.Provider value={group}>
 				{ children }
 			</TabsCtx.Provider>
@@ -94,8 +95,13 @@ export function TabBar({ children, ...props }: TabBarProps) {
 		setTabs(tabs => ({ ...tabs, length, staticItems }))
 	}, [length])
 
+	let classes = [
+		'biotic-tabs-tab-bar',
+		props.className ?? '',
+	].join(' ')
+
 	return (
-		<header {...props} className={cx(StyledTabBar, props.className)}>
+		<header {...props} className={classes}>
 			{ _children }
 		</header>
 	)
@@ -159,6 +165,12 @@ export function TabPanel({ children, scrollGroup, ...props }: TabPanelProps) {
 	let [, setScroll] = useScrollState(tabId)
 	let ref = useRestoreScroll(tabId)
 
+	let classes = [
+		'biotic-tabs-tab-content',
+		'biotic-scrollbar',
+		props.className ?? '',
+	].join(' ')
+
 	return (
 		<PanelIdCtx.Provider value={id}>
 			<div
@@ -166,7 +178,7 @@ export function TabPanel({ children, scrollGroup, ...props }: TabPanelProps) {
 				id={tabId}
 				onScroll={setScroll}
 				{...props}
-				className={cx(StyledTabContent, scrollbar, props.className)}
+				className={classes}
 			>
 				{ child }
 			</div>

@@ -1,7 +1,10 @@
 import { Fragment, useState } from 'react'
 import { Meta, StoryFn } from '@storybook/react'
-import { Button } from '@biotic-ui/button'
 
+import { Button } from '@biotic-ui/button'
+import '@biotic-ui/button/style.css'
+
+import '../style.css'
 import {
 	Notifications,
 	useNotification,

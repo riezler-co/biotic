@@ -1,6 +1,4 @@
-import { css, cx } from '@emotion/css'
 import { HTMLAttributes, MouseEvent } from 'react'
-import { StyledTab } from './styled'
 
 type TabProps
 	= HTMLAttributes<HTMLElement>
@@ -22,67 +20,32 @@ export let Tab = ({
 	icon = <Close />,
 	onClick,
 	onClose,
+	className = '',
 	...props
 }: TabProps) => {
+	let wrapperClasses = [
+		'biotic-tabs-tab-wrapper',
+		isActive ? 'biotic-tabs-tab-wrapper--active' : '',
+		className,
+	].join(' ')
+
 	return (
 		<li
 			{...props}
-			className={cx(
-				wrapper,
-				{ [wrapperActive]: isActive },
-			)}
+			className={wrapperClasses}
 		>
-			<button className={StyledTab} onClick={onClick}>
+			<button className={'biotic-tabs-tab'} onClick={onClick}>
 				{ children }
 			</button>
 			{ 
 				closable &&
-				<button className={CloseButton} onClick={onClose}>
+				<button className='biotic-tabs-tab-close-button' onClick={onClose}>
 					{ icon }
 				</button>
 			}
 		</li>
 	)
 }
-
-export let CloseButton = css`
-	border: none;
-	background: none;
-	cursor: pointer;
-	:focus {
-	  outline: none;
-	}
-
-	svg {
-		--size: calc(var(--baseline) * 2);
-		width: var(--size);
-		height: var(--size);
-	}
-
-	:hover svg {
-		background: rgba(200, 200, 200, 0.5);
-	}
-`
-
-export let wrapper = css`
-	list-style-type: none;
-	background: var(--tab-background, grey);
-	display: flex;
-	align-items: center;
-	border-left: 2px solid grey;
-
-	:hover {
-		background: var(--tab-background-hover, darkgrey);
-	}
-`
-
-let wrapperActive = css`
-	background: var(--tab-background--active, #fff);
-
-	&:hover {
-		background: var(--tab-background-hover--active, #fff);
-	}
-`
 
 let Close = () => {
 	return (

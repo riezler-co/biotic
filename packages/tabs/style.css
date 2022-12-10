@@ -1,0 +1,82 @@
+@import "@biotic-ui/leptons/style/scrollbar.css";
+
+.biotic-tabs-tab-bar {
+	display: flex;
+	height: calc(var(--size-2) * 4);
+	padding: 0;
+	width: 100%;
+	background: var(--tab-bar-background, grey);
+	overflow: auto;
+	-ms-overflow-style: none;  /* IE and Edge */
+	scrollbar-width: none;  /* Firefox */
+}
+
+.biotic-tabs-tab-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.biotic-tabs-tab-content {
+	overflow: auto;
+}
+
+.biotic-tabs-tab {
+	border: none;
+	min-width: calc(var(--size-2) * 10);
+	max-width: calc(var(--size-2) * 38);
+	background: none;
+	cursor: pointer;
+	height: 100%;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.biotic-tabs-tab:focus {
+  outline: var(--tab-focus, none);
+}
+
+.biotic-tabs-tab-close-button {
+	border: none;
+	background: none;
+	cursor: pointer;
+}
+
+.biotic-tabs-tab-close-button:focus {
+  outline: none;
+}
+
+.biotic-tabs-tab-close-button svg {
+	--size: calc(var(--baseline) * 2);
+	width: var(--size);
+	height: var(--size);
+}
+
+.biotic-tabs-tab-close-button:hover svg {
+	background: rgba(200, 200, 200, 0.5);
+}
+
+.biotic-tabs-tab-wrapper {
+	list-style-type: none;
+	background: var(--tab-background, grey);
+	display: flex;
+	align-items: center;
+	border-left: 2px solid grey;
+}
+
+.biotic-tabs-tab-wrapper:hover {
+	background: var(--tab-background-hover, darkgrey);
+}
+
+.biotic-tabs-tab-wrapper--active {
+	background: var(--tab-background--active, #fff);
+}
+
+.biotic-tabs-tab-wrapper--active:hover {
+	background: var(--tab-background-hover--active, #fff);
+}
+
+.biotic-tabs-tab-list {
+	display: grid;
+	height: 100%;
+	grid-template-rows: calc(var(--size-2) * 4) auto!important;
+}

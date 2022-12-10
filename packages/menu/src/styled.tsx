@@ -1,5 +1,4 @@
 import { forwardRef, HTMLAttributes } from 'react'
-import { list, listItem, itemTitle, titleSubmenu, titleIcon } from './menu.styles'
 
 type MenuProps = HTMLAttributes<HTMLElement>
 
@@ -9,8 +8,7 @@ export let StyledMenu = forwardRef<HTMLUListElement, MenuProps>(({
 	...props
 }, ref) => {
 	let classes = [
-		'menu-list',
-		list,
+		'biotic-menu-list',
 		className,
 	].join(' ')
 
@@ -27,7 +25,7 @@ export let StyledMenuItem = forwardRef<HTMLLIElement, MenuProps>(({
 	...props
 }, ref) => {
 	let classes = [
-		listItem,
+		'biotic-menu-list-item',
 		className,
 	].join(' ')
 
@@ -54,9 +52,9 @@ export let MenuItemTitle = forwardRef<HTMLButtonElement, MenuItemTitleProps>(({
 	...props
 }, ref) => {
 	let classes = [
-		itemTitle,
-		hasSubmenu ? titleSubmenu : '',
-		hasIcon ? titleIcon : '',
+		'biotic-menu-list-item-title',
+		hasSubmenu ? 'biotic-menu-list-item-title-submenu' : '',
+		hasIcon ? 'biotic-menu-list-item-title-icon' : '',
 		className,
 	].join(' ')
 

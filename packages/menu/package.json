@@ -31,7 +31,6 @@
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
     "@biotic-ui/std": "^0.4.1",
-    "@emotion/css": "^11.10.5",
     "react": "17 - 18.x",
     "react-dom": "16.8 - 18.x",
     "@popperjs/core": "^2.5.4",

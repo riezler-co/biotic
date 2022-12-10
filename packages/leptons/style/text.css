@@ -1,27 +1,26 @@
-import { css } from "@emotion/css";
 
-export let ellipsis = css`
+.biotic-text-ellipsis {
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
-`
+}
 
-export let clamp = css`
+.biotic-text-clamp {
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: var(--clamp-lines, 1);
 	overflow: hidden;
-`
+}
 
-export let error = css`
+.biotic-text-error {
 	color: var(--color-error);
 	text-align: center;
-`
+}
 
-export let small = css`
+.biotic-text-small {
 	font-size: 0.75em;
-`
+}
 
-export let muted = css`
+.biotic-text-muted {
 	color: var(--muted);
-`
+}

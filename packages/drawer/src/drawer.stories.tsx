@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { StoryFn, Meta } from '@storybook/react'
 
+import '../style.css'
 import { Drawer, Position } from './drawer'
 import { Button } from '@biotic-ui/button'
 

@@ -110,10 +110,12 @@ export function useContextMenu(userOptions = {}) {
 			})
 
 			return (
-				<BottomSheet open
+				<BottomSheet 
+					open
 					onClose={() => setUseBottomSheet(false)}
-					onClick={() => setUseBottomSheet(false)}>
-				{ menu }
+					onClick={() => setUseBottomSheet(false)}
+				>
+					{ menu }
 				</BottomSheet>
 			)
 		}

@@ -1,0 +1,13 @@
+
+.biotic-layout-card-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, 280px);
+	grid-gap: var(--size-3);
+	justify-content: center;
+}
+
+@media screen and (max-width: 607px) {
+	.biotic-layout-card-grid {
+		grid-template-columns: 1fr;
+	}
+}

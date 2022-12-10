@@ -1,12 +1,11 @@
 import { forwardRef, HTMLAttributes } from 'react'
-import { cardGrid } from './card_grid.styles'
 
 export let CardGrid = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({
 	className = '',
 	...props
 }, ref) => {
 	let classes = [
-		cardGrid,
+		'biotic-layout-card-grid',
 		className,
 	].join(' ')
 

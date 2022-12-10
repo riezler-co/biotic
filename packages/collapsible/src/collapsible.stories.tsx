@@ -6,6 +6,7 @@ import {
 	Trash,
 } from 'phosphor-react'
 
+import '../style.css'
 import {
 	Collapsible,
 	useAccordion,

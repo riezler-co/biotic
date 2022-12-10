@@ -1,0 +1,145 @@
+
+.biotic-form-section {
+	margin-block-end: calc(var(--baseline) * 2);
+}
+
+.biotic-input {
+	--default-border: 1px solid rgba(34,36,38,.15);
+	margin: 0;
+	max-inline-size: 100%;
+	inline-size: 100%;
+	flex: 1 0 auto;
+	outline: none;
+	-webkit-tap-highlight-color: var(--tap-highlight-color, rgba(255,255,255,0));
+	text-align: left;
+	line-height: 1.21428571em;
+	padding-inline: 0.62em; 
+	padding-block: .38em;
+	block-size: var(--baseline-4);
+	background: var(--input-bg, none);
+	border: var(--input-border, var(--default-border));
+	color: var(--input-color, rgba(0,0,0,.87));
+	border-radius: var(--input-border-radius, calc(var(--baseline) * 0.5));
+	-webkit-transition: box-shadow .1s ease,border-color .1s ease;
+	transition: box-shadow .1s ease, border-color .1s ease;
+	box-shadow: none;
+	font-size: inherit;
+	box-sizing: border-box;
+}
+
+.biotic-input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+	color: var(--input-color-placeholder);
+	opacity: 1; /* Firefox */
+}
+
+.biotic-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+	color: var(--input-color-placeholder);
+}
+
+.biotic-input::-ms-input-placeholder { /* Microsoft Edge */
+	color: var(--input-color-placeholder);
+}
+
+.biotic-select[multiple]:not([size]) {
+	block-size: var(--size-11);
+}
+
+.biotic-option {
+	background-color: var(--option-background, inherit);
+	color: var(--option-color, inherit);
+}
+
+.biotic-optgroup {
+	background-color: var(--optgroup-background, inherit);
+	color: var(--optgroup-color, inherit);
+}
+
+.biotic-input:disabled {
+  opacity: var(--input-disabled-opacity, 0.8);
+  background: var(--input-disabled-background, rgba(100,100,100, 0.1));
+}
+
+.biotic-input-wrapper--password {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.biotic-input-switch-view {
+	background: none;
+	border: none;
+	outline: none;
+	position: absolute;
+	inset-inline-end: var(--size-2);
+	z-index: 5;
+	background: var(--input-bg, none);
+}
+
+.biotic-form-label {
+	margin-block-end: 0.25em;
+	display: inline-block;
+}
+
+.biotic-textarea {
+	scrollbar-color: var(--scrollbar, #cdcdcd);	
+}
+
+.biotic-textarea::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-bg, #f0f0f0);
+}
+
+.biotic-textarea::-webkit-scrollbar {
+    width: var(--_scrollbar-width);
+    background-color: var(--scrollbar-bg, #f0f0f0);
+}
+
+.biotic-textarea::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar, #cdcdcd);
+    border-radius: '10px';
+}
+
+.biotic-chips-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 8px;
+	row-gap: 8px;
+	padding: 16px;
+	position: relative;
+	background: #fff;
+	cursor: text;
+	border-radius: 4px;
+	border-style: solid;
+}
+
+.biotic-chips-wrapper:hover {
+    border-color: #000;
+}
+
+.biotic-chips-input {
+	border: none;
+	background: none;
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	padding: 0;
+	flex-grow: 1;
+}
+
+.biotic-chips-input:focus {
+    outline: none;
+}
+
+.biotic-chips-label {
+	position: absolute;
+	top: 15px;
+	left: 10px;
+	transform: translateY(0) translateX(0) scale(1);
+	transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+	pointer-events: none;
+}
+
+.biotic-chips-label--notched {
+	transform: translateY(-24px) translateX(-8px) scale(0.75);
+	background: #fff;
+	padding: 0 8px;
+}

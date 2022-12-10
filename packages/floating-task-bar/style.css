@@ -1,26 +1,27 @@
+@import "@biotic-ui/leptons/style/backdrop.css";
 
-.floating-taskbar {
+.biotic-floating-taskbar {
 	position: fixed;
 	z-index: 10;
 }
 
-.floating-taskbar-content {
+.biotic-floating-taskbar-content {
 	position: relative;
 	background: var(--task-bar-background, #000);
 	padding: var(--_content-padding);
 	display: inline-flex;
 	flex-direction: var(--_content-direction);
-	grid-column-gap: var(--baseline-3);
-	grid-row-gap: var(--baseline-3);
-	border-radius: var(--baseline-2);
+	grid-column-gap: var(--size-5);
+	grid-row-gap: var(--size-5);
+	border-radius: var(--size-3);
 	box-shadow: var(--_content-shadow, var(--shadow-5));
 }
 
-.floating-taskbar-task {
-	--size: calc(var(--baseline) * 6);
+.biotic-floating-taskbar-task {
+	--size: calc(var(--size-2) * 6);
 	min-width: var(--size);
 	min-height: var(--size);
-	padding: var(---baseline);
+	padding: var(--size-2);
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -31,21 +32,21 @@
 	flex-direction: column;
 }
 
-.floating-taskbar-task svg {
+.biotic-floating-taskbar-task svg {
 	fill: currentColor;
-	width: var(--baseline-3);
-	height: var(--baseline-3);
+	width: var(--size-5);
+	height: var(--size-5);
 }
 
-.floating-taskbar-task-label {
+.biotic-floating-taskbar-task-label {
 	width: 100%;
 	text-align: center;
 	display: block;
-	margin-top: var(--baseline);
-	margin-bottom: 0;	
+	margin-top: var(--size-2);
+	margin-bottom: 0;
 }
 
-.floating-taskbar-close-wrapper {
+.biotic-floating-taskbar-close-wrapper {
 	position: absolute;
 	top: -8px;
 	right: -8px;
@@ -60,7 +61,7 @@
 	padding: 4px;
 }
 
-.floating-taskbar-close-wrapper svg {
-	width: var(--baseline-3);
-	height: var(--baseline-3);
+.biotic-floating-taskbar-close-wrapper svg {
+	width: var(--size-5);
+	height: var(--size-5);
 }

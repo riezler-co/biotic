@@ -1,0 +1,17 @@
+@import "@biotic-ui/leptons/style/scrollbar.css";
+
+.biotic-layout-topbar {
+	display: grid;
+	height: 100%;
+	grid-template-rows: var(--size-8) auto;
+}
+
+.biotic-layout-topbar-content {
+	overflow: auto;
+}
+
+.biotic-layout-topbar-header {
+	padding: var(--size-2) var(--size-3);
+	border-bottom: var(--border);
+	display: flex;
+}

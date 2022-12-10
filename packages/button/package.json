@@ -29,7 +29,6 @@
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
     "@biotic-ui/leptons": "^0.4.1",
-    "@emotion/css": "^11.10.5",
     "phosphor-react": "^1.4.1",
     "react": "17 - 18.x"
   },

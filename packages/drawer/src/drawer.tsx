@@ -1,4 +1,4 @@
-import { Fragment, ReactNode } from 'react'
+import { Fragment, HTMLAttributes } from 'react'
 import { createPortal } from 'react-dom'
 
 import {
@@ -6,9 +6,6 @@ import {
 	useOnEscape,
 	usePreventScroll
 } from '@biotic-ui/std'
-
-import { backdrop as backdropClass } from '@biotic-ui/leptons'
-import * as styles from './drawer.styles'
 
 type CloseEvent = {
 	backdrop: boolean,
@@ -20,25 +17,27 @@ export enum Position {
 	Right = 'right'
 }
 
-type Props = {
+type Props = HTMLAttributes<HTMLDivElement> & {
 	open: boolean,
-	children?: ReactNode,
 	maxWidth?: 'auto' | number,
 	onClose: (e: CloseEvent) => void,
 	position?: Position,
 	scrollable?: boolean,
+	backdropClassName?: string,
 }
 
 let NoOp = () => {}
-export function Drawer(props: Props) {
-	let {
-		open,
-		children,
-		maxWidth = 'auto',
-		onClose = NoOp,
-		position = Position.Left,
-		scrollable = false,
-	} = props
+export function Drawer({
+	open,
+	children,
+	maxWidth = 'auto',
+	onClose = NoOp,
+	position = Position.Left,
+	scrollable = false,
+	className = '',
+	backdropClassName = '',
+	...props
+}: Props) {
 
 	let DrawerContainer = useGetContainer('biotic-drawer-container')
 	
@@ -50,14 +49,16 @@ export function Drawer(props: Props) {
 	}
 
 	let backdropClasses = [
-		backdropClass,
-		open ? `${backdropClass}--open` : ''
+		'biotic-backdrop',
+		open ? `biotic-backdrop--open` : '',
+		backdropClassName,
 	].join(' ')
 
 	let classes = [
-		styles.drawer,
-		position === Position.Left ? styles.position.left : styles.position.right,
-		open ? styles.open : '',
+		'biotic-drawer',
+		position === Position.Left ? 'biotic-drawer--left' : 'biotic-drawer--right',
+		open ? 'biotic-drawer--open' : '',
+		className,
 	].join(' ')
 
 	let Drawer = (
@@ -72,6 +73,7 @@ export function Drawer(props: Props) {
 			<div
 				className={classes}
 				style={{ maxWidth }}
+				{...props}
 			>
 				{ children }
 			</div>

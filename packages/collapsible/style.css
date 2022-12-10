@@ -1,23 +1,22 @@
-import { css } from '@emotion/css'
 
-export let list = css`
+.biotic-accordion-list {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
-`
+}
 
-export let title = css`
+.biotic-accordion-title {
 	background: none;
 	border: none;
 	flex-grow: 0;
 	cursor: pointer;
 	padding: calc(var(--size-2) / 2) var(--size-2);
-`
+}
 
-export let content = css`
+.biotic-accordion-content {
 	padding: var(--size-2);
-`
+}
 
-export let contentOpen = css`
+.biotic-accordion-content--open {
 	padding: calc(var(--size-2) / 2);
-`
+}

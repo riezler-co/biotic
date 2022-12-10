@@ -9,7 +9,6 @@ import {
 } from 'react'
 import { Collapsible } from './collapsible'
 import { AnimateSharedLayout, motion } from 'framer-motion'
-import * as styles from './accordion.styles'
 
 type UseAccordion = {
 	open?: Array<number>;
@@ -78,7 +77,7 @@ export let Accordion = ({
 	return (
 		<AccordionCtx.Provider value={{ open, onClose, onOpen }}>
 			<AnimateSharedLayout>
-				<motion.ul layout className={[styles.list, className].join(' ')}>
+				<motion.ul layout className={['biotic-accordion-list', className].join(' ')}>
 					{ _children }
 				</motion.ul>
 			</AnimateSharedLayout>
@@ -122,9 +121,9 @@ export let AccordionTitle = ({ children, className, ...props }: AccordionTitlePr
 	}
 
 	let classes = [
-		styles.title,
+		'biotic-accordion-title',
 		className,
-		isOpen ? 'is-open' : '',
+		isOpen ? 'biotic-accordion-title--open' : '',
 	].join(' ')
 
 	return (
@@ -149,8 +148,8 @@ export let AccordionConent = ({ children, className, ...props }: AccordionConent
 	let { open } = useContext(AccordionCtx)
 
 	let classes = [
-		styles.content,
-		open ? styles.contentOpen : '',
+		'biotic-accordion-content',
+		open ? 'biotic-accordion-content--open' : '',
 		className ?? '',
 	]
 

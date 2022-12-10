@@ -2,8 +2,6 @@ import { forwardRef, ButtonHTMLAttributes } from 'react'
 import { X as CloseIcon } from 'phosphor-react'
 import { Pulse } from '@biotic-ui/leptons'
 
-import * as styles from './button.styles'
-
 type Props = {
 	disabled?: boolean;
 	raised?: boolean;
@@ -22,8 +20,8 @@ export let Button = forwardRef<HTMLButtonElement, ButtonProps>(({
 }, outerRef) => {
 
 	let classes = [
-		styles.button,
-		raised ? styles.buttonRaised : '',
+		'biotic-button',
+		raised ? 'biotic-button--raised' : '',
 		className
 	]
 
@@ -34,7 +32,7 @@ export let Button = forwardRef<HTMLButtonElement, ButtonProps>(({
 			className={classes.join(' ')}
 			disabled={loading ? true : disabled}>
 			<span>
-				{ loading && <Pulse className={styles.buttonLoading} size='1em' /> }
+				{ loading && <Pulse className='biotic-button--loading' size='1em' /> }
 				{ children }
 			</span>
 		</button>
@@ -52,7 +50,7 @@ export let IconButton = forwardRef<HTMLButtonElement, ButtonProps>(({
 		<button
 			ref={outerRef}
 			{...props}
-			className={[styles.iconButton, className].join(' ')}
+			className={['biotic-icon-button', className].join(' ')}
 			disabled={loading ? true : disabled}
 		>
 			{ children }
@@ -77,8 +75,8 @@ export let Fab = forwardRef<HTMLButtonElement, ButtonProps>(({
 	...props
 }, outerRef) => {
 	let classes = [
-		styles.fab,
-		raised ? styles.fabRaised : '',
+		'biotic-fab',
+		raised ? 'biotic-fab--raised' : '',
 		className,,
 	].join(' ')
 	return (
@@ -104,11 +102,11 @@ export let LinkButton = forwardRef<HTMLButtonElement, ButtonProps>(({
 		<button
 			ref={outerRef}
 			{...props}
-			className={[styles.button, styles.buttonLink, className].join(' ')}
+			className={['biotic-button', 'biotic-button--link', className].join(' ')}
 			disabled={loading ? true : disabled}
 		>
 			<span>
-				{ loading && <Pulse className={styles.buttonLoading} size='1em' /> }
+				{ loading && <Pulse className='biotic-button--loading' size='1em' /> }
 				{ children }
 			</span>
 		</button>
@@ -126,10 +124,10 @@ export let OutlineButton = forwardRef<HTMLButtonElement, ButtonProps>(({
 		<button
 			ref={outerRef}
 			{...props}
-			className={[styles.button, styles.buttonOutline, className].join('')}
+			className={['biotic-button', 'biotic-button--outline', className].join('')}
 			disabled={loading ? true : disabled}>
 			<span>
-				{ loading && <Pulse className={styles.buttonLoading} size='1em' /> }
+				{ loading && <Pulse className='biotic-button--loading' size='1em' /> }
 				{ children }
 			</span>
 		</button>

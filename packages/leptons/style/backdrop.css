@@ -1,6 +1,5 @@
-import { css } from "@emotion/css";
 
-export let backdrop = css`
+.biotic-backdrop {
 	background: var(--backdrop, rgba(63, 63, 63, 0.1));
 	opacity: 0;
 	position: fixed;
@@ -11,9 +10,9 @@ export let backdrop = css`
 	z-index: var(--background-z-index, 10);
 	pointer-events: none;
 	transition: opacity 300ms var(--ease-5);
+}
 
-	&--open {
-		pointer-events: all;
-		opacity: 1;
-	}
-`
+.biotic-backdrop--open {
+	pointer-events: all;
+	opacity: 1;
+}

@@ -17,9 +17,6 @@ import {
 
 import { motion, AnimatePresence, MotionStyle } from 'framer-motion'
 
-import { backdrop as backdropClass } from '@biotic-ui/leptons'
-import * as styles from './bottom_sheet.styles'
-
 type CloseEvent = {
 	backdrop: boolean;
 	escape: boolean;
@@ -110,7 +107,7 @@ export let BottomSheet = ({
 			{
 				!scrollable &&
 					<motion.div
-						className={`${backdropClass} ${open ? `${backdropClass}--open` : ''}`}
+						className={`biotic-backdrop ${open ? `biotic-backdrop--open` : ''}`}
 						initial='hidden'
 						animate={open ? 'visible' : 'hidden'}
 						variants={backdropVariants}
@@ -122,7 +119,7 @@ export let BottomSheet = ({
 				{ open &&
 					<motion.div
 						onClick={onClick}
-						className={[styles.drawer, open ? styles.drawerOpen : '', className].join('')}
+						className={['biotic-bottom-sheet-drawer', open ? 'biotic-bottom-sheet-drawer--open' : '', className].join('')}
 						initial={{ transform: 'translateY(100%)' }}
 						animate={{ transform: 'translateY(0%)' }}
 						exit={{ transform: 'translateY(100%)' }}

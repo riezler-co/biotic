@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react'
 import styled from 'styled-components';
 import { Select, Option, Optgroup } from '.'
+import '../../style.css'
 
 export default {
 	title: 'Form/Select',

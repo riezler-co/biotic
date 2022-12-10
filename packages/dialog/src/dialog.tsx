@@ -8,10 +8,6 @@ import {
 	usePreventScroll
 } from '@biotic-ui/std'
 
-
-import { backdrop as backdropClass } from '@biotic-ui/leptons'
-import  * as styles from './dialog.styles'
-
 type OnClose = {
 	backdrop: boolean;
 	escape: boolean
@@ -77,12 +73,12 @@ export let Dialog = ({
 			variants={wrapperVariants}
 			initial='hidden'
 			animate={open ? 'visible' : 'hidden'}
-			className={[styles.dialog, className].join(' ')}
+			className={['biotic-dialog', className].join(' ')}
 		>
 
 			{ backdrop &&
 				<motion.div
-					className={`${backdropClass} ${open ? `${backdropClass}--open` : ''}`}
+					className={`biotic-backdrop ${open ? `biotic-backdrop--open` : ''}`}
 					initial='hidden'
 					animate={open ? 'visible' : 'hidden'}
 					variants={backdropVariants}
@@ -99,7 +95,7 @@ export let Dialog = ({
 						animate={{ transform: 'scale(1)' }}
 						exit={{ transform: 'scale(0.95)' }}
 						transition={spring}
-						className={styles.content}
+						className='biotic-dialog-content'
 					>
 						{ children }
 					</motion.div>

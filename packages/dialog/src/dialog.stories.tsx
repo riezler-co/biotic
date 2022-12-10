@@ -2,6 +2,7 @@ import React from 'react'
 import { Dialog } from './main'
 import { Button } from '@biotic-ui/button'
 import { StoryFn, Meta } from '@storybook/react'
+import '../style.css'
 
 export default {
 	title: 'Dialog',

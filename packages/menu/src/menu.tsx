@@ -18,7 +18,6 @@ import { getSubmenuPosition } from './utils'
 import ArrowBack from './arrow_back'
 import { useCombinedRefs, useResize } from '@biotic-ui/std'
 import { StyledMenu, StyledMenuItem, MenuItemTitle } from './styled'
-import { divider, iconWrapper } from './menu.styles'
 
 type Props = {
 	children?: ReactNode;
@@ -263,13 +262,13 @@ type IconWrapperProps = {
 
 export let Divider = () => {
 	return (
-		<hr className={divider} />
+		<hr className='biotic-menu-divider' />
 	)
 }
 
 let IconWrapper = ({ children }: IconWrapperProps) => {
 	return (
-		<span className={iconWrapper}>
+		<span className='biotic-menu-icon-wrapper'>
 			{ children }
 		</span>
 	)

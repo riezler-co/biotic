@@ -12,7 +12,6 @@ import {
 
 import { createPortal } from 'react-dom'
 import { useGetContainer, useOutsideClick } from '@biotic-ui/std'
-import { css, cx } from '@emotion/css'
 import { motion, AnimatePresence } from 'framer-motion'
 import { boson, useBoson, useSetBoson, SetterOrUpdater } from '@biotic-ui/boson'
 
@@ -119,6 +118,11 @@ export let Notifications = (props: HTMLAttributes<HTMLUListElement>) => {
 
 	let ref = useOutsideClick<HTMLUListElement>(onMouseLeave)
 
+	let classes = [
+		'biotic-notification-list',
+		props.className ?? ''
+	].join(' ')
+
 	let NotificationContainer = (
 		<ul
 			ref={ref}
@@ -126,7 +130,7 @@ export let Notifications = (props: HTMLAttributes<HTMLUListElement>) => {
 			onMouseEnter={onMouseEnter}
 			onClick={onMouseEnter}
 			onMouseLeave={onMouseLeave}
-			className={cx(notifications, props.className)}
+			className={classes}
 		>
 			<AnimatePresence initial={false}>
 				{ 
@@ -150,21 +154,6 @@ export let Notifications = (props: HTMLAttributes<HTMLUListElement>) => {
 	return Container ? createPortal(NotificationContainer, Container) : null
 }
 
-let notifications = css`
-	position: fixed;
-	bottom: var(--notification-bottom, var(--size-2));
-	right: var(--notification-right, var(--size-2));
-	display: flex;
-	padding: 0;
-	list-style-type: none;
-	align-items: stretch;
-	flex-direction: column-reverse;
-	margin-bottom: 0;
-`
-
-let listItem = css`
-	margin-top: var(--notification-spacing, calc(var(--size-2) * 0.38));
-`
 
 type ListItemProps = {
 	index: number;
@@ -179,56 +168,36 @@ let ListItem = ({ children }: ListItemProps) => {
 			initial={{ opacity: 0, transform: 'scale(0.62)' }}
 			animate={{ opacity: 1, transform: 'scale(1)' }}
 			exit={{ opacity: 0, transform: 'scale(0.62)' }}
-			className={listItem}
+			className='biotic-notification-list-item'
 		>
 			{ children }
 		</motion.li>
 	)
 }
 
-export let notification = css`
-	--default-border: 1px solid #fff;
-	background: var(--notification-background, #222);
-	color: var(--notification-color, #fff);
-	padding: var(--size-2) calc(var(--size-2) * 1.62);
-	border: var(--notification-border, var(--default-border));
-	border-radius: var(--size-2);
-	width: 300px;
-	display: flex;
-	justify-content: space-between;
-	padding-right: var(--size);
-	max-width: 95vw;
-`
-
 export let Notification = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>((props, ref) => {
+	let classes = [
+		'biotic-notification',
+		props.className ?? ''
+	].join(' ')
+
 	return <div
 		ref={ref}
 		{...props}
-		className={cx(notification, props.className)}
+		className={classes}
 	/>
 })
 
-let buttonClass = css`
-	background: none;
-	border: none;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
+type CloseProps = HTMLAttributes<HTMLButtonElement>
 
-	svg {
-		fill: var(--notification-color, #fff);
-		width: 1em;
-		height: 1em;
-	}
-`
+export function Close({ ...props }: CloseProps) {
+	let classes = [
+		'biotic-notification-button-close',
+		props.className ?? ''
+	].join(' ')
 
-type CloseProps = {
-	onClick?: (e: MouseEvent) => void;
-}
-
-export function Close({ onClick }: CloseProps) {
 	return (
-		<button onClick={onClick} className={buttonClass}>
+		<button {...props} className={classes}>
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 				<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
 				<path d="M0 0h24v24H0z" fill="none"/>

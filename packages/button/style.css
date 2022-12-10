@@ -1,6 +1,6 @@
-import { css } from '@emotion/css'
+ @import "@biotic-ui/leptons/style/loading.css";
 
-export let button = css`
+.biotic-button {
 	--defaut-shadow: var(--shadow-2);
 	--default-button-background: rgb(239 239 239);
 	--default-button-hover: rgb(220 220 220);
@@ -22,50 +22,50 @@ export let button = css`
 	font-size: 12px; /* Firefox Andoird fallback */
 	font-size: max(0.75em, 12px);
 	border: var(--button-border, var(--default-button-border));
+}
 
-	&:not([disabled]):hover {
-		background: var(--button-bg--hover, var(--default-button-hover));
-	}
+.biotic-button:not([disabled]):hover {
+	background: var(--button-bg--hover, var(--default-button-hover));
+}
 
-	span {
-		position: relative;
-		display: flex;
-		align-items: center;
-	}
+.biotic-button span {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
 
-	&:disabled {
-		cursor: default;
-		opacity: 0.8;
-	}
-`
+.biotic-button:disabled {
+	cursor: default;
+	opacity: 0.8;
+}
 
-export let buttonRaised = css`
+.biotic-button--raised {
 	color:  var(--button-raised-color, #fff);
 	background: var(--button-raised-bg, #141923);
 	box-shadow: var(--shadow-2);
 	border-color: var(--button-raised-border-color, #292f39);
+}
 
-	&:not([disabled]):hover {
-		background: var(--button-raised-bg--hover, #292f39);
-	}
-`
+.biotic-button--raised:not([disabled]):hover {
+	background: var(--button-raised-bg--hover, #292f39);
+}
 
-export let buttonLink = css`
+.biotic-button--link {
 	background: none;
 	border: none;
-`
+}
 
-export let buttonOutline = css`
+.biotic-button--outline {
 	background: none;
 	border: 1px solid currentColor;
-`
+}
 
-export let buttonLoading = css`
+.biotic-button--loading {
 	position: absolute;
 	inset-inline-start: calc(var(--size-3) * -0.9);
-`
+}
 
-export let fab = css`
+.biotic-fab {
 	--_fab-size: var(--size-8);
 	width: var(--_fab-size);
 	height: var(--_fab-size);
@@ -81,28 +81,28 @@ export let fab = css`
 	color: var(--button-fab-color, #fff);
 	background: var(--button-fab-bg, #141923);
 	cursor: pointer;
+}
 
-	&:disabled {
-		cursor: default;
-		opacity: 0.8;
-	}
+.biotic-fab:disabled {
+	cursor: default;
+	opacity: 0.8;
+}
 
-	&:not([disabled]):hover {
-		background: var(--button-raised-bg--hover, #292f39);
-	}
+.biotic-fab:not([disabled]):hover {
+	background: var(--button-raised-bg--hover, #292f39);
+}
 
-	& svg {
-		fill: var(--button-icon-fill, currentColor);
-		width: 68%;
-		height: 68%;
-	}
-`
+.biotic-fab svg {
+	fill: var(--button-icon-fill, currentColor);
+	width: 68%;
+	height: 68%;
+}
 
-export let fabRaised = css`
+.biotic-fab--raised {
 	box-shadow: var(--shadow-3);
-`
+}
 
-export let iconButton = css`
+.biotic-icon-button {
 	background: none;
 	border: none;
 	display: flex;
@@ -112,9 +112,9 @@ export let iconButton = css`
 	cursor: pointer;
 	opacity: 1;
 	padding: 0;
+}
 
-	& :disabled {
-		cursor: default;
-		opacity: 0.8
-	}
-`
+.biotic-icon-button:disabled {
+	cursor: default;
+	opacity: 0.8
+}

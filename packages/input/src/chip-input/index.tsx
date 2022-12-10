@@ -8,7 +8,6 @@ import {
     HTMLAttributes,
 } from 'react';
 
-import { css } from '@emotion/css'
 import { useOnEscape, useOutsideClick, useCombinedRefs } from '@biotic-ui/std'
 
 export type Props = HTMLAttributes<HTMLDivElement> & {
@@ -30,7 +29,8 @@ export let ChipsInput = ({
     onCancelDelete = () => {},
     separator = ',',
     onChange,
-    style,
+    style = {},
+    className = '',
     ...props
 }: Props) => {
     let [focus, setFocus] = useState(false);
@@ -113,14 +113,14 @@ export let ChipsInput = ({
         <div
             {...props}
             style={{ ...style, ...containerStyles }}
-            className={chipsInput}
+            className={['biotic-chips-wrapper', className].join(' ')}
             ref={ref}
             onClick={handleClick}
         >
             {label && (
                 <span
                     style={{ color: focus ? 'var(--color-copy)' : 'rgba(0, 0, 0, 0.6)' }}
-                    className={[labelClass, isNotched ? 'notched' : ''].join(' ')}
+                    className={['biotic-chips-label', isNotched ? 'biotic-chips-label--notched' : ''].join(' ')}
                 >
                     {label}
                 </span>
@@ -129,7 +129,7 @@ export let ChipsInput = ({
             {children}
 
             <input
-                className={inputClass}
+                className='biotic-chips-input'
                 ref={input}
                 type="text"
                 onFocus={() => setFocus(true)}
@@ -141,49 +141,3 @@ export let ChipsInput = ({
         </div>
     );
 };
-
-let labelClass = css`
-    position: absolute;
-    top: 15px;
-    left: 10px;
-    transform: translateY(0) translateX(0) scale(1);
-    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: none;
-
-    &.notched {
-        transform: translateY(-24px) translateX(-8px) scale(0.75);
-        background: #fff;
-        padding: 0 8px;
-    }
-`
-
-let chipsInput = css`
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 8px;
-    row-gap: 8px;
-    padding: 16px;
-    position: relative;
-    background: #fff;
-    cursor: text;
-    border-radius: 4px;
-    border-style: solid;
-
-    :hover {
-        border-color: #000;
-    }
-`
-
-let inputClass = css`
-    border: none;
-    background: none;
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    padding: 0;
-    flex-grow: 1;
-
-    &:focus {
-        outline: none;
-    }
-`

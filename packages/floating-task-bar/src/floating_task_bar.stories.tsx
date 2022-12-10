@@ -2,6 +2,7 @@ import React from 'react';
 import { StoryFn, Meta } from '@storybook/react'
 import { FloatingTaskBar, Task, TaskLabel, Position } from './main'
 import { Button } from '@biotic-ui/button'
+import '../style.css'
 
 import {
 	Pencil,

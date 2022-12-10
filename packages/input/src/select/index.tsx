@@ -5,15 +5,6 @@ import {
 	SelectHTMLAttributes,
 } from 'react'
 
-import {
-	input,
-	select,
-	option,
-	optgroup
-} from '@biotic-ui/leptons'
-
-let classes = { input, select, option, optgroup }
-
 export type SelectProps = SelectHTMLAttributes<HTMLSelectElement>
 
 export let Select = forwardRef<HTMLSelectElement, SelectProps>(({
@@ -25,7 +16,7 @@ export let Select = forwardRef<HTMLSelectElement, SelectProps>(({
 		 <select
 			ref={ref}
 			{...props}
-			className={[classes.input, classes.select, className].join(' ')}
+			className={['biotic-input', 'biotic-select', className].join(' ')}
 		>
 			{ children }
 		</select>
@@ -44,7 +35,7 @@ export let Option = forwardRef<HTMLOptionElement, OptionProps>(({
 		 <option
 			ref={ref}
 			{...props}
-			className={[classes.option, className].join(' ')}
+			className={['biotic-option', className].join(' ')}
 		>
 			{ children }
 		</option>
@@ -63,7 +54,7 @@ export let Optgroup = forwardRef<HTMLOptGroupElement, OptionProps>(({
 		 <optgroup
 			ref={ref}
 			{...props}
-			className={[classes.optgroup, className].join(' ')}
+			className={['biotic-optgroup', className].join(' ')}
 		>
 			{ children }
 		</optgroup>

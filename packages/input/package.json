@@ -27,9 +27,7 @@
   },
   "homepage": "https://github.com/riezler-co/biotic#readme",
   "peerDependencies": {
-    "@biotic-ui/leptons": "^0.4.1",
     "@biotic-ui/std": "^0.4.1",
-    "@emotion/css": "^11.10.5",
     "react": "17 - 18.x"
   },
   "gitHead": "4d47ca609b3d59878dd7f9280cf9e74228490790",

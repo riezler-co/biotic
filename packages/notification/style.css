@@ -1,0 +1,44 @@
+.biotic-notification {
+	--default-border: 1px solid #fff;
+	background: var(--notification-background, #222);
+	color: var(--notification-color, #fff);
+	padding: var(--size-2) calc(var(--size-2) * 1.62);
+	border: var(--notification-border, var(--default-border));
+	border-radius: var(--size-2);
+	width: 300px;
+	display: flex;
+	justify-content: space-between;
+	padding-right: var(--size);
+	max-width: 95vw;
+}
+
+.biotic-notification-list {
+	position: fixed;
+	bottom: var(--notification-bottom, var(--size-2));
+	right: var(--notification-right, var(--size-2));
+	display: flex;
+	padding: 0;
+	list-style-type: none;
+	align-items: stretch;
+	flex-direction: column-reverse;
+	margin-bottom: 0;
+}
+
+.biotic-notification-list-item {
+	margin-top: var(--notification-spacing, calc(var(--size-2) * 0.38));
+}
+
+.biotic-notification-button-close {
+	background: none;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+}
+
+.biotic-notification-button-close svg {
+	fill: var(--notification-color, #fff);
+	width: 1em;
+	height: 1em;
+}
+

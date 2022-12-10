@@ -1,17 +1,21 @@
 import '@biotic-ui/leptons/style/base.css'
 import { useState } from 'react'
+import { Trash, Pencil } from 'phosphor-react'
+
 import {
 	Menu,
 	MenuItem,
 	MenuItemTitle,
 	Divider
 } from '@biotic-ui/menu'
-import { Trash, Pencil } from 'phosphor-react'
+
 import {
 	SidebarLayout,
 	Aside,
 	Main,
 } from './index'
+
+import './sidebar.css'
 
 export default {
 	title: 'Layout/Sidebar'

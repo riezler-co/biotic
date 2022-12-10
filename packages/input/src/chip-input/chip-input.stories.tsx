@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ChipsInput } from '.'
+import '../../style.css'
 
 import styled from 'styled-components'
 

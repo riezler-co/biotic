@@ -1,5 +1,4 @@
-import React, { CSSProperties } from 'react'
-import { useContext } from 'react' 
+import { useContext, CSSProperties, ReactNode } from 'react' 
 import { useDragLayer } from 'react-dnd'
 import { motion, useMotionValue } from 'framer-motion'
 import { SortableCtx } from './ctx'
@@ -14,9 +13,9 @@ let layerStyles: CSSProperties = {
     height: '100%',
 }
 
-type Props =
-    { children: (props: any) => JSX.Element
-    }
+type Props = {
+    children: (props: any) => ReactNode
+}
 
 export let DragLayer = ({ children }: Props) => {
     let ctx = useContext(SortableCtx)

@@ -3,6 +3,8 @@ import { Plus } from 'phosphor-react'
 import styled from 'styled-components'
 import { useState } from 'react'
 
+import '../style.css'
+
 let StyledButton = styled(Button)`
   --button-bg: green;
   --button-bg--hover: #199519;

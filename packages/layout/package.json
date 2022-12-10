@@ -30,7 +30,6 @@
     "@biotic-ui/drawer": "^0.4.1",
     "@biotic-ui/leptons": "^0.4.1",
     "@biotic-ui/std": "^0.4.1",
-    "@emotion/css": "^11.10.5",
     "framer-motion": "^7.5.1",
     "react": "17 - 18.x"
   },

@@ -1,6 +1,6 @@
-import { css } from '@emotion/css'
+@import "@biotic-ui/leptons/style/backdrop.css";
 
-export let drawer = css`
+.biotic-drawer {
 	--_drawer-timing-function: var(--drawer-timing-function, var(--ease-5));
 	--_drawer-duration: var(--drawer-duration, 200ms);
 
@@ -17,21 +17,19 @@ export let drawer = css`
 	--menu-width: auto;
 	--menu-padding: 0;
 	--menu-border: none;
-`
-
-export let position = {
-	left: css`
-		left: 0;
-		transform: translateX(-100%);
-	`,
-
-	right: css`
-		right: 0;
-		transform: translateX(100%);
-	`
 }
 
-export let open = css`
+.biotic-drawer--left {
+	left: 0;
+	transform: translateX(-100%);
+}
+
+.biotic-drawer--right {
+	right: 0;
+	transform: translateX(100%);
+}
+
+.biotic-drawer--open {
 	box-shadow: var(--shadow-2);
 	transform: translateX(0);
-`
+}

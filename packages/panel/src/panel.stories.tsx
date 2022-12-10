@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { Panel, StackedPanels } from './main'
 import '@biotic-ui/leptons/style/base.css'
+import '../style.css'
 
 export default {
 	title: 'Experiment/Panel',
@@ -46,6 +47,7 @@ export let Stacked = () => {
 
 	return (
 		<Wrapper>
+			<div style={{ width: 300 }}></div>
 			<StyledStacked onActivate={setItems}>
 				{ items.map(item => 
 					<Panel key={item} id={item}>

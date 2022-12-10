@@ -1,6 +1,4 @@
 import { forwardRef, HTMLAttributes } from 'react'
-import * as styles from './topbar.styles'
-import { scrollbar } from '@biotic-ui/leptons'
 
 type Props = HTMLAttributes<HTMLDivElement>
 
@@ -9,8 +7,8 @@ let TBContent = forwardRef<HTMLDivElement, Props>(({
 	...props
 }, ref) => {
 	let classes = [
-		styles.content,
-		scrollbar,
+		'biotic-layout-topbar-content',
+		'biotic-scrollbar',
 		className,
 	].join(' ')
 
@@ -28,7 +26,7 @@ let TBHeader = forwardRef<HTMLDivElement, Props>(({
 	...props
 }, ref) => {
 	let classes = [
-		styles.header,
+		'biotic-layout-topbar-header',
 		className,
 	].join(' ')
 
@@ -46,7 +44,7 @@ let TBContainer = forwardRef<HTMLDivElement, Props>(({
 	...props
 }, ref) => {
 	let classes = [
-		styles.container,
+		'biotic-layout-topbar',
 		className,
 	].join(' ')
 

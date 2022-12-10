@@ -1,5 +1,6 @@
 import { StoryFn, Meta } from '@storybook/react'
 
+import '../../style/loading.css'
 import { Pulse, Bounce, Flow, CircleFade } from '.'
 
 export default {

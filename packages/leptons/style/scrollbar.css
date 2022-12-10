@@ -1,0 +1,27 @@
+
+.biotic-scrollbar {
+	--default-thumb-color: #909090;
+	--default-track-color: #e9e8f3;
+
+	scrollbar-color: var(--scrollbar-thumb, var(--default-thumb-color)) var(--scrollbar-track, var(--default-track-color));
+	scrollbar-width: thin;
+}
+
+.biotic-scrollbar::-webkit-scrollbar-track {
+	background-color: var(--scrollbar-track, var(--default-track-color));
+}
+
+.biotic-scrollbar::-webkit-scrollbar {
+	width: var(--baseline);
+	height: var(--baseline);
+	background-color: var(--scrollbar-track, var(--default-track-color));
+}
+
+.biotic-scrollbar::-webkit-scrollbar-thumb {
+	background-color: var(--scrollbar-thumb, var(--default-thumb-color));
+	border-radius: 0;
+}
+
+.biotic-scrollbar::-webkit-scrollbar-corner {
+	background-color: var(--scrollbar-thumb, var(--default-thumb-color));
+}

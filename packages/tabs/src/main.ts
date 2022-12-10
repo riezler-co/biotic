@@ -11,7 +11,6 @@ export {
 
 export {
 	Tab,
-	CloseButton
 } from './tab'
 
 
@@ -26,13 +25,5 @@ export {
 	useActiveState,
 	Scroll as ScrollState,
 } from './hook'
-
-
-export {
-	StyledTabBar,
-	StyledTabContent,
-	StyledTab,
-	StyledTabs
-} from './styled'
 
 export { PanelIdCtx, usePanelId } from './utils'

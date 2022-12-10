@@ -9,44 +9,12 @@ import {
 } from 'react'
 
 import { motion } from 'framer-motion'
-import { css, cx } from '@emotion/css'
 
 type PanelProps = HTMLAttributes<HTMLDivElement> & {
 	side?: 'left' | 'right',
 	width?: string | number,
 	stacked?: boolean,
 }
-
-export let panel = css`
-	--default-panel-shadow: rgba(74,74,74,0.2);
-	padding: var(--size-5);
-	top: 0;
-	position: relative;
-	height: 100%;
-	background: #fff;
-	display: inline-block;
-	box-shadow: inset calc(var(--size-2) * 10) 0 calc(var(--size-2) * 12) 0 var(--panel-shadow, var(--default-panel-shadow))
-			  , 0 0 calc(var(--size-2) * -3) var(--size-2) var(--panel-shadow, var(--default-panel-shadow));
-	border-top-right-radius: var(--size-7);
-	border-top-left-radius: 0;
-	border-right: var(--border);
-`
-
-let panelRight = css`
-	box-shadow: inset calc(var(--size-2) * -10) 0 calc(var(--size-2) * 12) 0 var(--panel-shadow, var(--default-panel-shadow))
-			  , -8px 0 6px -12px rgba(0,0,0, 1);
-	border-top-left-radius: var(--size-7);
-	border-top-right-radius: 0;
-	border-left: var(--border);
-
-`
-
-let panelStacked = css`
-	&:not(:last-child) {
-		margin-right: calc(var(--size-6) * -1);
-		padding-right: calc(var(--size) * 6);
-	}
-`
 
 export let Panel = forwardRef<HTMLDivElement, PanelProps>(({
 	className = '',
@@ -62,26 +30,22 @@ export let Panel = forwardRef<HTMLDivElement, PanelProps>(({
 		[side]: '0'
 	}
 
+	let classes = [
+		'biotic-panel',
+		side === 'right' ? 'biotic-panel--right' : '',
+		stacked ? 'biotic-panel--stacked' : '',
+		className,
+	].join(' ')
+
 	return (
 		<div
 			ref={ref}
 			{...props}
 			style={styles}
-			className={cx(
-				panel,
-				{ [panelRight]: side === 'right' },
-				{ [panelStacked]: stacked },
-				className,
-			)}
+			className={classes}
 		/>
 	)
 })
-
-let modal = css`
-	position: absolute;
-	top: 0;
-	height: 100%;
-`
 
 export let PanelModal = ({
 	children,
@@ -95,7 +59,7 @@ export let PanelModal = ({
 	return (
 		<div
 			{...props}
-			className={cx(modal, className)}
+			className={['biotic-panel-modal', className].join(' ')}
 			style={{ [side]: '0' }}
 		>
 			<Panel
@@ -108,23 +72,6 @@ export let PanelModal = ({
 		</div>
 	)
 }
-
-let stack = css`
-	position: relative;
-	width: 100%;
-	overflow: hidden;
-`
-
-let handler = css`
-	opacity: 0;
-	height: 100%;
-	position: absolute;
-	height: 100%;
-	left: 0;
-	margin: 0;
-	padding: 0;
-	border: none;
-`
 
 type StackedPanelProps = HTMLAttributes<HTMLDivElement> & {
 	onActivate?: (ids: Array<string>) => void,
@@ -201,10 +148,10 @@ export let StackedPanels = ({ children, onActivate, ...props }: StackedPanelProp
 	})
 
 	return (
-		<div {...props} className={cx(stack, props.className)}>
+		<div {...props} className={['biotic-panel-stack', props.className ?? ''].join(' ')}>
 			{ _children }
 			<button
-				className={handler}
+				className='biotic-panel-stack-handler'
 				onClick={() => setClosed(!closed)}
 				style={{
 					width: `calc(var(--size) * ${_children?.length})`,

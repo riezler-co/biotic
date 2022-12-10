@@ -11,8 +11,6 @@ import {
 import { useMatchMedia } from '@biotic-ui/std'
 import { Drawer, DrawerPosition } from '@biotic-ui/drawer'
 import { motion, AnimateSharedLayout, MotionProps } from 'framer-motion'
-import * as styles from './sidebar.styles'
-import { scrollbar } from '@biotic-ui/leptons'
 
 function layoutColumns(direction: DrawerPosition) {
 	if (direction === DrawerPosition.Right) {
@@ -22,8 +20,7 @@ function layoutColumns(direction: DrawerPosition) {
 	return 'auto 1fr'
 }
 
-type Props = {
-	children?: ReactNode,
+type Props = HTMLAttributes<HTMLDivElement> & {
 	direction?: DrawerPosition
 }
 
@@ -31,21 +28,29 @@ let SidebarLayoutCtx = createContext({
 	direction: DrawerPosition.Left
 })
 
-export function SidebarLayout({ children, direction = DrawerPosition.Left }: Props) {
+export function SidebarLayout({
+	children,
+	direction = DrawerPosition.Left,
+	className = '',
+	style = {},
+	...props
+}: Props) {
 	let _children = Children.toArray(children) as Array<ReactElement>
 	let aside = _children.find(node => node.type === Aside) ?? null
 	let main = _children.find(node => node.type === Main) ?? null
 
-	let style = {
-		'--_layout-columns': layoutColumns(direction)
+	let styles = {
+		...style,
+		'--_layout-columns': layoutColumns(direction),
 	} as CSSProperties
 
 	return (
 		<SidebarLayoutCtx.Provider value={{ direction }}>
 			<AnimateSharedLayout>
 				<div
-					className={styles.container}
-					style={style}
+					{ ...props }
+					className={['biotic-layout-sidebar', className].join(' ')}
+					style={styles}
 				>
 					{ (direction === DrawerPosition.Left) && aside }
 					{ main }
@@ -56,25 +61,22 @@ export function SidebarLayout({ children, direction = DrawerPosition.Left }: Pro
 	)
 }
 
-type AsideProps = {
-	children?: ReactNode;
+type AsideProps = HTMLAttributes<HTMLDivElement> & {
 	open: boolean;
 	width?: number;
 	drawer?: string;
 	onClose: () => void;
 }
 
-export let Aside = (props: AsideProps) => {
+export let Aside = ({
+	children,
+	open,
+	width = 250,
+	drawer = '(max-width: 768px)',
+	onClose = () => {},
+	...props
+}: AsideProps) => {
 	let ctx = useContext(SidebarLayoutCtx)
-
-	let {
-		children,
-		open,
-		width = 250,
-		drawer = '',
-		onClose = () => {}
-	} = props
-	
 	let useDrawer = useMatchMedia(drawer)
 
 	if (useDrawer) {
@@ -91,7 +93,9 @@ export let Aside = (props: AsideProps) => {
 					position={ctx.direction}
 					open={open}
 					maxWidth={width}
-					onClose={() => onClose && onClose()}>
+					onClose={() => onClose && onClose()}
+					{...props}
+				>
 					{ children }
 				</Drawer>
 				
@@ -132,17 +136,19 @@ export let Aside = (props: AsideProps) => {
 			initial={open ? 'visible' : 'hidden'}
 			animate={open ? 'visible' : 'hidden'}
 			transition={transition} 
-			className={styles.aside}
+			className='biotic-layout-sidebar-aside'
 		>
 		  <motion.div
-		  	className={styles.content}
+		  	className='biotic-layout-sidebar-content'
   			style={contentStyle}
   			variants={contentVariants}
 			initial={open ? 'visible' : 'hidden'}
 			animate={open ? 'visible' : 'hidden'}
-			transition={transition} 
+			transition={transition}
 		  >
-			{ children }
+		  	<div {...props}>
+				{ children }
+		  	</div>
 		  </motion.div>
 		</motion.aside>
 	)
@@ -155,8 +161,8 @@ export type MainProps = {
 export let Main = ({ children, className = '', ...props }: MainProps) => {
 
 	let classes = [
-		styles.main,
-		scrollbar,
+		'biotic-layout-sidebar-main',
+		'biotic-scrollbar',
 		className,
 	].join(' ')
 

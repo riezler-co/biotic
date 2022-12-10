@@ -1,15 +1,14 @@
-import React from 'react'
-import { useMemo, useState, Children, createContext } from 'react'
+import { ReactNode, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { AnimateSharedLayout } from 'framer-motion'
 import { SortableCtx } from './ctx'
 
-type Props =
-	{ children: JSX.Element | Array<JSX.Element>
-	; onChange: (drag: number, hover: number) => void 
-	; onDrop?: (item: any) => void 
-	}
+type Props = {
+	children?: ReactNode,
+	onChange: (drag: number, hover: number) => void ,
+	onDrop?: (item: any) => void,
+}
 
 export function Sortable({ children, onChange, onDrop }: Props) {
 

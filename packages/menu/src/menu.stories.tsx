@@ -14,7 +14,7 @@ import {
 	MenuItemTitle,
 	useMenu,
 } from './main'
-
+import '../style.css'
 
 export default {
 	title: 'Menu'

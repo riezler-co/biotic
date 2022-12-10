@@ -1,5 +1,4 @@
 import { HTMLAttributes } from 'react'
-import * as styles from './loading.styles'
 import { getLength } from '../utils'
 
 type LoadingProps = HTMLAttributes<HTMLDivElement> & {
@@ -9,8 +8,8 @@ type LoadingProps = HTMLAttributes<HTMLDivElement> & {
 
 export let Pulse = ({ size, color, className = '', style = {}, ...props }: LoadingProps) => {
 	let classes = [
-		styles.base,
-		styles.pulse,
+		'biotic-loading',
+		'biotic-loading-pulse',
 		className
 	]
 
@@ -29,7 +28,8 @@ export let Pulse = ({ size, color, className = '', style = {}, ...props }: Loadi
 
 export let Bounce = ({ className, size, color, style, ...props }: LoadingProps) => {
 	let classes = [
-		styles.bounce,
+		'biotic-loading',
+		'biotic-loading-bounce',
 		className
 	]
 
@@ -45,15 +45,16 @@ export let Bounce = ({ className, size, color, style, ...props }: LoadingProps) 
 			style={_style}
 			className={classes.join(' ')}
 		>
-		    <div className={styles.bounceDot}></div>
-        	<div className={styles.bounceDot}></div>
+		    <div className='biotic-loading-bounce-dot'></div>
+        	<div className='biotic-loading-bounce-dot'></div>
 		</div>
 	)
 }
 
 export let Flow = ({ className, size, color, style, ...props }: LoadingProps) => {
 	let classes = [
-		styles.flow,
+		'biotic-loading',
+		'biotic-loading-flow',
 		className
 	]
 
@@ -69,16 +70,17 @@ export let Flow = ({ className, size, color, style, ...props }: LoadingProps) =>
 			style={_style}
 			className={classes.join(' ')}
 		>
-			<div className={styles.flowDot}></div>
-			<div className={styles.flowDot}></div>
-			<div className={styles.flowDot}></div>
+			<div className='biotic-loading-flow-dot'></div>
+			<div className='biotic-loading-flow-dot'></div>
+			<div className='biotic-loading-flow-dot'></div>
 		</div>
 	)
 }
 
 export let CircleFade = ({ className, size, color, style, ...props }: LoadingProps) => {
 	let classes = [
-		styles.circleFade,
+		'biotic-loading',
+		'biotic-loading-circle-fade',
 		className
 	]
 
@@ -94,18 +96,18 @@ export let CircleFade = ({ className, size, color, style, ...props }: LoadingPro
 			style={_style}
 			className={classes.join(' ')}
 		>
-			<div className={styles.circleFadeDot}></div>
-			<div className={styles.circleFadeDot}></div>
-			<div className={styles.circleFadeDot}></div>
-			<div className={styles.circleFadeDot}></div>
-			<div className={styles.circleFadeDot}></div>
-			<div className={styles.circleFadeDot}></div>
-			<div className={styles.circleFadeDot}></div>
-			<div className={styles.circleFadeDot}></div>
-			<div className={styles.circleFadeDot}></div>
-			<div className={styles.circleFadeDot}></div>
-			<div className={styles.circleFadeDot}></div>
-			<div className={styles.circleFadeDot}></div>
+			<div className='biotic-loading-circle-fade-dot'></div>
+			<div className='biotic-loading-circle-fade-dot'></div>
+			<div className='biotic-loading-circle-fade-dot'></div>
+			<div className='biotic-loading-circle-fade-dot'></div>
+			<div className='biotic-loading-circle-fade-dot'></div>
+			<div className='biotic-loading-circle-fade-dot'></div>
+			<div className='biotic-loading-circle-fade-dot'></div>
+			<div className='biotic-loading-circle-fade-dot'></div>
+			<div className='biotic-loading-circle-fade-dot'></div>
+			<div className='biotic-loading-circle-fade-dot'></div>
+			<div className='biotic-loading-circle-fade-dot'></div>
+			<div className='biotic-loading-circle-fade-dot'></div>
 		</div>
 	)
 }

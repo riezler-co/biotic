@@ -1,8 +1,6 @@
 import { Fragment, forwardRef, HTMLAttributes, ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { useOnEscape } from '@biotic-ui/std'
-import { backdrop as backdropClass } from '@biotic-ui/leptons'
-import * as styles from './floating_task_bar.styles'
 
 export enum Position {
 	Bottom = 'bottom',
@@ -56,7 +54,7 @@ export let FloatingTaskBar = ({
 		<Fragment>
 			{ backdrop &&
 				<motion.div
-					className={`${backdropClass} ${open ? `${backdropClass}--open` : ''}`}
+					className={`biotic-backdrop ${open ? `biotic-backdrop--open` : ''}`}
 					initial='hidden'
 					animate={open ? 'visible' : 'hidden'}
 					variants={backdropVariants}
@@ -68,7 +66,7 @@ export let FloatingTaskBar = ({
 				initial='hidden'
 				animate={open ? 'visible' : 'hidden'}
 				variants={variants}
-				className={styles.taskbar}
+				className='biotic-floating-taskbar'
 				style={{
 					[_position]: 'var(--size-3)',
 					[getDirection(_position)]: '50%',
@@ -76,7 +74,7 @@ export let FloatingTaskBar = ({
 				{...props}
 			>
 				<div
-					className={styles.content}
+					className='biotic-floating-taskbar-content'
 					style={{
 						padding: getPadding(_position),
 						flexDirection: getTaskDirection(_position),
@@ -140,7 +138,7 @@ export let Task = forwardRef<HTMLButtonElement, HTMLAttributes<HTMLButtonElement
 	...props
 }, ref) => {
 	let classes = [
-		styles.taskbarItem,
+		'biotic-floating-taskbar-task',
 		className,
 	].join(' ')
 
@@ -158,7 +156,7 @@ export let TaskLabel = forwardRef<HTMLLabelElement, HTMLAttributes<HTMLLabelElem
 	...props
 }, ref) => {
 	let classes = [
-		styles.label,
+		'biotic-floating-taskbar-task-label',
 		className,
 	].join(' ')
 
@@ -176,7 +174,7 @@ let CloseWrapper = forwardRef<HTMLButtonElement, HTMLAttributes<HTMLButtonElemen
 	...props
 }, ref) => {
 	let classes = [
-		styles.close,
+		'biotic-floating-taskbar-close-wrapper',
 		className,
 	].join(' ')
 

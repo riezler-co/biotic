@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react'
 import { Input, Password } from '.'
 import { useState } from 'react'
+import '../../style.css'
 
 export default {
 	title: 'Form/Input',

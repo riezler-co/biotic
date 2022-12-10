@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react'
 import { useState } from 'react'
 import { Textarea } from '.'
+import '../../style.css'
 
 export default {
 	title: 'Form/Textarea',
