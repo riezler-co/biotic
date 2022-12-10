@@ -1,5 +1,3 @@
-@import "@biotic-ui/leptons/style/backdrop.css";
-
 .biotic-floating-taskbar {
 	position: fixed;
 	z-index: 10;

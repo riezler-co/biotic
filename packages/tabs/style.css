@@ -1,5 +1,3 @@
-@import "@biotic-ui/leptons/style/scrollbar.css";
-
 .biotic-tabs-tab-bar {
 	display: flex;
 	height: calc(var(--size-2) * 4);

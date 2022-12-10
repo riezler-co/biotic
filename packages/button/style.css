@@ -1,5 +1,3 @@
- @import "@biotic-ui/leptons/style/loading.css";
-
 .biotic-button {
 	--defaut-shadow: var(--shadow-2);
 	--default-button-background: rgb(239 239 239);

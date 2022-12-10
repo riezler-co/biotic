@@ -1,5 +1,3 @@
-@import "@biotic-ui/leptons/style/backdrop.css";
-
 .biotic-drawer {
 	--_drawer-timing-function: var(--drawer-timing-function, var(--ease-5));
 	--_drawer-duration: var(--drawer-duration, 200ms);
