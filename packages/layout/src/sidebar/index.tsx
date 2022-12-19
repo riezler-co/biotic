@@ -9,7 +9,7 @@ import {
 	Fragment
 } from 'react'
 import { useMatchMedia } from '@biotic-ui/std'
-import { Drawer, DrawerPosition } from '@biotic-ui/drawer'
+import { Drawer, DrawerPosition, Props as DrawerProps } from '@biotic-ui/drawer'
 import { motion, AnimateSharedLayout, MotionProps } from 'framer-motion'
 
 function layoutColumns(direction: DrawerPosition) {
@@ -65,6 +65,7 @@ type AsideProps = HTMLAttributes<HTMLDivElement> & {
 	open: boolean;
 	width?: number;
 	drawer?: string;
+	drawerProps?: Omit<DrawerProps, "open" | "onClose" | "maxWidth" | "position">,
 	onClose: () => void;
 }
 
@@ -74,15 +75,21 @@ export let Aside = ({
 	width = 250,
 	drawer = '(max-width: 768px)',
 	onClose = () => {},
+	drawerProps = {},
 	...props
 }: AsideProps) => {
 	let ctx = useContext(SidebarLayoutCtx)
 	let useDrawer = useMatchMedia(drawer)
 
 	if (useDrawer) {
+
+		let p = {
+			...props,
+			...drawerProps,
+		};
+
 		return (
 			<Fragment>
-				
 				{/*
 					this way we don't need to update the grid-template-columns
 					and the main area will get the full width
@@ -93,8 +100,8 @@ export let Aside = ({
 					position={ctx.direction}
 					open={open}
 					maxWidth={width}
-					onClose={() => onClose && onClose()}
-					{...props}
+					onClose={() => onClose?.()}
+					{...p}
 				>
 					{ children }
 				</Drawer>

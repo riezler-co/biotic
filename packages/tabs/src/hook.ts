@@ -5,13 +5,15 @@ import {
 	SyntheticEvent
 } from 'react'
 
+import { atomFamily } from 'jotai/utils'
+
 import {
-	bosonFamily,
-	useBosonValue,
-	useSetBoson,
-	useBoson,
-	SetterOrUpdater,
-} from '@biotic-ui/boson'
+	atom,
+	useAtomValue,
+	useSetAtom,
+	useAtom,
+	SetStateAction,
+} from 'jotai'
 
 import { useDebounce } from '@biotic-ui/std'
 
@@ -34,19 +36,15 @@ import type {
 
 export const DEFAULT_GROUP = 'default'
 
-
 let CloseListener = new Map<string, (id: string) => void>()
 
-export let makeTabsState = bosonFamily<[string], TabsState>(group => {
-	return {
-		key: `tabs:${group}`,
-		defaultValue: {
-			items: [],
-			length: 0,
-			ids: {},
-			staticItems: []
-		}
-	}
+export let makeTabsState = atomFamily((_group: string) => {
+	return atom({
+		items: [],
+		length: 0,
+		ids: {},
+		staticItems: []
+	} as TabsState)
 })
 
 const DEFAULT_ACTIVE: ActiveState = {
@@ -55,43 +53,37 @@ const DEFAULT_ACTIVE: ActiveState = {
 	id: ''
 }
 
-export let makeTabsHistory = bosonFamily<[string], TabsHistory>(group => {
-	return {
-		key: `tabs_history:${group}`,
-		defaultValue: {
-			items: [],
-			currentIndex: 0,
-		}		
-	}
+export let makeTabsHistory = atomFamily((_group: string) => {
+	return atom({
+		items: [],
+		currentIndex: 0,
+	} as TabsHistory)
 })
 
 export function useTabs(group = DEFAULT_GROUP): TabsState {
 	let tabsState = makeTabsState(group)
-	let tabs = useBosonValue(tabsState)
-	return {
-		...tabs,
-		items: tabs.items.map(item => ({ ...item, isStatic: undefined }))
-	}
+	let tabs = useAtomValue(tabsState)
+	return tabs
 }
 
 export function useActiveState(group = DEFAULT_GROUP): ActiveState | null {
 	let tabsHistory = makeTabsHistory(group)
-	let history = useBosonValue(tabsHistory)
+	let history = useAtomValue(tabsHistory)
 	let active = history.items[history.currentIndex]
 	return active ? active : null
 }
 
 export function useSetTabHistory(group = DEFAULT_GROUP) {
 	let tabsHistory = makeTabsHistory(group)
-	let setHistory = useSetBoson(tabsHistory)
+	let setHistory = useSetAtom(tabsHistory)
 	return setHistory
 }
 
 export function useTabHistory(group = DEFAULT_GROUP) {
 	let tabsState = makeTabsState(group)
-	let [tabs, setTabs] = useBoson(tabsState)
+	let [tabs, setTabs] = useAtom(tabsState)
 	let tabsHistory = makeTabsHistory(group)
-	let [history, setHistory] = useBoson(tabsHistory)
+	let [history, setHistory] = useAtom(tabsHistory)
 	let active = useActiveState(group)
 
 	let push = useCallback((config: TabItem) => {
@@ -158,7 +150,7 @@ export function useTabHistory(group = DEFAULT_GROUP) {
 
 export function useCloseTab(group = DEFAULT_GROUP) {
 	let tabsState = makeTabsState(group)
-	let [tabs, setTabs] = useBoson(tabsState)
+	let [tabs, setTabs] = useAtom(tabsState)
 	let { active, replace } = useTabHistory(group)
 
 	let close = useCallback((id: string) => {
@@ -179,21 +171,19 @@ export function useCloseTab(group = DEFAULT_GROUP) {
 			...tabs.ids,
 		}
 
-		delete tabs.ids[id]
+		delete ids[id]
 
 		let length = Math.max(tabs.length - 1, 0)
 
 		setTabs(tabs => ({ ...tabs, items, ids, length }))
 
+		makeTabState.remove(id)
+		Scroll.delete(`tab_panel:${id}`)
 
-		let _id = `${id}`
-		makeTabState.cache.delete(_id)
-		makeScrollState.cache.delete(`tab_panel:${id}`)
-
-		let onClose = CloseListener.get(_id) 
+		let onClose = CloseListener.get(id) 
 		if (onClose) {
-			onClose(_id)
-			CloseListener.delete(_id) 
+			onClose(id)
+			CloseListener.delete(id) 
 		}
 
 		if (absoluteIndex > active.index) {
@@ -209,7 +199,6 @@ export function useCloseTab(group = DEFAULT_GROUP) {
 				replace(DEFAULT_ACTIVE)
 			} else if (activeTab === undefined && staticTabs > 0) {
 				let tab = last<TabItem>(tabs.staticItems) ?? DEFAULT_ACTIVE
-
 				replace({
 					id: tab.id,
 					index: staticTabs - 1,
@@ -237,7 +226,7 @@ export function useCloseTab(group = DEFAULT_GROUP) {
 }
 
 export function useOnTabClose(id: string, cb: EventCallback) {
-	CloseListener.set(`${id}`, cb)
+	CloseListener.set(id, cb)
 }
 
 
@@ -259,16 +248,13 @@ export function useDefaultTab({ index, type, id }: ActiveState, group = DEFAULT_
 }
 
 
-export let makeTabState= bosonFamily<[string], any | null>(tab => {
-	return {
-		key: `tab:${tab}`,
-		defaultValue: null
-	}
+export let makeTabState = atomFamily((_tab: string) => {
+	return atom(null as any | null)
 })
 
 type UseTabState<T> = [
 	T,
-	((nextState: SetterOrUpdater<T>) => void),
+	((nextState: SetStateAction<T>) => void),
 ]
 
 export function useTabState<T>(
@@ -276,18 +262,11 @@ export function useTabState<T>(
 	defaultState: T,
 ): UseTabState<T> {
 	let tabState = makeTabState(id)
-	let [state, setState] = useBoson<T>(tabState)
+	let [state, setState] = useAtom<T>(tabState)
 	return [state ? state : defaultState, setState]
 }
 
-let makeScrollState = bosonFamily<[string], ScrollState>(scroll => {
-	return {
-		key: `scroll:${scroll}`,
-		defaultValue: { top: 0, left: 0 }
-	}
-})
-
-export let Scroll = makeScrollState
+export let Scroll = new Map<string, ScrollState>()
 
 type UseScrollState = [
 	() => ScrollState,
@@ -295,13 +274,10 @@ type UseScrollState = [
 	(id?: string) => void,
 ]
 
-export function useScrollState(id: string): UseScrollState {
-	let scrollState = makeScrollState(id)
-	let setScroll = useSetBoson(scrollState)
-	
-	let handleSetScroll = useDebounce(({ scrollTop, scrollLeft }: { scrollTop: number, scrollLeft: number }) => {
-		setScroll({ top: scrollTop, left: scrollLeft })
-	}, 50, [setScroll], { leading: false, trailing: true })
+export function useScrollState(id: string) {	
+	let handleSetScroll = useDebounce((id: string, top: number, left: number) => {
+		Scroll.set(id, { top, left })
+	}, 50, [], { leading: false, trailing: true })
 
 	function handelScroll(e: SyntheticEvent) {
 
@@ -312,29 +288,25 @@ export function useScrollState(id: string): UseScrollState {
 		}
 		
 		let { scrollTop, scrollLeft } = target
-		handleSetScroll({ scrollTop, scrollLeft })
+		handleSetScroll(id, scrollTop, scrollLeft)
 	}
 
 	let getScroll = useCallback((): ScrollState => {
-		return scrollState.state.value
-	}, [id, scrollState])
+		return Scroll.get(id) ?? { top: 0, left: 0 }
+	}, [id])
 
 	let reset = useCallback((id?: string) => {
 		if (id) {
-			makeScrollState.cache.delete(id)
+			Scroll.delete(id)
 		}
 	}, [id])
 
-	return [
-		getScroll,
-		handelScroll,
-		reset,
-	]
+	return { get: getScroll, set: handelScroll, reset }
 }
 
 export function useRestoreScroll(currentId: string) {
 	let scroll = useRef<boolean>(true)
-	let [getScroll] = useScrollState(currentId)
+	let scrollState = useScrollState(currentId)
 
 	useEffect(() => {
 		if (scroll.current === false) {
@@ -345,7 +317,7 @@ export function useRestoreScroll(currentId: string) {
 	return (node: HTMLElement | null) => {
 		if (scroll.current && node) {
 			scroll.current = false
-			let { top, left } = getScroll()
+			let { top, left } = scrollState.get()
 			node.scrollTop = top
 			node.scrollLeft = left
 		}
@@ -354,6 +326,6 @@ export function useRestoreScroll(currentId: string) {
 
 export function useScroll(id: string) {
 	let ref = useRestoreScroll(id)
-	let [, onScroll] = useScrollState(id)
-	return [onScroll, ref]
+	let { set } = useScrollState(id)
+	return [set, ref]
 }

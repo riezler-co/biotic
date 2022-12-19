@@ -9,7 +9,7 @@ import {
     HTMLAttributes,
 } from 'react'
 
-import { useSetBoson } from '@biotic-ui/boson'
+import { useSetAtom } from 'jotai'
 
 import {
 	makeTabsState,
@@ -61,30 +61,28 @@ type TabBarProps = React.HTMLAttributes<HTMLElement>
 export function TabBar({ children, ...props }: TabBarProps) {
 	let group = useContext(TabsCtx)
 	let tabsState = makeTabsState(group)
-	let setTabs = useSetBoson(tabsState)
+	let setTabs = useSetAtom(tabsState)
 	let { active, ...history } = useTabHistory(group)
 	let closeTab = useCloseTab(group)
 
-	let _children = useMemo(() => {
-		return Children.map(children, (node, index) => {
-			let elm = (node as ReactElement)
-			return cloneElement(elm, {
-				onClick: () => {
-					history.activate({
-						index,
-						type: elm.props.type,
-						id: elm.props.id
-					})
-				},
+	let _children = Children.map(children, (node, index) => {
+		let elm = (node as ReactElement)
+		return cloneElement(elm, {
+			onClick: () => {
+				history.activate({
+					index,
+					type: elm.props.type,
+					id: elm.props.id
+				})
+			},
 
-				onClose: () => {
-					closeTab.close(elm.props.id)
-				},
+			onClose: () => {
+				closeTab.close(elm.props.id)
+			},
 
-				isActive: active && active.id === elm.props.id
-			})
+			isActive: active && active.id === elm.props.id
 		})
-	}, [children, active]) ?? []
+	}) ?? []
 
 	let length = _children.length
 	useEffect(() => {
@@ -102,7 +100,9 @@ export function TabBar({ children, ...props }: TabBarProps) {
 
 	return (
 		<header {...props} className={classes}>
-			{ _children }
+			{ Children.map(_children, (node => {
+				return cloneElement(node, { ...node.props, isStatic: undefined })
+			})) }
 		</header>
 	)
 }
@@ -162,7 +162,7 @@ export function TabPanel({ children, scrollGroup, ...props }: TabPanelProps) {
 
 	let child = cloneElement(_child, { id })
 	let tabId = `tab_panel:${id}`
-	let [, setScroll] = useScrollState(tabId)
+	let scrollState = useScrollState(tabId)
 	let ref = useRestoreScroll(tabId)
 
 	let classes = [
@@ -176,7 +176,7 @@ export function TabPanel({ children, scrollGroup, ...props }: TabPanelProps) {
 			<div
 				ref={ref}
 				id={tabId}
-				onScroll={setScroll}
+				onScroll={scrollState.set}
 				{...props}
 				className={classes}
 			>

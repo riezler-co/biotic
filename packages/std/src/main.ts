@@ -33,3 +33,5 @@ export { TaskQueue } from './collection/task_queue'
 
 /* data */
 export { base64url } from './data/base64'
+
+export { uuid, cx } from './utils'

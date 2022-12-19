@@ -15,7 +15,7 @@ import {
 	Main,
 } from './index'
 
-import './sidebar.css'
+import '../../style/sidebar.css'
 
 export default {
 	title: 'Layout/Sidebar'

@@ -1,6 +1,6 @@
 import '@biotic-ui/leptons/style/base.css'
 import { TopBar } from "."
-import './topbar.css'
+import '../../style/topbar.css'
 
 export default {
 	title: 'Layout/Topbar'

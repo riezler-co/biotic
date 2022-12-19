@@ -10,6 +10,8 @@ import {
 import { useForm } from '@biotic-ui/std'
 
 import '../style.css'
+import '@biotic-ui/layout/style/sidebar.css'
+
 import {
 	Tabs,
 	TabBar,
@@ -124,14 +126,14 @@ let Random = () => {
 	})
 
 	let nestedId = `nested:${id}`
-	let [, setScroll, cleanNested] = useScrollState(nestedId)
+	let nestedScrollState = useScrollState(nestedId)
 	let nested = useRestoreScroll(nestedId)
 
 	function handleUp() {
 		setState({ count: state.count + 1 })
 	}
 
-	useOnTabClose(id, cleanNested)
+	useOnTabClose(id, nestedScrollState.reset)
 
 	return (
 		<Content>
@@ -139,7 +141,7 @@ let Random = () => {
 			<h2>{ state.count }</h2>
 			<Button onClick={handleUp}>Up</Button>
 
-			<Nested id={nestedId} onScroll={setScroll} ref={nested}>
+			<Nested id={nestedId} onScroll={nestedScrollState.set} ref={nested}>
 				<Box />
 			</Nested>
 		</Content>)
@@ -167,14 +169,14 @@ let StaticId = () => {
 	})
 
 	let nestedId = `nested:${_id}`
-	let [, setScroll, cleanNested] = useScrollState(nestedId)
+	let nestedScrollState = useScrollState(nestedId)
 	let nested = useRestoreScroll(nestedId)
 
 	function handleUp() {
 		setState({ count: state.count + 1 })
 	}
 
-	useOnTabClose(id, cleanNested)
+	useOnTabClose(id, nestedScrollState.reset)
 
 	return (
 		<Content>
@@ -182,7 +184,7 @@ let StaticId = () => {
 			<h2>{ state.count }</h2>
 			<Button onClick={handleUp}>Up</Button>
 
-			<Nested id={nestedId} onScroll={setScroll} ref={nested}>
+			<Nested id={nestedId} onScroll={nestedScrollState.set} ref={nested}>
 				<Box />
 			</Nested>
 		</Content>)
