@@ -157,7 +157,7 @@ export class Table<T extends Item> {
 			open(this.tableConfigs, this.dbConfig).then(async db => {
 				let currentItem = await this.get(id).toPromise()
 
-				if (currentItem === null) {
+				if (!currentItem) {
 					subscriber.complete()
 					return
 				}

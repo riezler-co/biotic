@@ -21,7 +21,7 @@ export class KeyValue<T> {
 		this.table = new Table(table, tableConfigs, dbConfig, hooks)
 	}
 
-	get(key: string): Promise<T | null> {
+	get(key: string): Promise<NonNullable<T> | null | undefined> {
 		return this.table
 			.get(key)
 			.pipe(map(item => item?.value ?? null))
@@ -47,11 +47,13 @@ export class KeyValue<T> {
 		return true
 	}
 
-	has(key: string): Promise<boolean> {
-		return this.table
+	async has(key: string): Promise<boolean> {
+		let value = await this.table
 			.get(key)
 			.pipe(map(value => value !== null))
 			.toPromise()
+
+		return value ?? false
 	}
 
 	size(): Promise<number> {
@@ -70,6 +72,7 @@ export class KeyValue<T> {
 				toArray(),
 			)
 			.toPromise()
+			.then(value => value ?? [])
 	}
 
 	values(): Promise<Array<T>> {
@@ -80,6 +83,7 @@ export class KeyValue<T> {
 				toArray(),
 			)
 			.toPromise()
+			.then(value => value ?? [])
 	}
 
 	entries(): Promise<Array<[string, T]>> {
@@ -90,6 +94,7 @@ export class KeyValue<T> {
 				toArray(),
 			)
 			.toPromise()
+			.then(value => value ?? [])
 	}
 
 	async forEach(fn: (item: T, key: string, map: KeyValue<T>) => any): Promise<void> {
