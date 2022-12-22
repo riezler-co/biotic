@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/panel",
-  "version": "0.5.0",
+  "version": "0.5.3",
   "description": "React Panel",
   "source": "src/main.ts",
   "module": "lib/module.js",

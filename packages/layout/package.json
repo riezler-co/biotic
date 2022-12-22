@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/layout",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "biotic layout components",
   "source": "src/main.ts",
   "module": "lib/module.js",

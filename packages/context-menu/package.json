@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/context-menu",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Mobile First context menu for react",
   "source": "src/main.ts",
   "module": "lib/module.js",

@@ -1,6 +1,6 @@
 {
   "name": "@biotic-ui/button",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "biotic button",
   "source": "src/main.ts",
   "module": "lib/module.js",
