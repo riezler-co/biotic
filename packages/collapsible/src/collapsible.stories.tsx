@@ -7,6 +7,8 @@ import {
 } from 'phosphor-react'
 
 import '../style.css'
+import '@biotic-ui/menu/style.css'
+
 import {
 	Collapsible,
 	useAccordion,

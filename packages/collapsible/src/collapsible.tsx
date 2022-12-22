@@ -3,7 +3,6 @@ import { motion, AnimatePresence, Transition } from 'framer-motion'
 
 let DefaultTransition = {
 	type: "tween",
-	ease: "linear",
 	duration: 0.2
 }
 
@@ -22,31 +21,25 @@ export let Collapsible = ({
 }: CollapsibleProps) => {
 
 	let variants = {
-		visible: { transform: 'translateY(0%)' },
-		hidden: { transform: 'translateY(-62%)' },
-	}
-
-	let wrapper = {
-		open: { opacity: 1, height: "auto" },
-		collapsed: { opacity: 0, height: 0 }
+		visible: {
+			opacity: 1,
+			height: "auto",
+			transform: "translateY(0px)",
+		},
+		hidden: {
+			opacity: 0,
+			height: 0,
+			transform: "translateY(-50px)"
+		},
 	}
 
 	return (
 		<AnimatePresence initial={!open}>
 			{ open && (
-				<motion.div
-					layout
-					key="wrapper"
-		            initial="collapsed"
-		            animate="open"
-		            exit="collapsed"
-		            variants={wrapper}
-		            transition={transition}
-		            style={{ overflow: 'hidden' }}
-		            {...props}
-				>
+				<div style={{ overflow: "hidden" }}>
 					<motion.div
 						key='content'
+						layout
 						variants={variants}
 			    		initial="hidden"
 				        animate="visible"
@@ -55,7 +48,7 @@ export let Collapsible = ({
 			    	>
 						{ children }	
 					</motion.div>
-				</motion.div>
+				</div>
 			)}
 		</AnimatePresence>
 	)
