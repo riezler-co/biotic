@@ -52,7 +52,7 @@ export class TaskQueue {
     		}
 
     		if (this.running < this.concurrency) {
-    			this.runTask({ name, task, resolve, reject })
+    			return this.runTask({ name, task, resolve, reject })
     		}
 
     		this.enqueueTask({ name, task, resolve, reject })

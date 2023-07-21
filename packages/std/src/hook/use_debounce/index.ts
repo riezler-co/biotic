@@ -1,6 +1,6 @@
 import { useCallback, useRef, useEffect } from 'react'
 import type { DebouncedFunc, DebounceSettings } from 'lodash'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 
 type Dep = Array<any>
 type Callback<Args extends any[], Return> = (...args: Args) => Return
